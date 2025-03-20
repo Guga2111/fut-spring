@@ -1,19 +1,28 @@
 package com.guga.futspring.controller;
 
 import com.guga.futspring.entity.User;
-import com.guga.futspring.service.UserService;
+import com.guga.futspring.service.UserServiceImpl;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@RequestMapping("/user")
+@AllArgsConstructor
 @RestController
 public class UserController {
 
-    UserService userService;
+    UserServiceImpl userService;
 
-    public ResponseEntity<List<User>> getUsers() {
-        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+    @GetMapping("{id}")
+    public ResponseEntity<String> getUser(Long id) {
+        return new ResponseEntity<>(userService.getUser(id).getUsername(), HttpStatus.OK);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<User> saveUser(@Valid @RequestBody User user) {
+        userService.saveUser(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

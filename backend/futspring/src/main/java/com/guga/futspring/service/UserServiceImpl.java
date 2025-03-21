@@ -1,6 +1,7 @@
 package com.guga.futspring.service;
 
 import com.guga.futspring.entity.User;
+import com.guga.futspring.exception.UserNotFoundException;
 import com.guga.futspring.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,6 @@ public class UserServiceImpl implements UserService{
 
     static User unwrapUser(Optional<User> entity, Long id) {
         if(entity.isPresent()) return entity.get();
-        else throw new RuntimeException(); // por enquanto
+        else throw new UserNotFoundException(id);
     }
 }

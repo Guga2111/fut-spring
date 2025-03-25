@@ -32,4 +32,7 @@ public class User {
     @Column(name = "stars")
     int stars;
 
+    @OneToOne
+    @JoinColumn(name = "stats_id")
+    private Stats stats;
 }

@@ -21,24 +21,23 @@ public class SecurityConfig {
     private final CustomAuthManager customAuthManager;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(customAuthManager);
         authenticationFilter.setFilterProcessesUrl("/authenticate");
 
         http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.
-                        requestMatchers(HttpMethod.POST, SecurityConstants.REGISTER_PATH).permitAll()
-                        .anyRequest().authenticated()
-                ).addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/h2/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, SecurityConstants.REGISTER_PATH).permitAll()
+                        .anyRequest().authenticated())
+                .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
                 .addFilter(authenticationFilter)
                 .addFilterAfter(new JWTAuthorizationFilter(), AuthenticationFilter.class)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-
+        http.headers(headers -> headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()));
         return http.build();
-
     }
 }

@@ -21,8 +21,6 @@ public class User {
     @Column(name = "email")
     String email;
 
-    @NonNull
-    @NotBlank
     @Column(name = "username")
     String username;
 
@@ -31,8 +29,6 @@ public class User {
     @Column(name = "password")
     String password;
 
-    @NonNull
-    @NotBlank
     @Column(name = "stars")
     int stars;
 

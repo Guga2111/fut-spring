@@ -1,5 +1,6 @@
 package com.guga.futspring.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,6 +35,7 @@ public class Stats {
     private List<Date> puskasDates = new ArrayList<>();
 
     @OneToOne(mappedBy = "stats")
+    @JsonIgnore
     private User user;
 
     public int getPuskasTimes() {

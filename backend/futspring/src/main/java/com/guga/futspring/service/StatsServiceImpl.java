@@ -1,6 +1,7 @@
 package com.guga.futspring.service;
 
 import com.guga.futspring.entity.Stats;
+import com.guga.futspring.entity.User;
 import com.guga.futspring.repository.StatsRepository;
 import com.guga.futspring.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class StatsServiceImpl implements StatsService{
 
     StatsRepository statsRepository;
+    UserServiceImpl userService;
     @Override
     public List<Stats> getStats() {
         return (List<Stats>)statsRepository.findAll();
@@ -34,7 +36,11 @@ public class StatsServiceImpl implements StatsService{
     }
 
     @Override
-    public Stats saveStats(Stats stats) {
+    public Stats saveStats(Stats stats, Long userId) {
+        User user = userService.getUser(userId);
+        user.setStats(stats);
+        stats.setUser(user);
+        
         return statsRepository.save(stats);
     }
 

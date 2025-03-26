@@ -27,6 +27,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         }
 
         String token = header.replace(SecurityConstants.BEARER, "");
+
         String user = JWT.require(Algorithm.HMAC512(SecurityConstants.SECRET_KEY))
                 .build()
                 .verify(token)

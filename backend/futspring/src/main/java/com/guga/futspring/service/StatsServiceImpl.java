@@ -38,9 +38,7 @@ public class StatsServiceImpl implements StatsService{
     @Override
     public Stats saveStats(Stats stats, Long userId) {
         User user = userService.getUser(userId);
-        user.setStats(stats);
         stats.setUser(user);
-        
         return statsRepository.save(stats);
     }
 

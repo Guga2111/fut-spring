@@ -32,7 +32,7 @@ public class User {
     @Column(name = "stars")
     int stars;
 
-    @OneToOne
-    @JoinColumn(name = "stats_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "stats_id", referencedColumnName = "id")
     private Stats stats;
 }

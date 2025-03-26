@@ -42,6 +42,7 @@ public class StatsController {
     @PutMapping ("{id}")
     public ResponseEntity<Stats> updateStats(@Valid @RequestBody Stats stats, @PathVariable Long id) {
         Date date = new Date();
+        System.out.println(stats.getGoals());
         return new ResponseEntity<>(statsService.updateStats(stats.getGoals(), stats.getAssists(), date, id), HttpStatus.OK);
     }
 

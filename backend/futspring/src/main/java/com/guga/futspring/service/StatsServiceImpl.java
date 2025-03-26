@@ -39,6 +39,8 @@ public class StatsServiceImpl implements StatsService{
     public Stats saveStats(Stats stats, Long userId) {
         User user = userService.getUser(userId);
         stats.setUser(user);
+        user.setStats(stats);
+        userService.saveUser(user);
         return statsRepository.save(stats);
     }
 

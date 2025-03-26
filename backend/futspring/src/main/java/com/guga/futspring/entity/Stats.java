@@ -34,7 +34,7 @@ public class Stats {
     @Column(name = "puskasDates")
     private List<Date> puskasDates = new ArrayList<>();
 
-    @OneToOne(mappedBy = "stats")
+    @OneToOne(mappedBy = "stats", cascade = CascadeType.ALL)
     @JsonIgnore
     private User user;
 

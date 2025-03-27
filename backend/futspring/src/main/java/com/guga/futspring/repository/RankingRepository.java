@@ -1,4 +1,7 @@
 package com.guga.futspring.repository;
 
-public class RankingRepository {
+import com.guga.futspring.entity.Ranking;
+import org.springframework.data.repository.CrudRepository;
+
+public interface RankingRepository extends CrudRepository<Ranking, Long> {
 }

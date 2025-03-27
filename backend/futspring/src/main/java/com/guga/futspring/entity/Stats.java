@@ -38,6 +38,13 @@ public class Stats {
     @JsonIgnore
     private User user;
 
+    @ManyToMany
+    @JoinTable(
+            name = "stats_ranking",
+            joinColumns = @JoinColumn(name = "stats_id"),
+            inverseJoinColumns = @JoinColumn(name = "ranking_id"))
+    private List<Ranking> rankings = new ArrayList<>();
+
     public int getPuskasTimes() {
         return puskasDates.size();
     }

@@ -38,4 +38,8 @@ public class Pelada {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> players;
+
+    @OneToOne(mappedBy = "pelada", orphanRemoval = true)
+    @JsonIgnore
+    private Ranking ranking;
 }

@@ -1,0 +1,17 @@
+[33mab7d6d5[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m feat: Basic CRUD for 'Ranking' implemented.
+[33m92bd4e9[m feat: new entity 'ranking' created with most important relationships developed.
+[33m7aa8b7c[m feat: new relationship between 'user' and 'pelada', spelling fix, all endpoints of 'pelada' permitted, handle exception for 404 of 'pelada'
+[33m03cd280[m feat: new entity 'pelada' implemented, association by players to pelada concluded as well, also the visualization of the associated players of the group (pelada)
+[33m195c6b1[m fix: not double creating for stats
+[33mf1eb3e4[m fix: in 'user' table has now stats_id being not null!
+[33m9b0e955[m bug: stats it's no being setted in user table
+[33m16f8f0b[m feat: user id be add at stats, jsonignore to not be infinity the output of user
+[33m39887b9[m feat: entity 'stats' implemented
+[33mecc0241[m fix: bug in security solved! REGISTER AND AUTH READY
+[33mcaceebf[m feat: JWT implemented
+[33md9ba932[m feat: exception handler, "usernotfoundexception"
+[33mc9cda1e[m feat: starting auth spring security
+[33mfd6d52a[m feat: user crud created, (min controller), service interface for being more organized
+[33m900da4e[m Initial start of the CRUD
+[33m70bbf35[m initial package creation
+[33mf81320b[m Initial commit

@@ -17,8 +17,8 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(StatsNotFoundException.class)
-    public ResponseEntity<Object> handleStatsNotFoundException(StatsNotFoundException e) {
+    @ExceptionHandler(GeneralStatsNotFoundException.class)
+    public ResponseEntity<Object> handleStatsNotFoundException(GeneralStatsNotFoundException e) {
         ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }

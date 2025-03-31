@@ -38,4 +38,8 @@ public class Pelada {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> players;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ranking_id", referencedColumnName = "id")
+    private Ranking ranking;
 }

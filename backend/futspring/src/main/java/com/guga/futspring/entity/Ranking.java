@@ -34,8 +34,7 @@ public class Ranking {
     @ElementCollection
     private List<RankingEntry> puskas; // Ranking de jogadores que mais venceram o Puskas
 
-    @OneToOne
-    @JoinColumn(name = "pelada_id")
+    @OneToOne(mappedBy = "ranking")
     private Pelada pelada;
 }
 

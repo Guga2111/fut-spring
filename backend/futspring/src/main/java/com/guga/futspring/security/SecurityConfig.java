@@ -31,8 +31,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/h2/**").permitAll()
                         .requestMatchers(HttpMethod.POST, SecurityConstants.REGISTER_PATH).permitAll()
-                        .requestMatchers("/stats/**").permitAll()
+                        .requestMatchers("/generalStats/**").permitAll()
                         .requestMatchers("/pelada/**").permitAll()
+                        .requestMatchers("/ranking/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
                 .addFilter(authenticationFilter)

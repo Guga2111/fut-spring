@@ -1,11 +1,14 @@
 package com.guga.futspring.service;
 
 import com.guga.futspring.entity.Pelada;
+import com.guga.futspring.entity.Ranking;
 import com.guga.futspring.entity.User;
 import com.guga.futspring.repository.PeladaRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +17,7 @@ import java.util.Optional;
 public class PeladaServiceImpl implements PeladaService{
 
     PeladaRepository peladaRepository;
+    RankingServiceImpl rankingService;
     UserServiceImpl userService;
 
     @Override
@@ -28,7 +32,18 @@ public class PeladaServiceImpl implements PeladaService{
     }
 
     @Override
+    @Transactional
     public Pelada savePelada(Pelada pelada) {
+        Ranking ranking = new Ranking();
+        ranking.setGoals(0);
+        ranking.setAssists(0);
+        ranking.setPelada(pelada);
+        ranking.setPuskas(new ArrayList<>());
+        ranking.setGarcom(new ArrayList<>());
+        ranking.setArtilharia(new ArrayList<>());
+        rankingService.saveRanking(ranking);
+
+        pelada.setRanking(ranking);
         return peladaRepository.save(pelada);
     }
 

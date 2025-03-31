@@ -41,5 +41,6 @@ public class Pelada {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ranking_id", referencedColumnName = "id")
+    @JsonIgnore
     private Ranking ranking;
 }

@@ -43,4 +43,7 @@ public class Pelada {
     @JoinColumn(name = "ranking_id", referencedColumnName = "id")
     @JsonIgnore
     private Ranking ranking;
+
+    @OneToMany(mappedBy = "pelada")
+    private List<Daily> dailies;
 }

@@ -36,8 +36,11 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "stats_id", referencedColumnName = "id", unique = true)
-    private GeneralStats generalStats;
+    private Stats stats;
 
     @ManyToMany(mappedBy = "players")
     private List<Pelada> peladas;
+
+    @ManyToMany(mappedBy = "players")
+    private List<Daily> dailies;
 }

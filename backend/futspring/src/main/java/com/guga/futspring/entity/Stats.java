@@ -1,5 +1,6 @@
 package com.guga.futspring.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,13 +11,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "general_stats")
 @Entity
-@Table(name = "user_pelada_stats")
-public class UserPeladaStats {
+public class Stats {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,4 +33,14 @@ public class UserPeladaStats {
     @Temporal(TemporalType.DATE)
     @Column(name = "puskasDates")
     private List<Date> puskasDates = new ArrayList<>();
+
+    @OneToOne(mappedBy = "stats", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private User user;
+
+    public int getPuskasTimes() {
+        return puskasDates.size();
+    }
+
+
 }

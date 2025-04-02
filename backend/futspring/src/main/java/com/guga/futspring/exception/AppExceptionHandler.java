@@ -28,4 +28,10 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(AlreadyPlayerAssociatedException.class)
+    public ResponseEntity<Object> handleAlreadyPlayerAssociatedException(AlreadyPlayerAssociatedException e) {
+        ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
 }

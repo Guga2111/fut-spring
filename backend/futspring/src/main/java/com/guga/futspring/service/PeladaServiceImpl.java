@@ -3,6 +3,7 @@ package com.guga.futspring.service;
 import com.guga.futspring.entity.Pelada;
 import com.guga.futspring.entity.Ranking;
 import com.guga.futspring.entity.User;
+import com.guga.futspring.exception.AlreadyPlayerAssociatedException;
 import com.guga.futspring.repository.PeladaRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -59,10 +60,15 @@ public class PeladaServiceImpl implements PeladaService{
 
     @Override
     public Pelada associatePlayerToPelada(Long id, Long userId) {
+
         User user = userService.getUser(userId);
-        Pelada pelada = getPelada(id);
-        pelada.getPlayers().add(user);
-        return peladaRepository.save(pelada);
+
+        if(!getPelada(id).getPlayers().contains(user)) {
+            Pelada pelada = getPelada(id);
+            pelada.getPlayers().add(user);
+            return peladaRepository.save(pelada);
+        }
+        else throw new AlreadyPlayerAssociatedException(userId);
     }
 
     @Override

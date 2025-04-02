@@ -41,6 +41,6 @@ public class User {
     @ManyToMany(mappedBy = "players")
     private List<Pelada> peladas;
 
-    @ManyToMany(mappedBy = "players")
+    @ManyToMany(mappedBy = "playersPresence")
     private List<Daily> dailies;
 }

@@ -28,9 +28,13 @@ public class Daily {
             joinColumns = @JoinColumn(name = "daily_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> players;
+    private List<User> playersPresence; //vou precisar de uma lista de jogadores para definir os premios de cada diaria
+    //e de uma lista de dos times para a classificação da diaria
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "pelada_id", referencedColumnName = "id")
     private Pelada pelada;
+
+    @OneToMany(mappedBy = "daily")
+    private List<Team> teams;
 }

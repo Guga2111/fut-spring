@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -34,7 +35,11 @@ public class Ranking {
     @ElementCollection
     private List<RankingEntry> puskas; // Ranking de jogadores que mais venceram o Puskas
 
+    @OneToMany(mappedBy = "ranking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Stats> stats = new ArrayList<>();
+
     @OneToOne(mappedBy = "ranking", cascade = CascadeType.ALL)
     private Pelada pelada;
+
 }
 

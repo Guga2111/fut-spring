@@ -1,5 +1,6 @@
 package com.guga.futspring.service;
 
+import com.guga.futspring.entity.Pelada;
 import com.guga.futspring.entity.Ranking;
 
 import java.util.List;
@@ -9,4 +10,6 @@ public interface RankingService {
     List<Ranking> getRankings();
     Ranking saveRanking(Ranking ranking);
     Ranking updateRanking(int goals, int assists,Long id);
+    void updateTotalGoalsAndAssists(Long rankingId);
+    Ranking initializeRanking(Pelada pelada);
 }

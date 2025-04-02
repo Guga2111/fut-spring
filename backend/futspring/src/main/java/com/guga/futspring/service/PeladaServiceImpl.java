@@ -2,6 +2,7 @@ package com.guga.futspring.service;
 
 import com.guga.futspring.entity.Pelada;
 import com.guga.futspring.entity.Ranking;
+import com.guga.futspring.entity.Stats;
 import com.guga.futspring.entity.User;
 import com.guga.futspring.exception.AlreadyPlayerAssociatedException;
 import com.guga.futspring.repository.PeladaRepository;
@@ -33,16 +34,9 @@ public class PeladaServiceImpl implements PeladaService{
     }
 
     @Override
-    @Transactional
     public Pelada savePelada(Pelada pelada) {
-        Ranking ranking = new Ranking();
-        ranking.setGoals(0);
-        ranking.setAssists(0);
-        ranking.setPelada(pelada);
-        ranking.setPuskas(new ArrayList<>());
-        ranking.setGarcom(new ArrayList<>());
-        ranking.setArtilharia(new ArrayList<>());
-        rankingService.saveRanking(ranking);
+
+        Ranking ranking = rankingService.initializeRanking(pelada);
 
         pelada.setRanking(ranking);
         return peladaRepository.save(pelada);
@@ -58,18 +52,23 @@ public class PeladaServiceImpl implements PeladaService{
         return null;
     }
 
-    @Override
-    public Pelada associatePlayerToPelada(Long id, Long userId) {
+        @Override
+        @Transactional
+        public Pelada associatePlayerToPelada(Long id, Long userId) {
 
-        User user = userService.getUser(userId);
+            User user = userService.getUser(userId);
 
-        if(!getPelada(id).getPlayers().contains(user)) {
-            Pelada pelada = getPelada(id);
-            pelada.getPlayers().add(user);
-            return peladaRepository.save(pelada);
+            if(!getPelada(id).getPlayers().contains(user)) {
+                Pelada pelada = getPelada(id);
+                pelada.getPlayers().add(user);
+
+                user.getStats().setRanking(pelada.getRanking());
+                pelada.getRanking().getStats().add(user.getStats());
+
+                return peladaRepository.save(pelada);
+            }
+            else throw new AlreadyPlayerAssociatedException(userId);
         }
-        else throw new AlreadyPlayerAssociatedException(userId);
-    }
 
     @Override
     public List<User> getPlayerAssociatedToPelada(Long id) {

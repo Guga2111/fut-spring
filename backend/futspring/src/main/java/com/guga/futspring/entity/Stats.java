@@ -38,6 +38,10 @@ public class Stats {
     @JsonIgnore
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "ranking_id")
+    private Ranking ranking;
+
     public int getPuskasTimes() {
         return puskasDates.size();
     }

@@ -32,12 +32,6 @@ public class StatsController {
         return new ResponseEntity<Integer>(statsService.getPuskasTimes(id), HttpStatus.OK);
     }
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<Stats> createStats(@Valid @RequestBody Stats stats, @PathVariable Long userId) {
-        return new ResponseEntity<>(statsService.saveStats(stats, userId), HttpStatus.CREATED);
-    }
-
-
     @PutMapping ("{id}")
     public ResponseEntity<Stats> updateStats(@Valid @RequestBody Stats stats, @PathVariable Long id) {
         System.out.println(stats.getGoals());

@@ -1,5 +1,6 @@
 package com.guga.futspring.service;
 
+import com.guga.futspring.entity.Stats;
 import com.guga.futspring.entity.User;
 import com.guga.futspring.exception.UserNotFoundException;
 import com.guga.futspring.repository.UserRepository;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +18,7 @@ public class UserServiceImpl implements UserService{
 
     BCryptPasswordEncoder bCryptPasswordEncoder;
     UserRepository userRepository;
+    StatsServiceImpl statsService;
 
     @Override
     public List<User> getUsers() {
@@ -36,7 +39,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User saveUser(User user) {
+
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        Stats stats = statsService.initializeStats(user);
+        user.setStats(stats);
+
         return userRepository.save(user);
     }
 

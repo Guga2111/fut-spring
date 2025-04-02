@@ -7,6 +7,7 @@ import com.guga.futspring.repository.StatsRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,7 @@ import java.util.Optional;
 public class StatsServiceImpl implements StatsService {
 
     StatsRepository statsRepository;
-    UserServiceImpl userService;
+    RankingServiceImpl rankingService;
     @Override
     public List<Stats> getStats() {
         return (List<Stats>) statsRepository.findAll();
@@ -35,11 +36,12 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public Stats saveStats(Stats stats, Long userId) {
-        User user = userService.getUser(userId);
+    public Stats initializeStats(User user) {
+        Stats stats = new Stats();
         stats.setUser(user);
-        user.setStats(stats);
-        userService.saveUser(user);
+        stats.setGoals(0);
+        stats.setAssists(0);
+        stats.setPuskasDates(new ArrayList<>());
         return stats;
     }
 
@@ -56,7 +58,7 @@ public class StatsServiceImpl implements StatsService {
         unwrapStats.setGoals(goals);
         unwrapStats.setAssists(assists);
 
-        return unwrapStats;
+        return statsRepository.save(unwrapStats);
     }
 
     static Stats unwrapStats(Optional<Stats> entity, Long id) {

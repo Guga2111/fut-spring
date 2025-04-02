@@ -21,7 +21,7 @@ public class Team {
     @Column(name = "points")
     private int points;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "daily_id", referencedColumnName = "id")
     private Daily daily;
 }

@@ -33,8 +33,10 @@ public class Daily {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "pelada_id", referencedColumnName = "id")
+    @JsonIgnore
     private Pelada pelada;
 
     @OneToMany(mappedBy = "daily")
     private List<Team> teams;
+
 }

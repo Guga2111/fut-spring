@@ -44,6 +44,6 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(PlayerNotInPeladaException.class)
     public ResponseEntity<Object> handlePlayerNotInPeladaException(PlayerNotInPeladaException e) {
         ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 }

@@ -34,4 +34,16 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(AlreadyPlayerInDailyException.class)
+    public ResponseEntity<Object> handleAlreadyPlayerInDailyException(AlreadyPlayerInDailyException e) {
+        ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(PlayerNotInPeladaException.class)
+    public ResponseEntity<Object> handlePlayerNotInPeladaException(PlayerNotInPeladaException e) {
+        ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
 }

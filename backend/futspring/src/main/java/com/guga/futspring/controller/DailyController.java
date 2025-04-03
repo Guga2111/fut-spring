@@ -27,8 +27,13 @@ public class DailyController {
         return new ResponseEntity<>(dailyService.getDailys(), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Daily> saveDaily(@RequestBody @Valid Daily daily) {
-        return new ResponseEntity<>(dailyService.createDaily(daily), HttpStatus.CREATED);
+    @PostMapping("/pelada/{peladaId}")
+    public ResponseEntity<Daily> saveDaily(@RequestBody @Valid Daily daily, @PathVariable Long peladaId) {
+        return new ResponseEntity<>(dailyService.createDaily(daily, peladaId), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{dailyId}/confirm-presence/{userId}")
+    public ResponseEntity<Daily> confirmPresenceInDaily(@PathVariable Long dailyId, @PathVariable Long userId) {
+        return new ResponseEntity<>(dailyService.confirmPresenceInDaily(dailyId, userId), HttpStatus.OK);
     }
 }

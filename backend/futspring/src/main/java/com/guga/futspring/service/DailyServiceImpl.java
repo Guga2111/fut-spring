@@ -2,16 +2,17 @@ package com.guga.futspring.service;
 
 import com.guga.futspring.entity.Daily;
 import com.guga.futspring.entity.Pelada;
+import com.guga.futspring.entity.Team;
 import com.guga.futspring.entity.User;
 import com.guga.futspring.exception.AlreadyPlayerInDailyException;
 import com.guga.futspring.exception.PlayerNotInPeladaException;
 import com.guga.futspring.repository.DailyRepository;
 import com.guga.futspring.repository.PeladaRepository;
+import com.guga.futspring.repository.TeamRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +22,7 @@ public class DailyServiceImpl implements DailyService{
     PeladaServiceImpl peladaService;
     UserServiceImpl userService;
     PeladaRepository peladaRepository;
+    TeamRepository teamRepository;
 
     @Override
     public Daily getDaily(Long id) {
@@ -56,6 +58,66 @@ public class DailyServiceImpl implements DailyService{
     }
 
     @Override
+    public List<Team> sortTeamsBasedOnStars(Long id, int numberOfTeams) {
+
+        Daily daily = getDaily(id);
+        List<User> confirmedPlayers = daily.getPlayersPresence();
+
+        if(confirmedPlayers.size() < numberOfTeams) throw new IllegalArgumentException("Not suficient players to form a team");
+
+        Collections.shuffle(confirmedPlayers);
+
+        List<User> stars5 = new ArrayList<>();
+        List<User> stars4 = new ArrayList<>();
+        List<User> stars3 = new ArrayList<>();
+        List<User> stars2 = new ArrayList<>();
+        List<User> stars1 = new ArrayList<>();
+
+        for(User player : confirmedPlayers) {
+            switch(player.getStars()) {
+                case 5 -> stars5.add(player);
+                case 4 -> stars4.add(player);
+                case 3 -> stars3.add(player);
+                case 2 -> stars2.add(player);
+                case 1 ->stars1.add(player);
+            }
+        }
+
+        stars4.addAll(redistributeExtraPlayers(stars5));
+        stars3.addAll(redistributeExtraPlayers(stars4));
+        stars2.addAll(redistributeExtraPlayers(stars3));
+        stars1.addAll(redistributeExtraPlayers(stars2));
+
+        List<Team> teams = new ArrayList<>();
+        for(int i = 0; i < numberOfTeams; i++) {
+            Team team = new Team();
+            team.setName("Team " + (i + 1));
+            team.setDaily(daily);
+            team.setPoints(0);
+            teams.add(team);
+        }
+
+        for (int i = 0; i < numberOfTeams; i++) {
+            List<User> teamPlayers = new ArrayList<>();
+
+            if (i < stars5.size()) teamPlayers.add(stars5.get(i));
+            if (i < stars4.size()) teamPlayers.add(stars4.get(i));
+            if (i < stars3.size()) teamPlayers.add(stars3.get(i));
+            if (i < stars2.size()) teamPlayers.add(stars2.get(i));
+            if (i < stars1.size()) teamPlayers.add(stars1.get(i));
+
+            teams.get(i).setPlayers(teamPlayers);
+        }
+
+        Iterable<Team> savedTeams = teamRepository.saveAll(teams);
+
+        List<Team> result = new ArrayList<>();
+        savedTeams.forEach(result::add);
+
+        return result;
+    }
+
+    @Override
     public Daily updateDaily() {
         return null;
     }
@@ -78,5 +140,14 @@ public class DailyServiceImpl implements DailyService{
     static Daily unwrapDaily(Optional<Daily> entity, Long id) {
         if(entity.isPresent()) return entity.get();
         else throw new RuntimeException();
+    }
+
+    private List<User> redistributeExtraPlayers(List<User> higherStars) {
+        List<User> redistributed = new ArrayList<>();
+        while (higherStars.size() > redistributed.size() + 1) {
+            User player = higherStars.remove(higherStars.size() - 1); // Remove o último jogador
+            redistributed.add(player); // Adiciona à lista temporária
+        }
+        return redistributed;
     }
 }

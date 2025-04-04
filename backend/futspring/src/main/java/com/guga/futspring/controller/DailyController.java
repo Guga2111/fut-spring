@@ -1,6 +1,7 @@
 package com.guga.futspring.controller;
 
 import com.guga.futspring.entity.Daily;
+import com.guga.futspring.entity.Team;
 import com.guga.futspring.service.DailyServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,11 @@ public class DailyController {
     @PostMapping("/pelada/{peladaId}")
     public ResponseEntity<Daily> saveDaily(@RequestBody @Valid Daily daily, @PathVariable Long peladaId) {
         return new ResponseEntity<>(dailyService.createDaily(daily, peladaId), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{id}/sort-teams")
+    public ResponseEntity<List<Team>> sortTeams(@PathVariable Long id, @RequestParam @Valid Integer numberOfTeams) {
+        return new ResponseEntity<>(dailyService.sortTeamsBasedOnStars(id, numberOfTeams), HttpStatus.OK);
     }
 
     @PutMapping("/{dailyId}/confirm-presence/{userId}")

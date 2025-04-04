@@ -43,4 +43,7 @@ public class User {
 
     @ManyToMany(mappedBy = "playersPresence")
     private List<Daily> dailies;
+
+    @ManyToMany(mappedBy = "players")
+    private List<Team> teams;
 }

@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -39,4 +41,7 @@ public class Team {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> players;
+
+    @ManyToMany(mappedBy = "teams")
+    private Set<Match> matches = new HashSet<>();
 }

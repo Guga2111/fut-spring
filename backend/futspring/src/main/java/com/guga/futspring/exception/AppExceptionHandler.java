@@ -58,4 +58,10 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
     }
+
+    @ExceptionHandler(MatchNotFoundException.class)
+    public ResponseEntity<Object> handleMatchNotFoundException(MatchNotFoundException e) {
+        ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 }

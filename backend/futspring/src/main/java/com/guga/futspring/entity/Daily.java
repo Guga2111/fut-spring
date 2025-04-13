@@ -39,4 +39,6 @@ public class Daily {
     @OneToMany(mappedBy = "daily")
     private List<Team> teams;
 
+    @OneToMany(mappedBy = "daily")
+    private List<Match> matches;
 }

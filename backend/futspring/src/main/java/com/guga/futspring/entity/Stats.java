@@ -46,5 +46,4 @@ public class Stats {
         return puskasDates.size();
     }
 
-
 }

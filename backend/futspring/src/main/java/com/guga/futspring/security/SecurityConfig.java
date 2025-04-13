@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/pelada/**").permitAll()
                         .requestMatchers("/ranking/**").permitAll()
                         .requestMatchers("/daily/**").permitAll()
+                        .requestMatchers("/match/**").permitAll()
                         .requestMatchers("/team/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)

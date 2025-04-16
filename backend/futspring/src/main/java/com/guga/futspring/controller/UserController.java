@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+@CrossOrigin(origins = "localhost:3030/Login")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/user")

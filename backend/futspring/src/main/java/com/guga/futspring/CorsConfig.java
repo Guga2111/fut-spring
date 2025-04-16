@@ -14,7 +14,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000") //react url
+                        .allowedOrigins("*") //react url
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
             }
         };

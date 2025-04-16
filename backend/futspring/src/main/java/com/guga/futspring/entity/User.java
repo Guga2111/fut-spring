@@ -23,6 +23,7 @@ public class User {
     @Column(name = "email")
     String email;
 
+    @NotBlank(message = "username cannot be blank")
     @Column(name = "username")
     String username;
 

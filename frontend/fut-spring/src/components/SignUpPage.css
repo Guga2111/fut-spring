@@ -1,0 +1,70 @@
+/* Container principal */
+.signup-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Título */
+  .signup-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  /* Formulário */
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Grupo de campos */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  /* Rótulo */
+  .form-label {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* Campo de entrada */
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Botão */
+  .form-button {
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #3cff00;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .form-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Mensagem de sucesso */
+  .success-message {
+    color: green;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+  }

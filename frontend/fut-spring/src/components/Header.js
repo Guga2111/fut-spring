@@ -6,7 +6,13 @@ export default function Header() {
   return (
     <div className="header">
       <div className="header-content">
-        <h2 className="app-subtitle">FutSpring</h2>
+        <a href="/">
+          <img
+            src="futspringlogo.png"
+            alt="FutSpring Logo"
+            className="app-subtitle"
+          ></img>
+        </a>
         <ProfileImage></ProfileImage>
       </div>
     </div>

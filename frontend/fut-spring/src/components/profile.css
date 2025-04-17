@@ -35,13 +35,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  .profile-image {
+}
+
+.profile-image {
     width: 60px; /* Ajuste o tamanho da imagem */
     height: 60px;
     border-radius: 50%; /* Torna a imagem circular */
- /* Borda verde */
+    border: 2px solid #000; /* Adiciona uma borda sólida preta */
     object-fit: cover; /* Garante que a imagem se ajuste ao círculo */
-  }
+    background-color: #000; /* Adiciona um fundo preto para evitar resquícios */
+}
   

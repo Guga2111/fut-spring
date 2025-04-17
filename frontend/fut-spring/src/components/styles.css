@@ -17,15 +17,43 @@
     margin: 0 auto;
   }
   
-  /* Header Styles */
-  .header {
-    margin-top: 50px;
-  }
+/* Header Styles */
+.header {
+  display: flex;
+  justify-content: space-between; /* Nome à esquerda, perfil à direita */
+  align-items: center; /* Centraliza verticalmente */
+  padding: 10px 20px; /* Espaçamento interno */
+  background-color: #121212; /* Fundo do header */
+  border-bottom: 1px solid #333; /* Linha sutil abaixo do header */
+}
+
+/* Nome do aplicativo */
+.header .title {
+  font-size: 1.5rem; /* Ajusta o tamanho da fonte */
+  font-weight: bold;
+  color: #fff;
+  margin: 0; /* Remove margens extras */
+}
+
+/* Estilo do perfil */
+.header .profile-container {
+  display: flex;
+  align-items: center;
+}
+
+.header .profile-image {
+  width: 50px; /* Ajusta o tamanho da imagem */
+  height: 50px;
+  border-radius: 50%; /* Torna a imagem circular */
+  border: 2px solid #fff; /* Adiciona uma borda branca */
+  object-fit: cover; /* Garante que a imagem se ajuste ao círculo */
+  background-color: #000; /* Fundo preto para evitar resquícios */
+}
   
   .search-input {
     padding: 15px;
     margin: 25px 10px;
-    width: 100%;
+    width: 80%;
     font-size: 16px;
     border-radius: 100px;
     border: 1px solid #ccc;
@@ -161,9 +189,11 @@
   }
   
   .app-subtitle {
-    text-align: center;
-    margin: 25px auto;
-    font-weight: 300;
+    display: block; /* Garante que a imagem seja tratada como um bloco */
+    float: left; /* Posiciona a imagem à esquerda */
+    margin: 10px; /* Adiciona um pequeno espaçamento ao redor da imagem */
+    max-width: 60px; /* Define um tamanho compacto para a largura da imagem */
+    height: auto; /* Mantém a proporção da imagem */
   }
   
   nav {

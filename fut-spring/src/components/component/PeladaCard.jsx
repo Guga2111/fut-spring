@@ -10,16 +10,17 @@ import React from "react";
 
 export default function PeladaCard({ pelada }) {
   return (
-    <div key={pelada.id}>
-      <Card >
-        <CardHeader>
-          <CardTitle>{pelada.name}</CardTitle>
-          <CardDescription>{pelada.time}</CardDescription>
+    <div key={pelada.id} className="border rounded-lg p-2">
+      <Card className="w-[350px]">
+
+        <CardHeader className="grid grid-cols-2 gap-4">
+          <CardTitle className="w-auto">{pelada.name}</CardTitle>
+          <CardDescription className="w-auto">{pelada.time}</CardDescription>
         </CardHeader>
         <CardContent>
           <p>Card Content</p>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex justify-between">
           <p>Card Footer</p>
         </CardFooter>
       </Card>

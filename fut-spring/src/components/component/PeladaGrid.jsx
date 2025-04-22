@@ -5,7 +5,7 @@ export default function PeladaGrid({ peladas }) {
 
   return (
     <div>
-      <div className="peladas-grid">
+      <div className="grid grid-cols-2 gap-x-8 gap-y-4">
         {peladas.map((pelada) => (
           <PeladaCard pelada={pelada} key={pelada.id}></PeladaCard>
         ))}

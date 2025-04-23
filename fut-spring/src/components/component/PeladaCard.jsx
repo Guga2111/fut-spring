@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { LuClock } from "react-icons/lu";
 import React from "react";
 
 export default function PeladaCard({ pelada }) {
@@ -21,7 +22,18 @@ export default function PeladaCard({ pelada }) {
           <p>Card Content</p>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <p>Card Footer</p>
+        <div className="flex items-center space-x-2">
+          <div>
+            <p className="flex items-center">
+              <LuClock />
+            </p>
+          </div>
+          <div>
+            <p>
+              {pelada.duration}hrs
+            </p>
+          </div>
+        </div>
         </CardFooter>
       </Card>
     </div>

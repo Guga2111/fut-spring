@@ -1,4 +1,5 @@
 import React from "react";
+import { LuClock } from "react-icons/lu";
 import "./styles.css";
 
 export default function PeladaCard({ pelada }) {

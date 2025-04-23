@@ -22,7 +22,6 @@ export default function AddPeladaButton() {
   });
 
   const [responseData, setResponseData] = useState(null);
-  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,18 +42,16 @@ export default function AddPeladaButton() {
         },
       });
       setResponseData(response.data);
-      setError(null);
-
+      
     } catch (error) {
       console.error("Error in the request: " + error);
-      setError("Ocurred an error when trying to create a pelada.");
     }
   };
 
   return(
     <Dialog>
     <DialogTrigger asChild>
-    <Button className="bg-blue-500 text-white hover:bg-blue-600">
+    <Button >
           Create Pelada
         </Button>
     </DialogTrigger>
@@ -79,6 +76,12 @@ export default function AddPeladaButton() {
             Duration
           </Label>
           <Input required id="duration" name="duration" value={formData.duration} type="float" onChange={handleChange} className="col-span-3" />
+        </div>
+        <div className="grid grid-cols-4 items-center gap-4"> 
+          <Label htmlFor="time" className="text-right">
+            Time
+          </Label>
+          <Input required id="time" name="time" value={formData.time} type="text" onChange={handleChange} className="col-span-3" />
         </div>
         <DialogFooter>
         <Button type="submit">Save changes</Button>

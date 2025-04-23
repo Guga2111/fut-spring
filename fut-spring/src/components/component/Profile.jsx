@@ -8,15 +8,10 @@ import {
 export default function Profile() {
     return(
         <div>
-              <Popover>
-                <PopoverTrigger>
-                    <Avatar className="absolute top-4 right-4 ...">
-                        <AvatarImage src="https://github.com/shadcn.png" />
-                        <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                </PopoverTrigger>
-                <PopoverContent>Place content for the popover here.</PopoverContent>
-            </Popover>
+            <Avatar className="absolute top-4 right-4 ...">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
         </div>
     )
 }

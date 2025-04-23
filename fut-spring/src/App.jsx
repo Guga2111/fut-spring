@@ -5,6 +5,7 @@ import './App.css'
 import PeladaGrid from './components/component/PeladaGrid';
 import Footer from './components/component/Footer';
 import Profile from './components/component/Profile';
+import NavigationBar from './components/component/NavigationBar';
 
 function App() {
 
@@ -27,12 +28,13 @@ function App() {
     <>
     <div className='font-mono'>
       <div className='m-2'>
-        <Profile></Profile>
+        <NavigationBar></NavigationBar>
       </div>
+        <h1>FutSpring</h1>
       <div className='flex-grow'>
         <PeladaGrid peladas={peladas}></PeladaGrid>
       </div>
-    
+  
         <Footer></Footer>
       
     </div>

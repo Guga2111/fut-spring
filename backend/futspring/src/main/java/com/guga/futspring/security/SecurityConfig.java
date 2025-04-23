@@ -57,5 +57,5 @@ public class SecurityConfig {
         http.headers(headers -> headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()));
         return http.build();
     }
-
+    
 }

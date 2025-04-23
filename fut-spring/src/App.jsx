@@ -3,6 +3,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import axios from "axios";
 import './App.css'
 import PeladaGrid from './components/component/PeladaGrid';
+import Footer from './components/component/Footer';
+import Profile from './components/component/Profile';
 
 function App() {
 
@@ -23,22 +25,16 @@ function App() {
 
   return (
     <>
-    <div>
-      <div className='m-10'>
-      <Avatar className="absolute top-4 right-4 ...">
-        <AvatarImage src="https://github.com/shadcn.png" />
-        <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
-
+    <div className='font-mono'>
+      <div className='m-2'>
+        <Profile></Profile>
       </div>
-      <div className='pelada-grid'>
+      <div className='flex-grow'>
         <PeladaGrid peladas={peladas}></PeladaGrid>
       </div>
-      <div className='footer'>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      </div>
+    
+        <Footer></Footer>
+      
     </div>
     </>
   )

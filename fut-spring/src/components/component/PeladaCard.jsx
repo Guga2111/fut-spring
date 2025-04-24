@@ -12,7 +12,7 @@ import React from "react";
 export default function PeladaCard({ pelada }) {
   return (
     <div key={pelada.id} className="border rounded-lg p-2">
-      <Card className="w-[350px]">
+      <Card className="w-auto">
 
         <CardHeader className="grid grid-cols-2 gap-4">
           <CardTitle className="w-auto">{pelada.name}</CardTitle>

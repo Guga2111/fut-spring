@@ -26,7 +26,7 @@ function App() {
 
   return (
     <>
-    <div className='font-mono'>
+    <div className="font-mono min-h-screen flex flex-col">
       <div className='m-2'>
         <NavigationBar></NavigationBar>
       </div>

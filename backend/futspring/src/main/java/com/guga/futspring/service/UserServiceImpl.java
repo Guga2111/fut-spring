@@ -38,6 +38,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public Stats getStats(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        User unwrapUser = unwrapUser(user, id);
+        return unwrapUser.getStats();
+    }
+
+    @Override
     public User saveUser(User user) {
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

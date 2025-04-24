@@ -1,5 +1,6 @@
 package com.guga.futspring.controller;
 
+import com.guga.futspring.entity.Stats;
 import com.guga.futspring.entity.User;
 import com.guga.futspring.service.UserServiceImpl;
 import jakarta.validation.Valid;
@@ -25,5 +26,10 @@ public class UserController {
     public ResponseEntity<User> saveUser(@Valid @RequestBody User user) {
         userService.saveUser(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("{id}/stats")
+    public ResponseEntity<Stats> getStats(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.getStats(id), HttpStatus.OK);
     }
 }

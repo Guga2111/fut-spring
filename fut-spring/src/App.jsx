@@ -5,7 +5,9 @@ import './App.css'
 import PeladaGrid from './components/component/PeladaGrid';
 import Footer from './components/component/Footer';
 import Profile from './components/component/Profile';
+import SignUpPage from './components/component/SignUpPage';
 import NavigationBar from './components/component/NavigationBar';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
 
@@ -31,9 +33,20 @@ function App() {
         <NavigationBar></NavigationBar>
       </div>
         <h1>FutSpring</h1>
-      <div className='flex-grow'>
+
+      <Router>
+        <Routes>
+          <Route path='/' element={<div className='flex-grow'>
         <PeladaGrid peladas={peladas}></PeladaGrid>
-      </div>
+      </div>}>
+
+          </Route>
+          <Route path='/register' element={<SignUpPage></SignUpPage>}>
+
+          </Route>
+        </Routes>  
+      </Router>  
+      
   
         <Footer></Footer>
       

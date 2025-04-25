@@ -10,16 +10,20 @@ import {
 
 export default function StatsGrid({ stats }) {
 
+    if (!stats) {
+        return <div>Loading stats...</div>;
+      }
+
   return (
     <div>
       <Table>
         <TableCaption>A list of your stats.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Goals</TableHead>
+            <TableHead className="w-fit">Goals</TableHead>
             <TableHead>Assists</TableHead>
             <TableHead>Puskas</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -27,7 +31,6 @@ export default function StatsGrid({ stats }) {
             <TableCell className="font-medium">{stats.goals}</TableCell>
             <TableCell>{stats.assists}</TableCell>
             <TableCell>{stats.puskasTimes}</TableCell>
-            <TableCell className="text-right">$250.00</TableCell>
           </TableRow>
         </TableBody>
       </Table>

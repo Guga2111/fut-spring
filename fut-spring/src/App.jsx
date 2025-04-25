@@ -26,16 +26,31 @@ function App() {
   };
 
   const getStats = async () => {
-    const token = localStorage.getItem("jwt");
+    try {
+      const token = localStorage.getItem("jwt");
+      if (!token) {
+        console.error("No JWT token found");
+        return;
+      }
+  
+      const decoded = jwtDecode(token);
+      const email = decoded.sub;
+  
+      // Add the token to authorization header
+      const userResponse = await api.get("/user", { 
+        params: {email},
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
-    const decoded = jwtDecode(token);
-    const email = decoded.sub;
-
-    const userResponse = await api.get("/user", { params: {email} });
-
-    const userStats = userResponse.data.stats;
-
-    setStats(userStats);
+      console.log("Stats response:", userResponse.data);
+  
+      const userStats = userResponse.data.stats;
+      setStats(userStats);
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+    }
   }
 
   useEffect(() => {

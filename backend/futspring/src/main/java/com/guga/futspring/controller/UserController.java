@@ -22,6 +22,12 @@ public class UserController {
         return new ResponseEntity<>(userService.getUser(id).getUsername(), HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<User> getUserByEmail (@RequestParam String email) {
+        User user = userService.getUser(email);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<User> saveUser(@Valid @RequestBody User user) {
         userService.saveUser(user);

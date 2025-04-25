@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Stats getStats(Long id) {
+        System.out.println("OIIIUIIIIIII");
         Optional<User> user = userRepository.findById(id);
         User unwrapUser = unwrapUser(user, id);
         return unwrapUser.getStats();

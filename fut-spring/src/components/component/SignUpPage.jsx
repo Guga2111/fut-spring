@@ -27,6 +27,13 @@ export default function SignUpPage() {
     stars: 1,
   });
 
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+
+
   const [responseData, setResponseData] = useState(null);
 
   const navigate = useNavigate();
@@ -38,6 +45,14 @@ export default function SignUpPage() {
       [name]: value,
     });
   };
+
+  const handleLoginChange = (e) => {
+    const { name, value } =e.target;
+    setLoginData({
+      ...loginData,
+      [name]: value,
+    })
+  }
 
   const handleRegisterRequest = async (e) => {
     e.preventDefault();
@@ -59,8 +74,40 @@ export default function SignUpPage() {
     }
   };
 
+  const handleLoginRequest = async (e) => {
+    e.preventDefault();
+    const endpoint = "http://localhost:8080/authenticate";
+  
+    try {
+      // Faz a requisição ao backend
+      const response = await axios.post(endpoint, loginData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      // Verifica se o cabeçalho Authorization está presente
+      const authHeader = response.headers["authorization"];
+      console.log("Cabeçalho Authorization:", authHeader); // Log para depuração
+
+      if(authHeader && authHeader.startsWith("Bearer ")) {
+        const token = authHeader.split(" ")[1];
+        localStorage.setItem("jwt", token);
+        navigate("/");
+      } else {
+        console.error("Token JWT não encontrado no cabeçalho Authorization.");
+        alert("Erro ao processar o login. Tente novamente.");
+      }
+      
+    } catch (error) {
+      console.error("Erro na requisição de login: ", error);
+      alert("Erro ao realizar login. Verifique suas credenciais.");
+    }
+  };
+
   return (
-    <Tabs defaultValue="register" className="w-[400px]">
+    <div className="shadow-none mx-auto flex justify-center items-center">
+        <Tabs defaultValue="register" className="w-[400px]">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="register">Register</TabsTrigger>
         <TabsTrigger value="login">Login</TabsTrigger>
@@ -132,21 +179,25 @@ export default function SignUpPage() {
               Access your account by entering your credentials below.
             </CardDescription>
           </CardHeader>
+          <form onSubmit={handleLoginRequest}>
           <CardContent className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="Enter your email" />
+              <Input required name="email" id="email" type="email" value={loginData.email} onChange={handleLoginChange} placeholder="Enter your email" />
             </div>
             <div className="space-y-1">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" placeholder="Enter your password" />
+              <Input required name="password" id="password" type="password" value={loginData.password} onChange={handleLoginChange} placeholder="Enter your password" />
             </div>
           </CardContent>
           <CardFooter>
             <Button>Login</Button>
           </CardFooter>
+          </form>
         </Card>
       </TabsContent>
     </Tabs>
+    </div>
+    
   );
 }

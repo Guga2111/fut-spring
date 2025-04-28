@@ -11,6 +11,7 @@ import NavigationBar from "./components/component/NavigationBar";
 import StatsGrid from "./components/component/StatsGrid";
 import LandingPage from "./components/component/LandingPage";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Toaster } from "sonner";
 
 function App() {
   const [peladas, setPeladas] = useState([]);
@@ -21,8 +22,18 @@ function App() {
   });
 
   const getPeladas = async (filters) => {
-    const response = await api.get("/pelada", { params: filters });
-    setPeladas(response.data);
+    try {
+      const response = await api.get("/pelada", { params: filters });
+      console.log("Fetched peladas:", response.data);
+      setPeladas(response.data);
+    } catch (error) {
+      console.error("Error fetching peladas:", error);
+    }
+  };
+
+  const handlePeladaCreated = (newPelada) => {
+    console.log("New pelada created:", newPelada);
+    setPeladas(prevPeladas => [...prevPeladas, newPelada]);
   };
 
   const getStats = async () => {
@@ -36,7 +47,6 @@ function App() {
       const decoded = jwtDecode(token);
       const email = decoded.sub;
 
-      // Add the token to authorization header
       const userResponse = await api.get("/user", {
         params: { email },
         headers: {
@@ -72,7 +82,10 @@ function App() {
                 </div>
                 <h1>FutSpring</h1>
                 <div className="flex-grow">
-                  <PeladaGrid peladas={peladas} />
+                  <PeladaGrid 
+                    peladas={peladas} 
+                    onPeladaCreated={handlePeladaCreated} 
+                  />
                 </div>
               </>
             } 
@@ -82,6 +95,7 @@ function App() {
         </Routes>
         <Footer />
       </Router>
+      <Toaster position="top-right" />
     </div>
   );
 }

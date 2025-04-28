@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import axios from "axios";
 import {
   Card,
@@ -7,17 +7,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -32,8 +27,6 @@ export default function SignUpPage() {
     password: "",
   });
 
-
-
   const [responseData, setResponseData] = useState(null);
 
   const navigate = useNavigate();
@@ -47,12 +40,12 @@ export default function SignUpPage() {
   };
 
   const handleLoginChange = (e) => {
-    const { name, value } =e.target;
+    const { name, value } = e.target;
     setLoginData({
       ...loginData,
       [name]: value,
-    })
-  }
+    });
+  };
 
   const handleRegisterRequest = async (e) => {
     e.preventDefault();
@@ -77,7 +70,7 @@ export default function SignUpPage() {
   const handleLoginRequest = async (e) => {
     e.preventDefault();
     const endpoint = "http://localhost:8080/authenticate";
-  
+
     try {
       // Faz a requisição ao backend
       const response = await axios.post(endpoint, loginData, {
@@ -85,12 +78,12 @@ export default function SignUpPage() {
           "Content-Type": "application/json",
         },
       });
-  
+
       // Verifica se o cabeçalho Authorization está presente
       const authHeader = response.headers["authorization"];
       console.log("Cabeçalho Authorization:", authHeader); // Log para depuração
 
-      if(authHeader && authHeader.startsWith("Bearer ")) {
+      if (authHeader && authHeader.startsWith("Bearer ")) {
         const token = authHeader.split(" ")[1];
         localStorage.setItem("jwt", token);
         navigate("/");
@@ -98,7 +91,6 @@ export default function SignUpPage() {
         console.error("Token JWT não encontrado no cabeçalho Authorization.");
         alert("Erro ao processar o login. Tente novamente.");
       }
-      
     } catch (error) {
       console.error("Erro na requisição de login: ", error);
       alert("Erro ao realizar login. Verifique suas credenciais.");
@@ -106,98 +98,133 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="shadow-none mx-auto flex justify-center items-center">
-        <Tabs defaultValue="register" className="w-[400px]">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="register">Register</TabsTrigger>
-        <TabsTrigger value="login">Login</TabsTrigger>
-      </TabsList>
-      <TabsContent value="register">
-        <Card>
-          <CardHeader>
-            <CardTitle>Register</CardTitle>
-            <CardDescription>
-              Create a new account by filling out the form below.
-            </CardDescription>
-          </CardHeader>
-          <form onSubmit={handleRegisterRequest}>
-            <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="username">Name</Label>
-                <Input
-                  required
-                  name="username"
-                  id="username"
-                  type="text"
-                  value={formData.username}
-                  onChange={handleChange}
-                  placeholder="Enter your name"
-                />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  required
-                  name="email"
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  required
-                  name="password"
-                  id="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button type="submit">Create Account</Button>
-            </CardFooter>
-          </form>
-          {responseData && (
-            <div className="response-container">
-              <h3>Resposta do Servidor:</h3>
-              <pre>{JSON.stringify(responseData, null, 2)}</pre>
-            </div>
-          )}
-        </Card>
-      </TabsContent>
-      <TabsContent value="login">
-        <Card>
-          <CardHeader>
-            <CardTitle>Login</CardTitle>
-            <CardDescription>
-              Access your account by entering your credentials below.
-            </CardDescription>
-          </CardHeader>
-          <form onSubmit={handleLoginRequest}>
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="email">Email</Label>
-              <Input required name="email" id="email" type="email" value={loginData.email} onChange={handleLoginChange} placeholder="Enter your email" />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="password">Password</Label>
-              <Input required name="password" id="password" type="password" value={loginData.password} onChange={handleLoginChange} placeholder="Enter your password" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button>Login</Button>
-          </CardFooter>
-          </form>
-        </Card>
-      </TabsContent>
-    </Tabs>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="w-full max-w-md">
+        <Tabs defaultValue="register" className="w-full">
+          {/* TabsList is now outside the Card */}
+          <TabsList className="flex w-full mb-6 bg-transparent gap-4">
+            <TabsTrigger
+              value="register"
+              className="w-40 h-12 border-2 border-gray-400 text-center text-base bg-transparent
+      data-[state=active]:bg-gray-100 data-[state=active]:text-blue-600
+      data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-700
+      focus:outline-none transition-colors duration-200"
+            >
+              Register
+            </TabsTrigger>
+            <TabsTrigger
+              value="login"
+              className="w-40 h-12 border-2 border-gray-400 text-center text-base bg-transparent
+      data-[state=active]:bg-gray-100 data-[state=active]:text-blue-600
+      data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-700
+      focus:outline-none transition-colors duration-200"
+            >
+              Login
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="register">
+            <Card>
+              <CardHeader>
+                <CardTitle>Register</CardTitle>
+                <CardDescription>
+                  Create a new account by filling out the form below.
+                </CardDescription>
+              </CardHeader>
+              <form onSubmit={handleRegisterRequest}>
+                <CardContent className="space-y-2">
+                  <div className="space-y-1">
+                    <Label htmlFor="username">Name</Label>
+                    <Input
+                      required
+                      name="username"
+                      id="username"
+                      type="text"
+                      value={formData.username}
+                      onChange={handleChange}
+                      placeholder="Enter your name"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      required
+                      name="email"
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      required
+                      name="password"
+                      id="password"
+                      type="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="Enter your password"
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter className="mt-6">
+                  <Button type="submit">Create Account</Button>
+                </CardFooter>
+
+              </form>
+              {responseData && (
+                <div className="response-container p-4">
+                  <h3>Resposta do Servidor:</h3>
+                  <pre>{JSON.stringify(responseData, null, 2)}</pre>
+                </div>
+              )}
+            </Card>
+          </TabsContent>
+          <TabsContent value="login">
+            <Card>
+              <CardHeader>
+                <CardTitle>Login</CardTitle>
+                <CardDescription>
+                  Access your account by entering your credentials below.
+                </CardDescription>
+              </CardHeader>
+              <form onSubmit={handleLoginRequest}>
+                <CardContent className="space-y-2">
+                  <div className="space-y-1">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      required
+                      name="email"
+                      id="email"
+                      type="email"
+                      value={loginData.email}
+                      onChange={handleLoginChange}
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      required
+                      name="password"
+                      id="password"
+                      type="password"
+                      value={loginData.password}
+                      onChange={handleLoginChange}
+                      placeholder="Enter your password"
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter className="mt-6">
+                  <Button>Login</Button>
+                </CardFooter>
+              </form>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
-    
   );
 }

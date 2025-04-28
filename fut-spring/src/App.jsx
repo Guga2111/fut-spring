@@ -67,7 +67,7 @@ function App() {
             path="/home" 
             element={
               <>
-                <div className="m-2">
+                <div className="m-2 font-semibold">
                   <NavigationBar />
                 </div>
                 <h1>FutSpring</h1>

@@ -17,7 +17,9 @@ import {
 export default function BreadcrumMenu() {
     return (
       <div className="absolute top-4 left-4">
-        <Breadcrumb>
+        <div>
+          <span className="font-semibold">
+          <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -51,6 +53,10 @@ export default function BreadcrumMenu() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
+          </span>
+
+        </div>
+        
       </div>
     );
 }

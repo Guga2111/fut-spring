@@ -30,7 +30,7 @@ export default function Profile() {
             </div>
             <div className="grid gap-4 py-4 text-white">
               <Button variant="ghost" className="justify-start">
-                Acess your stats
+                <a href="/stats">Acess your stats</a>
               </Button>
               <Button variant="ghost" className="justify-start">
                 Configurations

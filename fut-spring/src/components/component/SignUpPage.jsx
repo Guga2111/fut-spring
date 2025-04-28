@@ -103,25 +103,25 @@ export default function SignUpPage() {
         <Tabs defaultValue="register" className="w-full">
           {/* TabsList is now outside the Card */}
           <TabsList className="flex w-full mb-6 bg-transparent gap-4">
-            <TabsTrigger
-              value="register"
-              className="w-40 h-12 border-2 border-gray-400 text-center text-base bg-transparent
-      data-[state=active]:bg-gray-100 data-[state=active]:text-blue-600
+  <TabsTrigger
+    value="register"
+    className="w-40 h-12 border-2 border-gray-400 text-center text-base bg-transparent
+      data-[state=active]:bg-gray-100 data-[state=active]:text-green-500
       data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-700
       focus:outline-none transition-colors duration-200"
-            >
-              Register
-            </TabsTrigger>
-            <TabsTrigger
-              value="login"
-              className="w-40 h-12 border-2 border-gray-400 text-center text-base bg-transparent
-      data-[state=active]:bg-gray-100 data-[state=active]:text-blue-600
+  >
+    Register
+  </TabsTrigger>
+  <TabsTrigger
+    value="login"
+    className="w-40 h-12 border-2 border-gray-400 text-center text-base bg-transparent
+      data-[state=active]:bg-gray-100 data-[state=active]:text-green-500
       data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-700
       focus:outline-none transition-colors duration-200"
-            >
-              Login
-            </TabsTrigger>
-          </TabsList>
+  >
+    Login
+  </TabsTrigger>
+</TabsList>
           <TabsContent value="register">
             <Card>
               <CardHeader>

@@ -1,18 +1,18 @@
-import React, {useEffect,useState} from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import React, { useEffect, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import axios from "axios";
-import './App.css'
+import "./App.css";
 import { jwtDecode } from "jwt-decode";
-import PeladaGrid from './components/component/PeladaGrid';
-import Footer from './components/component/Footer';
-import Profile from './components/component/Profile';
-import SignUpPage from './components/component/SignUpPage';
-import NavigationBar from './components/component/NavigationBar';
-import StatsGrid from './components/component/StatsGrid';
+import PeladaGrid from "./components/component/PeladaGrid";
+import Footer from "./components/component/Footer";
+import Profile from "./components/component/Profile";
+import SignUpPage from "./components/component/SignUpPage";
+import NavigationBar from "./components/component/NavigationBar";
+import StatsGrid from "./components/component/StatsGrid";
+import LandingPage from "./components/component/LandingPage";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
-
   const [peladas, setPeladas] = useState([]);
   const [stats, setStats] = useState(null);
 
@@ -32,26 +32,26 @@ function App() {
         console.error("No JWT token found");
         return;
       }
-  
+
       const decoded = jwtDecode(token);
       const email = decoded.sub;
-  
+
       // Add the token to authorization header
-      const userResponse = await api.get("/user", { 
-        params: {email},
+      const userResponse = await api.get("/user", {
+        params: { email },
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       console.log("Stats response:", userResponse.data);
-  
+
       const userStats = userResponse.data.stats;
       setStats(userStats);
     } catch (error) {
       console.error("Error fetching stats:", error);
     }
-  }
+  };
 
   useEffect(() => {
     getPeladas();
@@ -59,36 +59,31 @@ function App() {
   }, []);
 
   return (
-    <>
     <div className="font-mono min-h-screen flex flex-col">
-      <div className='m-2'>
-        <NavigationBar></NavigationBar>
-      </div>
-        <h1>FutSpring</h1>
-
       <Router>
         <Routes>
-          <Route path='/' element={<div className='flex-grow'>
-        <PeladaGrid peladas={peladas}></PeladaGrid>
-      </div>}>
-
-          </Route>
-          <Route path='/register' element={<SignUpPage></SignUpPage>}>
-
-          </Route>
-
-          <Route path='/stats' element={<StatsGrid stats={stats}></StatsGrid>}>
-
-          </Route>
-        </Routes>  
-      </Router>  
-      
-  
-        <Footer></Footer>
-      
+          <Route path="/" element={<LandingPage />} />
+          <Route 
+            path="/home" 
+            element={
+              <>
+                <div className="m-2">
+                  <NavigationBar />
+                </div>
+                <h1>FutSpring</h1>
+                <div className="flex-grow">
+                  <PeladaGrid peladas={peladas} />
+                </div>
+              </>
+            } 
+          />
+          <Route path="/register" element={<SignUpPage />} />
+          <Route path="/stats" element={<StatsGrid stats={stats} />} />
+        </Routes>
+        <Footer />
+      </Router>
     </div>
-    </>
-  )
+  );
 }
 
-export default App
+export default App;

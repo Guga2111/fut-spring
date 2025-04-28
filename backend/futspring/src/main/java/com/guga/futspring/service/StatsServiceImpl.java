@@ -62,7 +62,9 @@ public class StatsServiceImpl implements StatsService {
         unwrapStats.setAssists(assists);
 
         Stats savedStats = statsRepository.save(unwrapStats);
-        rankingService.updateTotalGoalsAndAssists(unwrapStats.getRanking().getId());
+        if (unwrapStats.getRanking() != null) {
+            rankingService.updateTotalGoalsAndAssists(unwrapStats.getRanking().getId());
+        }
         return savedStats;
     }
 

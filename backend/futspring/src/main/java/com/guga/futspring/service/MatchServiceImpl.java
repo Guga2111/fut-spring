@@ -1,9 +1,6 @@
 package com.guga.futspring.service;
 
-import com.guga.futspring.entity.Daily;
-import com.guga.futspring.entity.Match;
-import com.guga.futspring.entity.Team;
-import com.guga.futspring.entity.User;
+import com.guga.futspring.entity.*;
 import com.guga.futspring.repository.DailyRepository;
 import com.guga.futspring.repository.MatchRepository;
 import com.guga.futspring.repository.TeamRepository;
@@ -38,6 +35,16 @@ public class MatchServiceImpl implements MatchService{
     public Match createMatch(Match match, Long team1Id, Long team2Id, Long dailyId) {
         Team team1 = TeamServiceImpl.unwrapTeam(teamRepository.findById(team1Id), team1Id);
         Team team2 = TeamServiceImpl.unwrapTeam(teamRepository.findById(team2Id), team2Id);
+
+        for(User player : team1.getPlayers()) {
+            Stats stats = player.getStats();
+            stats.setMatches(stats.getMatches() + 1);
+        }
+
+        for(User player : team2.getPlayers()) {
+            Stats stats = player.getStats();
+            stats.setMatches(stats.getMatches() + 1);
+        }
 
         Daily daily = DailyServiceImpl.unwrapDaily(dailyRepository.findById(dailyId), dailyId);
 

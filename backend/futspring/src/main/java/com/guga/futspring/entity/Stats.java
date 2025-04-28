@@ -29,6 +29,9 @@ public class Stats {
     @Column(name = "assists")
     private int assists;
 
+    @Column(name = "matches")
+    private int matches;
+
     @ElementCollection
     @Temporal(TemporalType.DATE)
     @Column(name = "puskasDates")

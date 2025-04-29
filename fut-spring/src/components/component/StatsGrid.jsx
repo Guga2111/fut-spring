@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import StatsChart from "./StatsChart";
 
 export default function StatsGrid({ stats }) {
 
@@ -15,8 +16,9 @@ export default function StatsGrid({ stats }) {
       }
 
   return (
-    <div>
-      <Table>
+    <div className="w-full h-screen">
+      <div>
+      <Table className="w-full">
         <TableCaption>A list of your stats.</TableCaption>
         <TableHeader>
           <TableRow>
@@ -34,6 +36,12 @@ export default function StatsGrid({ stats }) {
           </TableRow>
         </TableBody>
       </Table>
+      </div>
+      <div>
+        {/*<StatsChart></StatsChart>*/}
+        {/* standby this chart */}
+      </div>
+      
     </div>
   );
 }

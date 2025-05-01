@@ -21,6 +21,7 @@ export default function AddPeladaButton({ onPeladaCreated }) {
     duration: "",
     time: "",
   });
+  const [imageFile, setImageFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
@@ -31,15 +32,30 @@ export default function AddPeladaButton({ onPeladaCreated }) {
     });
   };
 
+  const handleImageChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
   const handleCreatePeladaRequest = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     const endpoint = "http://localhost:8080/pelada";
 
+    // Create FormData object
+    const data = new FormData();
+    
+    // Add pelada data as JSON string
+    data.append("peladaData", JSON.stringify(formData));
+    
+    // Add image file if it exists
+    if (imageFile) {
+      data.append("image", imageFile);
+    }
+
     try {
-      const response = await axios.post(endpoint, formData, {
+      const response = await axios.post(endpoint, data, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
       
@@ -56,6 +72,7 @@ export default function AddPeladaButton({ onPeladaCreated }) {
         duration: "",
         time: "",
       });
+      setImageFile(null);
       
       setOpen(false);
       
@@ -95,13 +112,26 @@ export default function AddPeladaButton({ onPeladaCreated }) {
               <Label htmlFor="duration" className="text-right">
                 Duration
               </Label>
-              <Input required id="duration" name="duration" value={formData.duration} type="float" onChange={handleChange} className="col-span-3" />
+              <Input required id="duration" name="duration" value={formData.duration} type="number" step="0.1" onChange={handleChange} className="col-span-3" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4"> 
               <Label htmlFor="time" className="text-right">
                 Time
               </Label>
               <Input required id="time" name="time" value={formData.time} type="text" onChange={handleChange} className="col-span-3" />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4"> 
+              <Label htmlFor="image" className="text-right">
+                Image
+              </Label>
+              <Input 
+                id="image" 
+                name="image" 
+                type="file" 
+                accept="image/*" 
+                onChange={handleImageChange} 
+                className="col-span-3" 
+              />
             </div>
             <DialogFooter>
               <Button type="submit" disabled={isSubmitting}>

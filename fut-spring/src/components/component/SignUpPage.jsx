@@ -72,16 +72,14 @@ export default function SignUpPage() {
     const endpoint = "http://localhost:8080/authenticate";
 
     try {
-      // Faz a requisição ao backend
       const response = await axios.post(endpoint, loginData, {
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      // Verifica se o cabeçalho Authorization está presente
       const authHeader = response.headers["authorization"];
-      console.log("Cabeçalho Authorization:", authHeader); // Log para depuração
+      console.log("Cabeçalho Authorization:", authHeader);
 
       if (authHeader && authHeader.startsWith("Bearer ")) {
         const token = authHeader.split(" ")[1];
@@ -101,7 +99,7 @@ export default function SignUpPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md">
         <Tabs defaultValue="register" className="w-full">
-          {/* TabsList is now outside the Card */}
+          
           <TabsList className="flex w-full mb-6 bg-transparent gap-4">
   <TabsTrigger
     value="register"

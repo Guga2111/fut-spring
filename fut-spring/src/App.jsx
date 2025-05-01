@@ -10,12 +10,15 @@ import SignUpPage from "./components/component/SignUpPage";
 import NavigationBar from "./components/component/NavigationBar";
 import StatsGrid from "./components/component/StatsGrid";
 import LandingPage from "./components/component/LandingPage";
+import PeladaArea from "./components/component/PeladaArea";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Toaster } from "sonner";
 
 function App() {
   const [peladas, setPeladas] = useState([]);
   const [stats, setStats] = useState(null);
+  const [selectedPelada, setSelectedPelada] = useState(null);
 
   const api = axios.create({
     baseURL: "http://localhost:8080", // URL do backend
@@ -33,7 +36,11 @@ function App() {
 
   const handlePeladaCreated = (newPelada) => {
     console.log("New pelada created:", newPelada);
-    setPeladas(prevPeladas => [...prevPeladas, newPelada]);
+    setPeladas((prevPeladas) => [...prevPeladas, newPelada]);
+  };
+
+  const handlePeladaSelect = (pelada) => {
+    setSelectedPelada(pelada);
   };
 
   const getStats = async () => {
@@ -70,28 +77,59 @@ function App() {
 
   return (
     <div className="font-mono min-h-screen flex flex-col">
+
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route 
-            path="/home" 
+          <Route
+            path="/home"
             element={
               <>
                 <div className="m-2 font-semibold">
                   <NavigationBar />
                 </div>
-                <h1>FutSpring</h1>
+                <h1 className="font-extrabold">FutSpring</h1>
                 <div className="flex-grow">
-                  <PeladaGrid 
-                    peladas={peladas} 
-                    onPeladaCreated={handlePeladaCreated} 
+                  <PeladaGrid
+                    peladas={peladas}
+                    onPeladaCreated={handlePeladaCreated}
+                    onPeladaSelect={handlePeladaSelect}
                   />
                 </div>
               </>
-            } 
+            }
           />
-          <Route path="/register" element={<SignUpPage />} />
-          <Route path="/stats" element={<StatsGrid stats={stats} />} />
+          <Route path="/register" element={<>
+            <h1 className="font-extrabold">FutSpring</h1>
+            <SignUpPage />
+          </>} />
+          <Route
+            path="/stats"
+            element={
+              <>
+                <div className="m-2 font-semibold">
+                  <NavigationBar />
+                </div>
+                <h1 className="font-extrabold">FutSpring</h1>
+                <div>
+                  <StatsGrid stats={stats} />
+                </div>
+              </>
+            }
+          />
+          <Route
+            path="/pelada/:id"
+            element={
+              <>
+                <div className="m-2 font-semibold">
+                  <NavigationBar />
+                </div>
+                <div>
+                  <PeladaArea pelada={selectedPelada}></PeladaArea>
+                </div>
+              </>
+            }
+          />
         </Routes>
         <Footer />
       </Router>

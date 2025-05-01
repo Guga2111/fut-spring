@@ -4,9 +4,11 @@ import AddPeladaButton from "./AddPeladaButton";
 import { Button } from "@/components/ui/button"
 import {Search, PlusCircle} from 'lucide-react';
 import SearchBar from "./SearchBar";
+import { useNavigate } from "react-router-dom";
 
-export default function PeladaGrid({ peladas, onPeladaCreated }) {
+export default function PeladaGrid({ peladas, onPeladaCreated, onPeladaSelect }) {
   const [searchTerm, setSearchTerm] = useState("");
+
 
   const matchesSearchTerm = (pelada, searchTerm) => {
     return pelada.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -15,6 +17,8 @@ export default function PeladaGrid({ peladas, onPeladaCreated }) {
   const filteredPeladas = peladas.filter((pelada) =>
     matchesSearchTerm(pelada, searchTerm)
   );
+
+ 
 
   console.log("PeladaGrid rendered with peladas:", peladas);
 
@@ -28,7 +32,7 @@ export default function PeladaGrid({ peladas, onPeladaCreated }) {
       </div>
       <div className="grid grid-cols-2 gap-x-8 gap-y-4">
         {filteredPeladas.map((pelada) => (
-          <PeladaCard pelada={pelada} key={pelada.id}></PeladaCard>
+          <PeladaCard pelada={pelada} key={pelada.id} onPeladaSelect={onPeladaSelect}></PeladaCard>
         ))}
       </div>
     </div>

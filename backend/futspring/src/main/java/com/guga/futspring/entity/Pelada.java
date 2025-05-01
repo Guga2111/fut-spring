@@ -27,6 +27,9 @@ public class Pelada {
     @Column(name = "time")
     private String time;
 
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "duration")
     private float duration; //1,5 = 1h 30m; 2 = 2h; 1,333 = 1h 20m
 

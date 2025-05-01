@@ -1,13 +1,21 @@
 package com.guga.futspring.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guga.futspring.entity.Pelada;
 import com.guga.futspring.entity.User;
 import com.guga.futspring.service.PeladaServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 //
 @RestController
@@ -32,9 +40,35 @@ public class PeladaController {
         return new ResponseEntity<>(peladaService.getPlayerAssociatedToPelada(id), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Pelada> savePelada(@RequestBody Pelada pelada) {
-        return new ResponseEntity<>(peladaService.savePelada(pelada), HttpStatus.CREATED);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Pelada> savePelada(@RequestPart("peladaData") String peladaJson, @RequestPart(value = "image", required = false)MultipartFile imageFile) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Pelada pelada = mapper.readValue(peladaJson, Pelada.class);
+        return new ResponseEntity<>(peladaService.savePelada(pelada, imageFile), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/images/{filename:.+}")
+    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
+        Resource imageResource = peladaService.getImage(filename);
+
+        if (imageResource != null && imageResource.exists()) {
+
+            String contentType = "image/jpeg";
+            try {
+                contentType = Files.probeContentType(
+                        Paths.get(imageResource.getFile().getAbsolutePath())
+                );
+            } catch (IOException e) {
+
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(contentType));
+
+            return new ResponseEntity<>(imageResource, headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("{id}/user/{userId}")

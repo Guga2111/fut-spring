@@ -42,6 +42,7 @@ public class Stats {
     private User user;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "ranking_id")
     private Ranking ranking;
 

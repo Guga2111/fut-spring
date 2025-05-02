@@ -17,14 +17,18 @@ export default function LandingPageHeader() {
           <NavigationMenuList className="flex space-x-8">
             <NavigationMenuItem>
               <NavigationMenuTrigger className="px-3 py-2 text-white">
-                Products
+                Peladas
               </NavigationMenuTrigger>
               <NavigationMenuContent className="bg-white p-4 rounded-md shadow-lg border border-gray-100 min-w-[200px]">
                 <NavigationMenuLink
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md"
                   href="/home"
                 >
-                  Link
+                  Pelada
+                </NavigationMenuLink>
+                <NavigationMenuLink className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md"
+                  href="https://www.linkedin.com/in/luisgustavosampaio/">
+                    Creator
                 </NavigationMenuLink>
               </NavigationMenuContent>
             </NavigationMenuItem>

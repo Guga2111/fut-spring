@@ -22,7 +22,7 @@ export default function BreadcrumMenu() {
           <Breadcrumb>
             <BreadcrumbList className="[&_a]:!font-semibold [&_span]:!font-semibold [&_div]:!font-semibold">
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/home">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
@@ -32,7 +32,10 @@ export default function BreadcrumMenu() {
                     <span className="sr-only">Toggle menu</span>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start">
-                    <DropdownMenuItem>Documentation</DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <a href="/">
+                      Landing Page
+                        </a></DropdownMenuItem>
                     <DropdownMenuItem>Themes</DropdownMenuItem>
                     <a href="https://github.com/Guga2111/fut-spring">
                       <DropdownMenuItem>GitHub</DropdownMenuItem>

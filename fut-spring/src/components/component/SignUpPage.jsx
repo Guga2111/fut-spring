@@ -84,7 +84,7 @@ export default function SignUpPage() {
       if (authHeader && authHeader.startsWith("Bearer ")) {
         const token = authHeader.split(" ")[1];
         localStorage.setItem("jwt", token);
-        navigate("/");
+        navigate("/home");
       } else {
         console.error("Token JWT não encontrado no cabeçalho Authorization.");
         alert("Erro ao processar o login. Tente novamente.");

@@ -3,6 +3,9 @@ package com.guga.futspring.service;
 import com.guga.futspring.entity.Pelada;
 import com.guga.futspring.entity.Ranking;
 import com.guga.futspring.entity.Stats;
+import com.guga.futspring.exception.PeladaNotFoundException;
+import com.guga.futspring.exception.RankingNotFoundForPelada;
+import com.guga.futspring.repository.PeladaRepository;
 import com.guga.futspring.repository.RankingRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -17,11 +20,17 @@ import java.util.Optional;
 public class RankingServiceImpl implements RankingService{
 
     RankingRepository rankingRepository;
+    PeladaRepository peladaRepository;
 
     @Override
-    public Ranking getRanking(Long id) {
-        Optional<Ranking> ranking = rankingRepository.findById(id);
-        return unwrapRanking(ranking, id);
+    public Ranking getRanking(Long peladaId) {
+        Optional<Pelada> pelada = peladaRepository.findById(peladaId);
+
+        Ranking ranking = pelada.get().getRanking();
+
+        if(ranking == null) throw new RankingNotFoundForPelada();
+
+        return ranking;
     }
 
     @Override
@@ -54,7 +63,7 @@ public class RankingServiceImpl implements RankingService{
     @Override
     @Transactional
     public void updateTotalGoalsAndAssists(Long rankingId) {
-        Ranking ranking = unwrapRanking(rankingRepository.findById(rankingId), rankingId);
+        Ranking ranking = unwrapRanking(rankingRepository.findById(rankingId));
 
         int totalGoals = ranking.getStats().stream().mapToInt(Stats::getGoals).sum();
         int totalAssists = ranking.getStats().stream().mapToInt(Stats::getAssists).sum();
@@ -64,7 +73,7 @@ public class RankingServiceImpl implements RankingService{
         rankingRepository.save(ranking);
     }
 
-    static Ranking unwrapRanking(Optional<Ranking> entity, Long id) {
+    static Ranking unwrapRanking(Optional<Ranking> entity) {
         if(entity.isPresent()) return entity.get();
         else throw new RuntimeException();
     }

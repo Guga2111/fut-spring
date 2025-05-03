@@ -22,17 +22,27 @@ public class Ranking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "matches")
     private int matches;
+
+    @Column(name = "goals")
     private int goals; // Total de gols de todos os jogadores
+
+    @Column(name = "assists")
     private int assists; // Total de assistências de todos os jogadores
 
+
+
     @ElementCollection
+    @Column(name = "artillery")
     private List<RankingEntry> artilharia; // Ranking de jogadores baseado em gols
 
     @ElementCollection
+    @Column(name = "waiter")
     private List<RankingEntry> garcom; // Ranking de jogadores baseado em assistências
 
     @ElementCollection
+    @Column(name = "puskas")
     private List<RankingEntry> puskas; // Ranking de jogadores que mais venceram o Puskas
 
     @OneToMany(mappedBy = "ranking", cascade = CascadeType.ALL, orphanRemoval = true)

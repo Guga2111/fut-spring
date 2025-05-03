@@ -22,6 +22,11 @@ public class RankingController {
         return new ResponseEntity<>(rankingService.getRankings(), HttpStatus.OK);
     }
 
+    @GetMapping("{peladaId}")
+    public ResponseEntity<Ranking> getRanking(@PathVariable Long peladaId) {
+        return new ResponseEntity<>(rankingService.getRanking(peladaId), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Ranking> createRanking(@Valid @RequestBody Ranking ranking) {
         return new ResponseEntity<>(rankingService.saveRanking(ranking), HttpStatus.CREATED);

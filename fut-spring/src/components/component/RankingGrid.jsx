@@ -12,18 +12,31 @@ import { IoFootball } from "react-icons/io5";
 import { BiSolidBullseye } from "react-icons/bi";
 import { GiSoccerKick } from "react-icons/gi";
 
-export default function RankingGrid() {
-
+export default function RankingGrid({ ranking }) {
   return (
-    <div className="w-full">
+    <div className="w-full p-4">
       <Tabs defaultValue="ranking">
         <div className="flex justify-center">
-        <TabsList className="flex space-x-4">
-          <TabsTrigger value="goals" className="text-white">Goals</TabsTrigger>
-          <TabsTrigger value="assists" className="text-white">Assists</TabsTrigger>
-          <TabsTrigger value="puskas" className="text-white">Puskas</TabsTrigger>
-        </TabsList>
+          <TabsList className="flex flex-col items-center space-y-4 mb-4">
+            <div>
+              <TabsTrigger value="general" className="text-white">
+                General
+              </TabsTrigger>
+            </div>
+            <div className="flex space-x-4">
+              <TabsTrigger value="goals" className="text-white">
+                Goals
+              </TabsTrigger>
+              <TabsTrigger value="assists" className="text-white">
+                Assists
+              </TabsTrigger>
+              <TabsTrigger value="puskas" className="text-white">
+                Puskas
+              </TabsTrigger>
+            </div>
+          </TabsList>
         </div>
+        <div className="p-4">
         <TabsContent value="goals">
           <Table>
             <TableCaption>Goals Ranking.</TableCaption>
@@ -71,7 +84,7 @@ export default function RankingGrid() {
             </TableHeader>
             <TableBody>
               <TableRow>
-              <TableCell className="font-medium">
+                <TableCell className="font-medium">
                   <div className="flex justify-center items-center ">
                     <div className="overflow-hidden rounded-full w-10 h-10">
                       <img
@@ -105,7 +118,7 @@ export default function RankingGrid() {
             </TableHeader>
             <TableBody>
               <TableRow>
-              <TableCell className="font-medium">
+                <TableCell className="font-medium">
                   <div className="flex justify-center items-center ">
                     <div className="overflow-hidden rounded-full w-10 h-10">
                       <img
@@ -127,6 +140,41 @@ export default function RankingGrid() {
             </TableBody>
           </Table>
         </TabsContent>
+        <TabsContent value="general">
+          <Table>
+            <TableCaption>General Ranking.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Matches</TableHead>
+                <TableHead>Goals</TableHead>
+                <TableHead className="text-right">Assists</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium">
+                  <div className="flex items-center justify-end gap-1">
+                    <span>{ranking.matches}</span>
+                    <IoFootball />
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center justify-end gap-1">
+                    <span>{ranking.goals}</span>
+                    <IoFootball />
+                  </div>
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex items-center justify-end gap-1">
+                    <span>{ranking.assists}</span>
+                    <BiSolidBullseye />
+                  </div>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TabsContent>
+        </div>
       </Tabs>
     </div>
   );

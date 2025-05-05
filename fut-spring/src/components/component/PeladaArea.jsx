@@ -14,6 +14,7 @@ export default function PeladaArea({pelada}) {
     const [loading, setLoading] = useState(!pelada);
     const [playersAssociated, setPlayersAssociated] = useState([]);
     const [loadingPlayers, setLoadingPlayers] = useState(true);
+    const [ranking, setRanking] = useState([]);
 
     useEffect(() => {
         if (!peladaData && id) {
@@ -50,6 +51,19 @@ export default function PeladaArea({pelada}) {
         
         fetchPlayers();
     }, [id]);
+
+    useEffect(() => {
+      const fetchRanking = async () => {
+        try{
+          const response = await axios.get(`http://localhost:8080/ranking/${id}`);
+          setRanking(response.data);
+        } catch (error) {
+          console.error("Error fetching ranking: ", error);
+        }
+      };
+
+      fetchRanking();
+    }, [id])
       
       if (loading) return <div><Progress value={33} /></div>;
       if (!peladaData) return <div>Pelada not found</div>;
@@ -67,11 +81,11 @@ export default function PeladaArea({pelada}) {
     </div>
 
     {/* ─── MIDDLE COLUMN: DailyCard + Players ─── */}
-    <div className="w-1/2 flex flex-col items-center space-y-96">
-      <div className="Central Area w-full">
+    <div className="w-1/2 h-screen flex flex-col justify-between items-center">
+      <div className="w-full">
         <DailyCard pelada={peladaData} />
       </div>
-      <div className="Players Area w-full">
+      <div className="w-full">
         <ViewPeladaPlayersDialog
           isLoading={loadingPlayers}
           playersAssociated={playersAssociated}
@@ -80,8 +94,8 @@ export default function PeladaArea({pelada}) {
     </div>
 
     {/* ─── RIGHT COLUMN: RankingGrid ─── */}
-    <div className="w-1/4 Ranking Area border rounded p-4 py-16">
-      <RankingGrid />
+    <div className="w-1/4 border rounded p-4 ">
+      <RankingGrid ranking={ranking}/>
     </div>
 
   </div>

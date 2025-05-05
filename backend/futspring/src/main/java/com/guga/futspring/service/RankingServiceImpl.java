@@ -26,6 +26,8 @@ public class RankingServiceImpl implements RankingService{
     public Ranking getRanking(Long peladaId) {
         Optional<Pelada> pelada = peladaRepository.findById(peladaId);
 
+        if(pelada.isPresent()) throw new PeladaNotFoundException(peladaId);
+
         Ranking ranking = pelada.get().getRanking();
 
         if(ranking == null) throw new RankingNotFoundForPelada();

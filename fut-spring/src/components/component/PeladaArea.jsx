@@ -95,7 +95,7 @@ export default function PeladaArea({pelada}) {
 
     {/* ─── RIGHT COLUMN: RankingGrid ─── */}
     <div className="w-1/4 border rounded p-4 ">
-      <RankingGrid ranking={ranking}/>
+      <RankingGrid ranking={ranking} associatedPlayers={playersAssociated}/>
     </div>
 
   </div>

@@ -12,17 +12,33 @@ import { IoFootball } from "react-icons/io5";
 import { BiSolidBullseye } from "react-icons/bi";
 import { GiSoccerKick } from "react-icons/gi";
 
-export default function RankingGrid({ ranking }) {
+/**
+ * @param {Object} props
+ * @param {Object} props.ranking - objeto de ranking com prizeEntries, stats, pelada...
+ * @param {Array} props.associatedPlayers - lista de jogadores associados à pelada [{id, name, photo}, ...]
+ */
+export default function RankingGrid({ ranking, associatedPlayers }) {
+  // Mapeia e enriquece prize entries com dados do jogador
+  const mapEntries = (type) =>
+    (ranking.prizeEntries || [])
+      .filter((entry) => entry.typeOfPrize === type)
+      .map((entry) => ({
+        ...entry,
+        user: associatedPlayers.find((p) => p.id === entry.userId) || { id: entry.userId, name: 'Unknown', photo: '' }
+      }));
+
+  const goalsPrizes = mapEntries("TOPSCORER");
+  const assistsPrizes = mapEntries("TOPASSIST");
+  const puskasPrizes = mapEntries("PUSKAS");
+
   return (
     <div className="w-full p-4">
-      <Tabs defaultValue="ranking">
+      <Tabs defaultValue="general">
         <div className="flex justify-center">
           <TabsList className="flex flex-col items-center space-y-4 mb-4">
-            <div>
-              <TabsTrigger value="general" className="text-white">
-                General
-              </TabsTrigger>
-            </div>
+            <TabsTrigger value="general" className="text-white">
+              General
+            </TabsTrigger>
             <div className="flex space-x-4">
               <TabsTrigger value="goals" className="text-white">
                 Goals
@@ -36,144 +52,139 @@ export default function RankingGrid({ ranking }) {
             </div>
           </TabsList>
         </div>
-        <div className="p-4">
-        <TabsContent value="goals">
-          <Table>
-            <TableCaption>Goals Ranking.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]"></TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">
-                  <div className="flex justify-center items-center ">
-                    <div className="overflow-hidden rounded-full w-10 h-10">
-                      <img
-                        src={"backgroundbalotelli.jpg"}
-                        alt={"Player"}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-                </TableCell>
 
-                <TableCell>Players name</TableCell>
-                <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-1">
-                    <span>50</span>
-                    <IoFootball />
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TabsContent>
-        <TabsContent value="assists">
-          <Table>
-            <TableCaption>Assists Ranking.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]"></TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">
-                  <div className="flex justify-center items-center ">
-                    <div className="overflow-hidden rounded-full w-10 h-10">
-                      <img
-                        src={"backgroundbalotelli.jpg"}
-                        alt={"Player"}
-                        className="w-full h-full object-cover"
-                      />
+        <div className="p-4">
+          {/* GOALS */}
+          <TabsContent value="goals">
+            <Table>
+              <TableCaption>Goals Ranking.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]"></TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead className="text-right">Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {goalsPrizes.map(({ user, date }) => (
+                  <TableRow key={`${user.id}-${date}`}> 
+                    <TableCell className="font-medium">
+                      <div className="flex justify-center items-center">
+                        <div className="overflow-hidden rounded-full w-10 h-10">
+                          <img
+                            src={user.photo}
+                            alt={user.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell className="text-right">
+                      {date ? new Date(date).toLocaleDateString() : '-'}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TabsContent>
+
+          {/* ASSISTS */}
+          <TabsContent value="assists">
+            <Table>
+              <TableCaption>Assists Ranking.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]"></TableHead>
+                  <TableHead>Name</TableHead>
+    
+                  <TableHead className="text-right">Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {assistsPrizes.map(({ user, date }) => (
+                  <TableRow key={`${user.id}-${date}`}> 
+                    <TableCell className="font-medium">
+                      <div className="flex justify-center items-center">
+                        <div className="overflow-hidden rounded-full w-10 h-10">
+                          <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{user.name}</TableCell>
+                  
+                    <TableCell className="text-right">
+                      {date ? new Date(date).toLocaleDateString() : '-'}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TabsContent>
+
+          {/* PUSKAS */}
+          <TabsContent value="puskas">
+            <Table>
+              <TableCaption>Puskas Ranking.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]"></TableHead>
+                  <TableHead>Name</TableHead>
+              
+                  <TableHead className="text-right">Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {puskasPrizes.map(({ user, date }) => (
+                  <TableRow key={`${user.id}-${date}`}> 
+                    <TableCell className="font-medium">
+                      <div className="flex justify-center items-center">
+                        <div className="overflow-hidden rounded-full w-10 h-10">
+                          <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{user.name}</TableCell>
+                   
+                    <TableCell className="text-right">
+                      {date ? new Date(date).toLocaleDateString() : '-'}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TabsContent>
+
+          {/* GENERAL */}
+          <TabsContent value="general">
+            <Table>
+              <TableCaption>General Ranking.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]"></TableHead>
+                  <TableHead>Goals</TableHead>
+                  <TableHead className="text-right">Assists</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="font-medium"></TableCell>
+                  <TableCell>
+                    <div className="flex items-center justify-end gap-1">
+                      <span>{ranking.goals}</span>
+                      <IoFootball />
                     </div>
-                  </div>
-                </TableCell>
-                <TableCell>Players name</TableCell>
-                <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-1">
-                    <span>50</span>
-                    <BiSolidBullseye />
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TabsContent>
-        <TabsContent value="puskas">
-          <Table>
-            <TableCaption>Puskas Ranking.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]"></TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">
-                  <div className="flex justify-center items-center ">
-                    <div className="overflow-hidden rounded-full w-10 h-10">
-                      <img
-                        src={"backgroundbalotelli.jpg"}
-                        alt={"Player"}
-                        className="w-full h-full object-cover"
-                      />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex items-center justify-end gap-1">
+                      <span>{ranking.assists}</span>
+                      <BiSolidBullseye />
                     </div>
-                  </div>
-                </TableCell>
-                <TableCell>Players name</TableCell>
-                <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-1">
-                    <span>50</span>
-                    <GiSoccerKick />
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TabsContent>
-        <TabsContent value="general">
-          <Table>
-            <TableCaption>General Ranking.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Matches</TableHead>
-                <TableHead>Goals</TableHead>
-                <TableHead className="text-right">Assists</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">
-                  <div className="flex items-center justify-end gap-1">
-                    <span>{ranking.matches}</span>
-                    <IoFootball />
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center justify-end gap-1">
-                    <span>{ranking.goals}</span>
-                    <IoFootball />
-                  </div>
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-1">
-                    <span>{ranking.assists}</span>
-                    <BiSolidBullseye />
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TabsContent>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TabsContent>
         </div>
       </Tabs>
     </div>

@@ -31,19 +31,8 @@ public class Ranking {
     @Column(name = "assists")
     private int assists; // Total de assistências de todos os jogadores
 
-
-
     @ElementCollection
-    @Column(name = "artillery")
-    private List<RankingEntry> artilharia; // Ranking de jogadores baseado em gols
-
-    @ElementCollection
-    @Column(name = "waiter")
-    private List<RankingEntry> garcom; // Ranking de jogadores baseado em assistências
-
-    @ElementCollection
-    @Column(name = "puskas")
-    private List<RankingEntry> puskas; // Ranking de jogadores que mais venceram o Puskas
+    private List<RankingEntry> prizes; //premios como artilheiro, garcom e puskas
 
     @OneToMany(mappedBy = "ranking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Stats> stats = new ArrayList<>();

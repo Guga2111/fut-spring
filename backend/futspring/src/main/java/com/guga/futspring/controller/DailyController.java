@@ -3,6 +3,7 @@ package com.guga.futspring.controller;
 import com.guga.futspring.entity.Daily;
 import com.guga.futspring.entity.Match;
 import com.guga.futspring.entity.Team;
+import com.guga.futspring.entity.embedded.RankingEntry;
 import com.guga.futspring.service.DailyServiceImpl;
 import com.guga.futspring.service.MatchServiceImpl;
 import jakarta.validation.Valid;
@@ -49,5 +50,11 @@ public class DailyController {
     @PutMapping("/{dailyId}/confirm-presence/{userId}")
     public ResponseEntity<Daily> confirmPresenceInDaily(@PathVariable Long dailyId, @PathVariable Long userId) {
         return new ResponseEntity<>(dailyService.confirmPresenceInDaily(dailyId, userId), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/finalize")
+    public ResponseEntity<Daily> finalizeDaily(@PathVariable Long id, @RequestBody @Valid List<RankingEntry> prizes) {
+
+        return new ResponseEntity<>(dailyService.finalizeDaily(id, prizes), HttpStatus.OK);
     }
 }

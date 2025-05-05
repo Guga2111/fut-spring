@@ -26,7 +26,7 @@ public class RankingServiceImpl implements RankingService{
     public Ranking getRanking(Long peladaId) {
         Optional<Pelada> pelada = peladaRepository.findById(peladaId);
 
-        if(pelada.isPresent()) throw new PeladaNotFoundException(peladaId);
+        if(pelada.isEmpty()) throw new PeladaNotFoundException(peladaId);
 
         Ranking ranking = pelada.get().getRanking();
 
@@ -51,9 +51,7 @@ public class RankingServiceImpl implements RankingService{
         ranking.setGoals(0);
         ranking.setAssists(0);
         ranking.setPelada(pelada);
-        ranking.setPuskas(new ArrayList<>());
-        ranking.setGarcom(new ArrayList<>());
-        ranking.setArtilharia(new ArrayList<>());
+        ranking.setPrizes(new ArrayList<>());
         return rankingRepository.save(ranking);
     }
 

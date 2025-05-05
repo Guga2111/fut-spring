@@ -1,6 +1,7 @@
 package com.guga.futspring.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.guga.futspring.entity.embedded.RankingEntry;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,16 @@ public class Daily {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    //criar atributo imagem para colocar a imagem do time campeao!
+
+
+
+    @Column(name = "finished")
+    private Boolean isFinished;
+
+    @ElementCollection
+    private List<RankingEntry> prizeEntries;
 
     @ManyToMany
     @JsonIgnore

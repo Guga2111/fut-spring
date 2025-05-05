@@ -1,14 +1,15 @@
 package com.guga.futspring.service;
 
-import com.guga.futspring.entity.Daily;
-import com.guga.futspring.entity.Pelada;
-import com.guga.futspring.entity.Team;
-import com.guga.futspring.entity.User;
+import com.guga.futspring.entity.*;
+import com.guga.futspring.entity.embedded.RankingEntry;
 import com.guga.futspring.exception.AlreadyPlayerInDailyException;
+import com.guga.futspring.exception.DailyNotFoundException;
 import com.guga.futspring.exception.PlayerNotInPeladaException;
 import com.guga.futspring.repository.DailyRepository;
 import com.guga.futspring.repository.PeladaRepository;
+import com.guga.futspring.repository.RankingRepository;
 import com.guga.futspring.repository.TeamRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class DailyServiceImpl implements DailyService{
     UserServiceImpl userService;
     PeladaRepository peladaRepository;
     TeamRepository teamRepository;
+    RankingRepository rankingRepository;
 
     @Override
     public Daily getDaily(Long id) {
@@ -36,11 +38,13 @@ public class DailyServiceImpl implements DailyService{
     }
 
     @Override
+    @Transactional
     public Daily createDaily(Daily daily, Long peladaId) {
         Pelada pelada = peladaService.getPelada(peladaId);
         pelada.getDailies().add(daily);
         peladaRepository.save(pelada);
         daily.setPelada(pelada);
+        daily.setIsFinished(false);
         return dailyRepository.save(daily);
     }
 
@@ -55,6 +59,25 @@ public class DailyServiceImpl implements DailyService{
         daily.getPlayersPresence().add(player); 
 
         return dailyRepository.save(daily);
+    }
+
+    @Override
+    @Transactional
+    public Daily finalizeDaily(Long dailyId, List<RankingEntry> prizes) {
+        Optional<Daily> daily = dailyRepository.findById(dailyId);
+
+        if(daily.isEmpty()) throw new DailyNotFoundException(dailyId);
+
+        Daily unwrapDaily = daily.get();
+        unwrapDaily.setPrizeEntries(prizes);
+        unwrapDaily.setIsFinished(true);
+
+        Ranking ranking = unwrapDaily.getPelada().getRanking();
+        if(ranking == null) throw new IllegalStateException("Ranking não encontrado para a Pelada da Daily " + dailyId);
+
+        ranking.getPrizes().addAll(prizes);
+        rankingRepository.save(ranking);
+        return dailyRepository.save(unwrapDaily);
     }
 
     @Override

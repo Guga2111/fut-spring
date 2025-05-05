@@ -15,7 +15,7 @@ import lombok.Setter;
 public class RankingEntry {
     private Long userId;
 
-    private int quantity;
+    private String date;
 
     private Prize typeOfPrize;
 

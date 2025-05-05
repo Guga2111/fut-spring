@@ -3,6 +3,9 @@ import DailyCard from "./DailyCard";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import ViewPeladaPlayersDialog from "./ViewPeladaPlayersDialog";
+import { Progress } from "@/components/ui/progress"
+import RankingGrid from "./RankingGrid";
+
 
 export default function PeladaArea({pelada}) {
 
@@ -48,29 +51,41 @@ export default function PeladaArea({pelada}) {
         fetchPlayers();
     }, [id]);
       
-      if (loading) return <div>Loading...</div>;
+      if (loading) return <div><Progress value={33} /></div>;
       if (!peladaData) return <div>Pelada not found</div>;
 
     return(
-        <div>
-            <div>
-                <h1 className="font-extrabold">{peladaData.name}</h1>
-            </div>
-            <div className="py-55">
-                <div className="Central Area ">
-                    <DailyCard pelada={peladaData}></DailyCard>
-                </div>
-                <div className="Chat Area">
+<div>
+  <h1 className="font-extrabold text-center">{peladaData.name}</h1>
 
-                </div>
-                <div className="Ranking Area">
+  {/* make this a flex container with gap and top padding */}
+  <div className="py-15 flex justify-center items-start gap-20">
 
-                </div>
-                <div className="Players Area mt-48">
-                    <ViewPeladaPlayersDialog isLoading={loadingPlayers} playersAssociated={playersAssociated}></ViewPeladaPlayersDialog>
-                </div>
-            </div>
-            
-        </div>
+    {/* ─── LEFT COLUMN: Chat ─── */}
+    <div className="w-1/4 Chat Area border rounded p-4 py-16">
+      {/* …your chat UI… */}
+    </div>
+
+    {/* ─── MIDDLE COLUMN: DailyCard + Players ─── */}
+    <div className="w-1/2 flex flex-col items-center space-y-96">
+      <div className="Central Area w-full">
+        <DailyCard pelada={peladaData} />
+      </div>
+      <div className="Players Area w-full">
+        <ViewPeladaPlayersDialog
+          isLoading={loadingPlayers}
+          playersAssociated={playersAssociated}
+        />
+      </div>
+    </div>
+
+    {/* ─── RIGHT COLUMN: RankingGrid ─── */}
+    <div className="w-1/4 Ranking Area border rounded p-4 py-16">
+      <RankingGrid />
+    </div>
+
+  </div>
+</div>
+
     )
 }

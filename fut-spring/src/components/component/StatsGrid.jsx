@@ -8,11 +8,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import StatsChart from "./StatsChart";
+import { Progress } from "@/components/ui/progress"
 
 export default function StatsGrid({ stats }) {
 
     if (!stats) {
-        return <div>Loading stats...</div>;
+        return <div><Progress value={33} /></div>;
       }
 
   return (

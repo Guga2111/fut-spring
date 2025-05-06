@@ -41,13 +41,10 @@ export default function AddPeladaButton({ onPeladaCreated }) {
     setIsSubmitting(true);
     const endpoint = "http://localhost:8080/pelada";
 
-    // Create FormData object
     const data = new FormData();
     
-    // Add pelada data as JSON string
     data.append("peladaData", JSON.stringify(formData));
-    
-    // Add image file if it exists
+
     if (imageFile) {
       data.append("image", imageFile);
     }

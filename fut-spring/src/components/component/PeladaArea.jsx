@@ -72,15 +72,14 @@ export default function PeladaArea({pelada}) {
 <div>
   <h1 className="font-extrabold text-center">{peladaData.name}</h1>
 
-  {/* make this a flex container with gap and top padding */}
   <div className="py-15 flex justify-center items-start gap-20">
 
-    {/* ─── LEFT COLUMN: Chat ─── */}
+    
     <div className="w-1/4 Chat Area border rounded p-4 py-16">
-      {/* …your chat UI… */}
+     
     </div>
 
-    {/* ─── MIDDLE COLUMN: DailyCard + Players ─── */}
+    
     <div className="w-1/2 h-screen flex flex-col justify-between items-center">
       <div className="w-full">
         <DailyCard pelada={peladaData} />
@@ -93,7 +92,6 @@ export default function PeladaArea({pelada}) {
       </div>
     </div>
 
-    {/* ─── RIGHT COLUMN: RankingGrid ─── */}
     <div className="w-1/4 border rounded p-4 ">
       <RankingGrid ranking={ranking} associatedPlayers={playersAssociated}/>
     </div>

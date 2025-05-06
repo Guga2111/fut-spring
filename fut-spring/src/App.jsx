@@ -21,7 +21,7 @@ function App() {
   const [selectedPelada, setSelectedPelada] = useState(null);
 
   const api = axios.create({
-    baseURL: "http://localhost:8080", // URL do backend
+    baseURL: "http://localhost:8080", 
   });
 
   const getPeladas = async (filters) => {

@@ -12,15 +12,10 @@ import { IoFootball } from "react-icons/io5";
 import { BiSolidBullseye } from "react-icons/bi";
 import { GiSoccerKick } from "react-icons/gi";
 
-/**
- * @param {Object} props
- * @param {Object} props.ranking - objeto de ranking com prizeEntries, stats, pelada...
- * @param {Array} props.associatedPlayers - lista de jogadores associados à pelada [{id, name, photo}, ...]
- */
 export default function RankingGrid({ ranking, associatedPlayers }) {
-  // Mapeia e enriquece prize entries com dados do jogador
+
   const mapEntries = (type) =>
-    (ranking.prizeEntries || [])
+    (ranking.prizes || [])
       .filter((entry) => entry.typeOfPrize === type)
       .map((entry) => ({
         ...entry,
@@ -54,7 +49,6 @@ export default function RankingGrid({ ranking, associatedPlayers }) {
         </div>
 
         <div className="p-4">
-          {/* GOALS */}
           <TabsContent value="goals">
             <Table>
               <TableCaption>Goals Ranking.</TableCaption>
@@ -73,13 +67,13 @@ export default function RankingGrid({ ranking, associatedPlayers }) {
                         <div className="overflow-hidden rounded-full w-10 h-10">
                           <img
                             src={user.photo}
-                            alt={user.name}
+                            alt={user.username}
                             className="w-full h-full object-cover"
                           />
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.username}</TableCell>
                     <TableCell className="text-right">
                       {date ? new Date(date).toLocaleDateString() : '-'}
                     </TableCell>
@@ -89,7 +83,6 @@ export default function RankingGrid({ ranking, associatedPlayers }) {
             </Table>
           </TabsContent>
 
-          {/* ASSISTS */}
           <TabsContent value="assists">
             <Table>
               <TableCaption>Assists Ranking.</TableCaption>
@@ -107,11 +100,11 @@ export default function RankingGrid({ ranking, associatedPlayers }) {
                     <TableCell className="font-medium">
                       <div className="flex justify-center items-center">
                         <div className="overflow-hidden rounded-full w-10 h-10">
-                          <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
+                          <img src={user.photo} alt={user.username} className="w-full h-full object-cover" />
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.username}</TableCell>
                   
                     <TableCell className="text-right">
                       {date ? new Date(date).toLocaleDateString() : '-'}
@@ -122,7 +115,6 @@ export default function RankingGrid({ ranking, associatedPlayers }) {
             </Table>
           </TabsContent>
 
-          {/* PUSKAS */}
           <TabsContent value="puskas">
             <Table>
               <TableCaption>Puskas Ranking.</TableCaption>
@@ -140,11 +132,11 @@ export default function RankingGrid({ ranking, associatedPlayers }) {
                     <TableCell className="font-medium">
                       <div className="flex justify-center items-center">
                         <div className="overflow-hidden rounded-full w-10 h-10">
-                          <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
+                          <img src={user.photo} alt={user.username} className="w-full h-full object-cover" />
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.username}</TableCell>
                    
                     <TableCell className="text-right">
                       {date ? new Date(date).toLocaleDateString() : '-'}
@@ -155,7 +147,6 @@ export default function RankingGrid({ ranking, associatedPlayers }) {
             </Table>
           </TabsContent>
 
-          {/* GENERAL */}
           <TabsContent value="general">
             <Table>
               <TableCaption>General Ranking.</TableCaption>

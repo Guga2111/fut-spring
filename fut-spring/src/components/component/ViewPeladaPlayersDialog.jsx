@@ -24,7 +24,7 @@ import {
   import { Button } from "@/components/ui/button";
   import { ArrowBigLeft } from 'lucide-react';
   
-  export default function ViewPeladaPlayersDialog({isLoading, playersAssociated}) {
+  export default function ViewPeladaPlayersDialog({isLoading, playersAssociated, allImages}) {
     return (
       <div>
         <AlertDialog>
@@ -56,14 +56,22 @@ import {
                     </TableHeader>
                     <TableBody>
                       {playersAssociated && playersAssociated.length > 0 ? (
-                        playersAssociated.map((player) => (
+                        playersAssociated.map((player) => {
+
+                          const imgFilename = player.image; // ou player.image
+                          const hasImage = allImages.includes(imgFilename);
+                          const imgSrc = hasImage
+                            ? `http://localhost:8080/user/images/${imgFilename}`
+                            : "/backgroundbalotelli.jpg";
+
+                          return(
                           <TableRow key={player.id}>
                             <TableCell className="">
                               <div className="flex justify-center items-center ">
                                 <div className="overflow-hidden rounded-full w-10 h-10">
                                   <img
-                                    src={player.profileImage || "backgroundbalotelli.jpg"}
-                                    alt={player.name || "Player"}
+                                    src={imgSrc}
+                                    alt={player.username || "Player"}
                                     className="w-full h-full object-cover"
                                   />
                                 </div>
@@ -73,7 +81,8 @@ import {
                             <TableCell>{player.role || "Player"}</TableCell>
                             <TableCell className="text-right">{player.position || "N/A"}</TableCell>
                           </TableRow>
-                        ))
+                          );
+                        })
                       ) : (
                         <TableRow>
                           <TableCell colSpan={4} className="text-center">No players found</TableCell>

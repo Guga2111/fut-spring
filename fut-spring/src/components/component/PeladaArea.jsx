@@ -15,6 +15,22 @@ export default function PeladaArea({pelada}) {
     const [playersAssociated, setPlayersAssociated] = useState([]);
     const [loadingPlayers, setLoadingPlayers] = useState(true);
     const [ranking, setRanking] = useState([]);
+    const [allImages, setAllImages] = useState([]);
+    const [loadingImages, setLoadingImages] = useState(true);
+
+    useEffect(() => {
+         const fetchAllImages = async () => {
+           try {
+             const resp = await axios.get("http://localhost:8080/user/images");
+             setAllImages(resp.data);
+           } catch (error) {
+             console.error("Erro ao buscar allImages:", error);
+           } finally {
+             setLoadingImages(false);
+           }
+         };
+       fetchAllImages();
+       }, []);
 
     useEffect(() => {
         if (!peladaData && id) {
@@ -88,6 +104,7 @@ export default function PeladaArea({pelada}) {
         <ViewPeladaPlayersDialog
           isLoading={loadingPlayers}
           playersAssociated={playersAssociated}
+          allImages={allImages}
         />
       </div>
     </div>

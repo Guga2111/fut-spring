@@ -2,23 +2,41 @@ package com.guga.futspring.service;
 
 import com.guga.futspring.entity.Stats;
 import com.guga.futspring.entity.User;
+import com.guga.futspring.entity.dto.UserImageDTO;
 import com.guga.futspring.exception.UserNotFoundException;
 import com.guga.futspring.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-@AllArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
-    BCryptPasswordEncoder bCryptPasswordEncoder;
-    UserRepository userRepository;
-    StatsServiceImpl statsService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
+    private final StatsServiceImpl statsService;
+
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     @Override
     public List<User> getUsers() {
@@ -51,6 +69,7 @@ public class UserServiceImpl implements UserService{
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Stats stats = statsService.initializeStats(user);
         user.setStats(stats);
+        user.setImage(null);
 
         return userRepository.save(user);
     }
@@ -67,6 +86,55 @@ public class UserServiceImpl implements UserService{
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+    @Override
+    public User saveUserImage(Long id ,MultipartFile imageFile) throws IOException {
+        if(imageFile != null && !imageFile.isEmpty()) {
+            File directory = new File(uploadDir);
+            if(!directory.exists()) {
+                directory.mkdirs();
+            }
+        }
+
+        String filename = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+        Path filePath = Paths.get(uploadDir, filename);
+
+        Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        User user = getUser(id);
+        user.setImage(filename);
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public Resource getImage(String filename) {
+
+        try{
+            Path imagePath = Paths.get(uploadDir).resolve(filename).normalize();
+            Resource resource = new UrlResource(imagePath.toUri());
+
+            if(resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Could not read image file: " + filename);
+            }
+
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
+
+    // muda assinatura para List<String>
+    @Override
+    public List<String> getAllImageFilenames() {
+        Iterable<User> users = userRepository.findAll();
+        return StreamSupport.stream(users.spliterator(), false)
+                .map(User::getImage)                // só o campo image (filename)
+                .filter(Objects::nonNull)           // se quiser pular nulls
+                .collect(Collectors.toList());
+    }
+
 
     static User unwrapUser(Optional<User> entity, Long id) {
         if(entity.isPresent()) return entity.get();

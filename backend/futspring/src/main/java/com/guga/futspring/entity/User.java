@@ -27,6 +27,9 @@ public class User {
     @Column(name = "username")
     String username;
 
+    @Column(name = "image")
+    private String image;
+
     @NonNull
     @NotBlank
     @Column(name = "password")

@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/daily/**").permitAll()
                         .requestMatchers("/match/**").permitAll()
                         .requestMatchers("/team/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/user/images/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
                 .addFilter(authenticationFilter)

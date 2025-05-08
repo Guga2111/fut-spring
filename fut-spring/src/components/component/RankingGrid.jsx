@@ -46,7 +46,7 @@ export default function RankingGrid({ ranking, associatedPlayers, allImages }) {
   return (
     <div className="w-full p-4">
       <Select onValueChange={(value) => setTab(value)} >
-        <SelectTrigger className="w-[200px] text-green-600">
+        <SelectTrigger className="w-[200px] text-green-600 !bg-white">
           <SelectValue  placeholder="Select view..." />
         </SelectTrigger>
         <SelectContent>

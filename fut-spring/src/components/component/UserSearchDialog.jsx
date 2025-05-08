@@ -31,21 +31,21 @@ export default function UserSearchDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="!bg-green-600 !text-white hover:!bg-green-700 hover:!border-white" onClick={() => setOpen(true)}>
-          <Plus className="mr-2" /> Adicionar
+          <Plus className="mr-2" /> Include
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Pesquisar Usuários</DialogTitle>
-          <DialogDescription>Digite para buscar entre os usuários disponíveis.</DialogDescription>
+          <DialogTitle>Search Users</DialogTitle>
+          <DialogDescription>Type to search for the avaible users.</DialogDescription>
         </DialogHeader>
 
         <div className="mt-4">
-          <Label htmlFor="user-search" className="block mb-1">Buscar</Label>
+          <Label htmlFor="user-search" className="block mb-1">Search</Label>
           <div className="flex items-center space-x-2">
             <Input
               id="user-search"
-              placeholder="Nome do usuário..."
+              placeholder="Username..."
               value={query}
               onChange={e => setQuery(e.target.value)}
             />
@@ -63,14 +63,14 @@ export default function UserSearchDialog() {
               </li>
             ))
           ) : (
-            <li className="py-2 text-sm text-gray-500">Nenhum usuário encontrado.</li>
+            <li className="py-2 text-sm text-gray-500">No user found.</li>
           )}
         </ul>
 
         <DialogFooter className="sm:justify-start">
           <DialogClose asChild>
             <Button type="button" className="bg-green-600 text-white hover:bg-green-700">
-              Fechar
+              Close
             </Button>
           </DialogClose>
         </DialogFooter>

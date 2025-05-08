@@ -56,7 +56,7 @@ export default function PeladaArea({pelada}) {
         const fetchPlayers = async () => {
             if (id) {
                 try {
-                    const response = await axios.get(`http://localhost:8080/pelada/${id}/user`);
+                    const response = await axios.get(`http://localhost:8080/pelada/${id}/users`);
                     setPlayersAssociated(response.data);
                     setLoadingPlayers(false);
                 } catch (error) {

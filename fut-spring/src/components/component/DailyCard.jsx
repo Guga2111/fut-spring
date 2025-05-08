@@ -39,11 +39,11 @@ import {
           </CardContent>
   
           <CardFooter className="flex justify-center gap-4 pt-2 pb-4">
-            <Button className="px-6 font-semibold bg-black text-white hover:bg-gray-800">
-              ACCEPT
+            <Button className="px-6 font-semibold bg-black text-white hover:!bg-green-600 hover:!border-white">
+              CONFIRM
             </Button>
-            <Button className="px-6 font-semibold bg-black text-white hover:bg-gray-800">
-              DENY
+            <Button className="px-6 font-semibold bg-black text-white hover:!bg-red-900 hover:!border-white">
+              DISCONFIRM
             </Button>
           </CardFooter>
         </Card>

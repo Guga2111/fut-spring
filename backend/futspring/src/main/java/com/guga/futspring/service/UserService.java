@@ -2,7 +2,6 @@ package com.guga.futspring.service;
 
 import com.guga.futspring.entity.Stats;
 import com.guga.futspring.entity.User;
-import com.guga.futspring.entity.dto.UserImageDTO;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 

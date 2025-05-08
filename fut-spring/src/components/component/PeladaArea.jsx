@@ -5,6 +5,7 @@ import axios from 'axios';
 import ViewPeladaPlayersDialog from "./ViewPeladaPlayersDialog";
 import { Progress } from "@/components/ui/progress"
 import RankingGrid from "./RankingGrid";
+import PeladaHeader from "./PeladaHeader";
 
 
 export default function PeladaArea({pelada}) {
@@ -86,9 +87,13 @@ export default function PeladaArea({pelada}) {
 
     return(
 <div>
-  <h1 className="font-extrabold text-center">{peladaData.name}</h1>
+<div>
+  <PeladaHeader peladaData={peladaData}></PeladaHeader>
+</div>
 
-  <div className="py-15 flex justify-center items-start gap-20">
+  
+
+  <div className="py-20 flex justify-center items-start gap-20">
 
     
     <div className="w-1/4 Chat Area border rounded p-4 py-16">
@@ -96,7 +101,7 @@ export default function PeladaArea({pelada}) {
     </div>
 
     
-    <div className="w-1/2 h-screen flex flex-col justify-between items-center">
+    <div className="w-1/2 flex flex-col gap-85 items-center">
       <div className="w-full">
         <DailyCard pelada={peladaData} />
       </div>
@@ -110,7 +115,7 @@ export default function PeladaArea({pelada}) {
     </div>
 
     <div className="w-1/4 border rounded p-4 ">
-      <RankingGrid ranking={ranking} associatedPlayers={playersAssociated}/>
+      <RankingGrid ranking={ranking} associatedPlayers={playersAssociated} allImages={allImages}/>
     </div>
 
   </div>

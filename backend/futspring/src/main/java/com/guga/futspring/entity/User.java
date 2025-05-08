@@ -21,7 +21,7 @@ public class User {
     @NonNull
     @NotBlank
     @Column(name = "email")
-    String email;
+    private String email;
 
     @NotBlank(message = "username cannot be blank")
     @Column(name = "username")
@@ -33,7 +33,7 @@ public class User {
     @NonNull
     @NotBlank
     @Column(name = "password")
-    String password;
+    private String password;
 
     @Column(name = "stars")
     int stars;

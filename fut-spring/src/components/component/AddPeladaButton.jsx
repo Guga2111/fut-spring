@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
+import { Plus } from "lucide-react";
   
 export default function AddPeladaButton({ onPeladaCreated }) {
   const [open, setOpen] = useState(false);
@@ -86,8 +87,8 @@ export default function AddPeladaButton({ onPeladaCreated }) {
   return(
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          Create Pelada
+      <Button className="!bg-green-600 !text-white hover:!bg-green-700 hover:!border-white" onClick={() => setOpen(true)}>
+          <Plus className="mr-2" /> Create Pelada
         </Button>
       </DialogTrigger>
       <DialogContent>

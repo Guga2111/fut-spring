@@ -49,13 +49,13 @@ export default function LandingPageContent() {
                     <span>Already registered?</span>
                     <a
                       href="/login"
-                      className="underline hover:text-green-600 transition-colors"
+                      className="!underline hover:!text-green-600 !transition-colors"
                     >
                       Login
                     </a>
                   </div>
                   <a href="/register">
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+                    <button className="hover:!bg-green-600 text-white font-medium py-2 px-4 rounded-md !transition-colors ">
                       Get Started
                     </button>
                   </a>

@@ -29,7 +29,7 @@ import {
       <div>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button> <User /> Show Players <ChevronRight /></Button>
+            <Button className="hover:!bg-gray-950 hover:!border-white"> <User /> Show Players <ChevronRight /></Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>

@@ -62,8 +62,8 @@ export default function PeladaCard({ pelada, onPeladaSelect }) {
               </p>
             </div>
           </div>
-          <div>
-              <Button onClick={handleClick}>View</Button>
+          <div >
+              <Button onClick={handleClick} className= "hover:!bg-green-600 hover:!border-white !transition-colors">View</Button>
           </div>
         </CardFooter>
       </Card>

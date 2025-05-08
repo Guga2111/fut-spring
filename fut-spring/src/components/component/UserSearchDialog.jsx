@@ -30,7 +30,7 @@ export default function UserSearchDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="!bg-green-600 !text-white hover:!bg-green-700" onClick={() => setOpen(true)}>
+        <Button className="!bg-green-600 !text-white hover:!bg-green-700 hover:!border-white" onClick={() => setOpen(true)}>
           <Plus className="mr-2" /> Adicionar
         </Button>
       </DialogTrigger>

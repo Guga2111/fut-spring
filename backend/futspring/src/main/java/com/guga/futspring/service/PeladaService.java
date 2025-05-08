@@ -17,4 +17,6 @@ public interface PeladaService {
     Pelada updatePelada(Long id, String name, float duration, String time);
     Pelada associatePlayerToPelada(Long id, Long userId);
     List<User> getPlayerAssociatedToPelada(Long id);
+    List<User> getPlayersDisassociated(Long id);
+
 }

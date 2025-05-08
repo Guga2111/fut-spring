@@ -30,14 +30,19 @@ public class PeladaController {
         return new ResponseEntity<>(peladaService.getPeladas(), HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Pelada> getPelada(@PathVariable Long id) {
         return new ResponseEntity<>(peladaService.getPelada(id), HttpStatus.OK);
     }
 
-    @GetMapping("{id}/user")
+    @GetMapping("/{id}/users")
     public ResponseEntity<List<User>> getPlayersAssociatedToPelada(@PathVariable Long id) {
         return new ResponseEntity<>(peladaService.getPlayerAssociatedToPelada(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/not-users")
+    public ResponseEntity<List<User>> getDisassociatedPlayers(@PathVariable Long id) {
+        return new ResponseEntity<>(peladaService.getPlayersDisassociated(id), HttpStatus.OK);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -71,12 +76,12 @@ public class PeladaController {
         }
     }
 
-    @PutMapping("{id}/user/{userId}")
+    @PutMapping("/{id}/user/{userId}")
     public ResponseEntity<Pelada> associatePlayerToPelada(@PathVariable Long id, @PathVariable Long userId) {
         return new ResponseEntity<>(peladaService.associatePlayerToPelada(id, userId), HttpStatus.OK);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Pelada> deletePelada(@PathVariable Long id) {
         peladaService.deletePelada(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

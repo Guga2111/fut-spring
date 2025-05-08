@@ -84,5 +84,4 @@ public class UserController {
         List<String> filenames = userService.getAllImageFilenames();
         return new ResponseEntity<>(filenames, HttpStatus.OK);
     }
-
 }

@@ -48,6 +48,8 @@ public class UserServiceImpl implements UserService{
         return unwrapUser(user, id);
     }
 
+
+
     @Override
     public User getUser(String email) {
         Optional<User> user = userRepository.findByEmail(email);
@@ -124,16 +126,15 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-    // muda assinatura para List<String>
+
     @Override
     public List<String> getAllImageFilenames() {
         Iterable<User> users = userRepository.findAll();
         return StreamSupport.stream(users.spliterator(), false)
-                .map(User::getImage)                // só o campo image (filename)
-                .filter(Objects::nonNull)           // se quiser pular nulls
+                .map(User::getImage)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
-
 
     static User unwrapUser(Optional<User> entity, Long id) {
         if(entity.isPresent()) return entity.get();

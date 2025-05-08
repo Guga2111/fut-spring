@@ -122,6 +122,14 @@ public class PeladaServiceImpl implements PeladaService{
         return pelada.getPlayers();
     }
 
+    @Override
+    public List<User> getPlayersDisassociated(Long id) {
+        Pelada pelada = getPelada(id);
+        List<User> allUsers = userService.getUsers();
+        allUsers.removeAll(pelada.getPlayers());
+        return allUsers;
+    }
+
     static Pelada unwrapPelada(Optional<Pelada> entity, Long id) {
         if(entity.isPresent()) return entity.get();
         else throw new RuntimeException();

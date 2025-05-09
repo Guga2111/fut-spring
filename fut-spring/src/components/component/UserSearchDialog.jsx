@@ -31,7 +31,7 @@ export default function UserSearchDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="!bg-green-600 !text-white hover:!bg-green-700 hover:!border-white" onClick={() => setOpen(true)}>
-          <Plus className="mr-2" /> Include
+          <Plus className="" /> Include
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">

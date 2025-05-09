@@ -6,36 +6,51 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 
-export default function Profile() {
+export default function Profile({user}) {
+
+  if (!user) {
+    return <p>Carregando perfil…</p>;
+  }
+
+  const getImageSrc = (filename) => {
+    if (!filename) return "/default-avatar.jpg";
+    return `http://localhost:8080/user/images/${filename}`;
+  };
+
+  const shortenEmail = (email) => {
+    const parts = email.split('@');
+    return parts[0];
+  }
+
   return (
     <div>
       <Popover>
         <PopoverTrigger asChild>
           <Avatar className="absolute top-4 right-4 cursor-pointer">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage src= {getImageSrc(user.image) || "https://github.com/shadcn.png"} />
+            <AvatarFallback>NF</AvatarFallback>
           </Avatar>
         </PopoverTrigger>
         <PopoverContent className="w-64 p-4" asChild>
           <div className="flex flex-col space-y-2">
             <div className="flex items-center space-x-2">
               <Avatar className="w-10 h-10">
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src={getImageSrc(user.image) || "https://github.com/shadcn.png"} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <div>
-                <p className="text-sm font-medium">Guga</p>
-                <p className="text-xs text-muted-foreground">@guga6397</p>
+                <p className="text-sm font-medium">{user.username}</p>
+                <p className="text-xs text-muted-foreground">@{shortenEmail(user.email)}</p>
               </div>
             </div>
-            <div className="grid gap-4 py-4 text-white">
-              <Button variant="ghost" className="justify-start">
+            <div className="grid gap-4 py-4 !text-white">
+              <Button variant="ghost" className="justify-start hover:!border-white hover:!bg-neutral-800 hover:!text-green-600">
                 <a href="/stats">Acess your stats</a>
               </Button>
-              <Button variant="ghost" className="justify-start">
+              <Button variant="ghost" className="justify-start hover:!border-white hover:!bg-neutral-800 hover:!text-green-600">
                 Configurations
               </Button>
-              <Button variant="ghost" className="justify-start">
+              <Button variant="ghost" className="justify-start hover:!border-white hover:!bg-neutral-800 hover:!text-green-600">
                 Leave
               </Button>
             </div>

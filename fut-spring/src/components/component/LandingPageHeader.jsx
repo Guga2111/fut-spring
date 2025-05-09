@@ -16,17 +16,17 @@ export default function LandingPageHeader() {
         <NavigationMenu className="hidden md:block">
           <NavigationMenuList className="flex space-x-8">
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="px-3 py-2 text-white">
+              <NavigationMenuTrigger className="px-3 py-2 !text-white hover:!text-green-500">
                 Peladas
               </NavigationMenuTrigger>
               <NavigationMenuContent className="bg-white p-4 rounded-md shadow-lg border border-gray-100 min-w-[200px]">
                 <NavigationMenuLink
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md"
+                  className="block px-4 py-2 text-sm  rounded-md"
                   href="/home"
                 >
                   Pelada
                 </NavigationMenuLink>
-                <NavigationMenuLink className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md"
+                <NavigationMenuLink className="block px-4 py-2 text-sm  rounded-md"
                   href="https://www.linkedin.com/in/luisgustavosampaio/">
                     Creator
                 </NavigationMenuLink>
@@ -34,13 +34,13 @@ export default function LandingPageHeader() {
             </NavigationMenuItem>
 
             <NavigationMenuItem>
-              <NavigationMenuLink className="px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors">
+              <NavigationMenuLink className="px-3 py-2 text-gray-700 hover:!text-green-600 transition-colors">
                 About
               </NavigationMenuLink>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
-              <NavigationMenuLink className="px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors">
+              <NavigationMenuLink className="px-3 py-2 text-gray-700 hover:!text-green-600 transition-colors">
                 Contact
               </NavigationMenuLink>
             </NavigationMenuItem>

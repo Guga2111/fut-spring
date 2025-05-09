@@ -15,7 +15,7 @@ export default function PeladaHeader({ peladaData }) {
       </div>
       <div className="flex space-x-2">
         <div>
-            <UserSearchDialog></UserSearchDialog>
+            <UserSearchDialog peladaData={peladaData}></UserSearchDialog>
         </div>
         <div>
             <UserShareDialog peladaData={peladaData}></UserShareDialog>

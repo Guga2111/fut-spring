@@ -3,29 +3,43 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import axios from 'axios';
 import { Plus, Search } from "lucide-react";
 
-async function fetchUsers() {
-  return [
-    { id: 1, name: 'Alice' },
-    { id: 2, name: 'Bob' },
-    { id: 3, name: 'Charlie' },
-    { id: 4, name: 'David' }
-  ];
-}
-
-export default function UserSearchDialog() {
+export default function UserSearchDialog({peladaData}) {
   const [open, setOpen] = useState(false);
   const [users, setUsers] = useState([]);
   const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const getNotUsers = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/pelada/${peladaData.id}/not-users`
+      );
+      console.log("Fetched not-users:", response.data);
+      setUsers(response.data);
+    } catch (err) {
+      console.error("Error fetching not-users:", err);
+      setError("Não foi possível carregar usuários.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetchUsers().then(setUsers);
-  }, []);
+    if (open) {
+      getNotUsers();
+    }
+  }, [open, peladaData.id]);
 
   const filtered = users.filter(user =>
-    user.name.toLowerCase().includes(query.toLowerCase())
+    user.username.toLowerCase().includes(query.toLowerCase())
   );
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -59,7 +73,7 @@ export default function UserSearchDialog() {
           {filtered.length > 0 ? (
             filtered.map(user => (
               <li key={user.id} className="py-2 border-b last:border-none">
-                {user.name}
+                {user.username}
               </li>
             ))
           ) : (

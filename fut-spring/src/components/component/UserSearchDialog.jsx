@@ -84,17 +84,17 @@ export default function UserSearchDialog({peladaData}) {
 
         <ul className="mt-4 max-h-48 overflow-y-auto">
           {loading && <li className="py-2 text-sm">Loading...</li>}
-          {error && <li className="py-2 text-sm text-red-600">{error}</li>}
+          {error && <li className="py-2 text-sm !text-red-600">{error}</li>}
           {!loading && !error && (filtered.length > 0 ? (
             filtered.map(user => (
               <li key={user.id} className="py-2 border-b last:border-none flex justify-between items-center">
                 <span>{user.username}</span>
                 <Button
                   size="xs"
-                  className="!bg-transparent hover:bg-green-100"
+                  className="bg-transparent hover:!bg-green-600 hover:!border-white"
                   onClick={() => addUser(user.id)}
                 >
-                  <Plus className="w-4 h-4 text-green-600" />
+                  <Plus className="w-4 h-4 text-white" />
                 </Button>
               </li>
             ))

@@ -20,6 +20,8 @@ function App() {
   const [stats, setStats] = useState(null);
   const [selectedPelada, setSelectedPelada] = useState(null);
 
+  const [user, setUser] = useState(null);
+
   const api = axios.create({
     baseURL: "http://localhost:8080", 
   });
@@ -64,6 +66,8 @@ function App() {
       console.log("Stats response:", userResponse.data);
 
       const userStats = userResponse.data.stats;
+      setUser(userResponse.data);
+      console.log("User data loaded: ", userResponse.data)
       setStats(userStats);
     } catch (error) {
       console.error("Error fetching stats:", error);
@@ -86,7 +90,7 @@ function App() {
             element={
               <>
                 <div className="m-2 font-semibold">
-                  <NavigationBar />
+                  <NavigationBar user={user}/>
                 </div>
                 <h1 className="font-extrabold">FutSpring</h1>
                 <div className="flex-grow">
@@ -108,7 +112,7 @@ function App() {
             element={
               <>
                 <div className="m-2 font-semibold">
-                  <NavigationBar />
+                  <NavigationBar user={user}/>
                 </div>
                 <h1 className="font-extrabold">FutSpring</h1>
                 <div>
@@ -122,7 +126,7 @@ function App() {
             element={
               <>
                 <div className="m-2 font-semibold">
-                  <NavigationBar />
+                  <NavigationBar user={user}/>
                 </div>
                 <div>
                   <PeladaArea pelada={selectedPelada}></PeladaArea>

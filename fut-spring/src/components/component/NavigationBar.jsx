@@ -1,13 +1,16 @@
+import BreadcrumMenu from "./BreadcrumMenu";
+import Profile from "./Profile";
+import ProfileNotLogged from "./ProfileNotLogged";
 
-import BreadcrumMenu from "./BreadcrumMenu"
-import Profile from "./Profile"
-//fazer depois uma profile para quem nao está logado - placeholder
-export default function NavigationBar({user}) {
-    return (
-        <div className="py-2 w-full border-b border-gray-200 bg-white">
-            
-            <BreadcrumMenu></BreadcrumMenu>
-            <Profile user={user}/>
-        </div>
-    )
+export default function NavigationBar({ user }) {
+  return (
+    <div className="py-2 w-full border-b border-gray-200 bg-white">
+      <BreadcrumMenu></BreadcrumMenu>
+      {user ? (
+        <Profile user={user}></Profile>
+      ) : (
+        <ProfileNotLogged></ProfileNotLogged>
+      )}
+    </div>
+  );
 }

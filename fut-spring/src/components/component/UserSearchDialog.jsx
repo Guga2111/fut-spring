@@ -30,6 +30,19 @@ export default function UserSearchDialog({peladaData}) {
     }
   };
 
+  const addUser = async (userId) => {
+    try {
+      await axios.put(
+        `http://localhost:8080/pelada/${peladaData.id}/user/${userId}`
+      );
+      // Refresh
+      getNotUsers();  
+    } catch (err) {
+      console.error(`Error adding user ${userId}:`, err);
+      setError("Não foi possível adicionar o usuário.");
+    }
+  };
+
   useEffect(() => {
     if (open) {
       getNotUsers();
@@ -63,29 +76,37 @@ export default function UserSearchDialog({peladaData}) {
               value={query}
               onChange={e => setQuery(e.target.value)}
             />
-            <Button type="button" size="sm" className="px-3 bg-green-600 text-white hover:bg-green-700">
+            <Button type="button" size="sm" className="px-3 bg-green-600 text-white hover:!bg-green-700">
               <Search className="w-4 h-4" />
             </Button>
           </div>
         </div>
 
         <ul className="mt-4 max-h-48 overflow-y-auto">
-          {filtered.length > 0 ? (
+          {loading && <li className="py-2 text-sm">Loading...</li>}
+          {error && <li className="py-2 text-sm text-red-600">{error}</li>}
+          {!loading && !error && (filtered.length > 0 ? (
             filtered.map(user => (
-              <li key={user.id} className="py-2 border-b last:border-none">
-                {user.username}
+              <li key={user.id} className="py-2 border-b last:border-none flex justify-between items-center">
+                <span>{user.username}</span>
+                <Button
+                  size="xs"
+                  className="!bg-transparent hover:bg-green-100"
+                  onClick={() => addUser(user.id)}
+                >
+                  <Plus className="w-4 h-4 text-green-600" />
+                </Button>
               </li>
             ))
           ) : (
             <li className="py-2 text-sm text-gray-500">No user found.</li>
-          )}
+          ))}
         </ul>
+
 
         <DialogFooter className="sm:justify-start">
           <DialogClose asChild>
-            <Button type="button" className="bg-green-600 text-white hover:bg-green-700">
-              Close
-            </Button>
+          
           </DialogClose>
         </DialogFooter>
       </DialogContent>

@@ -27,15 +27,14 @@ export default function BreadcrumMenu() {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="flex items-center gap-1">
+                  <DropdownMenuTrigger className="flex items-center gap-1 !bg-white">
                     <BreadcrumbEllipsis className="h-4 w-4" />
                     <span className="sr-only">Toggle menu</span>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start">
                     <DropdownMenuItem>
-                      <a href="/">
-                      Landing Page
-                        </a></DropdownMenuItem>
+                      <a href="/">Landing Page</a>
+                    </DropdownMenuItem>
                     <DropdownMenuItem>Themes</DropdownMenuItem>
                     <a href="https://github.com/Guga2111/fut-spring">
                       <DropdownMenuItem>GitHub</DropdownMenuItem>

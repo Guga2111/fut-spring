@@ -21,6 +21,8 @@ export default function AddPeladaButton({ onPeladaCreated }) {
     name: "",
     duration: "",
     time: "",
+    address: "",
+    reference: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,6 +71,8 @@ export default function AddPeladaButton({ onPeladaCreated }) {
         name: "",
         duration: "",
         time: "",
+        address: "",
+        reference: "",
       });
       setImageFile(null);
       
@@ -117,6 +121,14 @@ export default function AddPeladaButton({ onPeladaCreated }) {
                 Time
               </Label>
               <Input required id="time" name="time" value={formData.time} type="text" onChange={handleChange} className="col-span-3" />
+              <Label htmlFor="name" className="text-right">
+                Address
+              </Label>
+              <Input required type="text" id="address" name="address" value={formData.address} onChange={handleChange} className="col-span-3" />
+              <Label htmlFor="name" className="text-right">
+                Reference
+              </Label>
+              <Input required type="text" id="reference" name="reference" value={formData.reference} onChange={handleChange} className="col-span-3" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4"> 
               <Label htmlFor="image" className="text-right">

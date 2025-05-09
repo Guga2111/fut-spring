@@ -76,7 +76,7 @@ function App() {
   }, []);
 
   return (
-    <div className="font-mono min-h-screen flex flex-col">
+    <div className="font-mono min-h-screen flex flex-col ">
 
       <Router>
         <Routes>

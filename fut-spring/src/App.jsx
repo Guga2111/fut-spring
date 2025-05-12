@@ -20,10 +20,11 @@ function App() {
   const [stats, setStats] = useState(null);
   const [selectedPelada, setSelectedPelada] = useState(null);
 
+  const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
 
   const api = axios.create({
-    baseURL: "http://localhost:8080", 
+    baseURL: "http://localhost:8080",
   });
 
   const getPeladas = async (filters) => {
@@ -45,7 +46,7 @@ function App() {
     setSelectedPelada(pelada);
   };
 
-  const getStats = async () => {
+  const getUser = async () => {
     try {
       const token = localStorage.getItem("jwt");
       if (!token) {
@@ -66,8 +67,10 @@ function App() {
       console.log("Stats response:", userResponse.data);
 
       const userStats = userResponse.data.stats;
+      console.log("SET USER");
+      console.log(userResponse);
       setUser(userResponse.data);
-      console.log("User data loaded: ", userResponse.data)
+      console.log("User data loaded: ", userResponse.data);
       setStats(userStats);
     } catch (error) {
       console.error("Error fetching stats:", error);
@@ -75,13 +78,14 @@ function App() {
   };
 
   useEffect(() => {
-    getPeladas();
-    getStats();
-  }, []);
+    if (token !== null) {
+      getPeladas();
+      getUser();
+    }
+  }, [token]);
 
   return (
     <div className="font-mono min-h-screen flex flex-col ">
-
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -90,7 +94,7 @@ function App() {
             element={
               <>
                 <div className="m-2 font-semibold">
-                  <NavigationBar user={user}/>
+                  <NavigationBar user={user} />
                 </div>
                 <h1 className="font-extrabold">FutSpring</h1>
                 <div className="flex-grow">
@@ -103,16 +107,21 @@ function App() {
               </>
             }
           />
-          <Route path="/register" element={<>
-            <h1 className="font-extrabold">FutSpring</h1>
-            <SignUpPage />
-          </>} />
+          <Route
+            path="/register"
+            element={
+              <>
+                <h1 className="font-extrabold">FutSpring</h1>
+                <SignUpPage onLogin={setToken} />
+              </>
+            }
+          />
           <Route
             path="/stats"
             element={
               <>
                 <div className="m-2 font-semibold">
-                  <NavigationBar user={user}/>
+                  <NavigationBar user={user} />
                 </div>
                 <h1 className="font-extrabold">FutSpring</h1>
                 <div>
@@ -126,7 +135,7 @@ function App() {
             element={
               <>
                 <div className="m-2 font-semibold">
-                  <NavigationBar user={user}/>
+                  <NavigationBar user={user} />
                 </div>
                 <div>
                   <PeladaArea pelada={selectedPelada}></PeladaArea>

@@ -48,6 +48,7 @@ public class Daily {
     private Pelada pelada;
 
     @OneToMany(mappedBy = "daily")
+    @JsonIgnore
     private List<Team> teams;
 
     @OneToMany(mappedBy = "daily")

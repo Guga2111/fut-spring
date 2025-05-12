@@ -11,12 +11,17 @@ import {
 import { IoFootball } from "react-icons/io5";
 import { BiSolidBullseye } from "react-icons/bi";
 import { GiSoccerKick } from "react-icons/gi";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 import React from "react";
 
 export default function RankingGrid({ ranking, associatedPlayers, allImages }) {
-
   const [tab, setTab] = React.useState("general");
 
   const mapEntries = (type) =>
@@ -45,12 +50,12 @@ export default function RankingGrid({ ranking, associatedPlayers, allImages }) {
 
   return (
     <div className="w-full p-4">
-      <Select onValueChange={(value) => setTab(value)} >
+      <Select onValueChange={(value) => setTab(value)}>
         <SelectTrigger className="w-[200px] text-green-600 !bg-white">
-          <SelectValue  placeholder="Select view..." />
+          <SelectValue placeholder="Select view..." />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="general" >General</SelectItem>
+          <SelectItem value="general">General</SelectItem>
           <SelectItem value="goals">Golden Boot</SelectItem>
           <SelectItem value="assists">Playmaker</SelectItem>
           <SelectItem value="puskas">Puskas</SelectItem>
@@ -58,8 +63,6 @@ export default function RankingGrid({ ranking, associatedPlayers, allImages }) {
       </Select>
 
       <Tabs value={tab} onValueChange={setTab} className="mt-4">
-        
-
         <div className="p-4">
           <TabsContent value="goals">
             <Table>

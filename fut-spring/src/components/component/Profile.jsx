@@ -21,6 +21,7 @@ export default function Profile({ user }) {
   };
 
   const shortenEmail = (email) => {
+    if (!email) return "";
     const parts = email.split("@");
     return parts[0];
   };

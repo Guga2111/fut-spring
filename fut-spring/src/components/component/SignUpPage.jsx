@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function SignUpPage() {
+export default function SignUpPage({ onLogin }) {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -84,6 +84,7 @@ export default function SignUpPage() {
       if (authHeader && authHeader.startsWith("Bearer ")) {
         const token = authHeader.split(" ")[1];
         localStorage.setItem("jwt", token);
+        onLogin(token);
         navigate("/home");
       } else {
         console.error("Token JWT não encontrado no cabeçalho Authorization.");

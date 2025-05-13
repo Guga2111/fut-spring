@@ -83,7 +83,7 @@ function App() {
   }, [token]);
 
   return (
-    <div className="font-mono min-h-screen flex flex-col scrollbar-custom">
+    <div className="!font-[system-ui,Avenir,Helvetica,Arial,sans-serif] min-h-screen flex flex-col scrollbar-custom">
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />

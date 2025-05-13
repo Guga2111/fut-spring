@@ -4,7 +4,15 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        mono: ["'JetBrains Mono'", "monospace"], // Adiciona JetBrains Mono como fonte mono
+        mono: ["'JetBrains Mono'", "monospace"],
+        sans: [
+          "-apple-system",
+          "BlinkMacSystemFont",
+          '"SF Pro Text"',
+          '"SF Pro Display"',
+          "system-ui",
+          "sans-serif",
+        ], // Adiciona JetBrains Mono como fonte mono
       },
     },
   },

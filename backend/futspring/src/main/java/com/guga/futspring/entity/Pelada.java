@@ -55,4 +55,8 @@ public class Pelada {
 
     @OneToMany(mappedBy = "pelada")
     private List<Daily> dailies;
+
+    @OneToMany(mappedBy = "pelada", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Message> messages;
 }

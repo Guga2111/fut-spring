@@ -78,14 +78,12 @@ function App() {
   };
 
   useEffect(() => {
-    if (token !== null) {
-      getPeladas();
-      getUser();
-    }
+    getPeladas();
+    getUser();
   }, [token]);
 
   return (
-    <div className="font-mono min-h-screen flex flex-col ">
+    <div className="font-mono min-h-screen flex flex-col scrollbar-custom">
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />

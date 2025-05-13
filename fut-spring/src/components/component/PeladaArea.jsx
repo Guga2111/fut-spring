@@ -101,7 +101,11 @@ export default function PeladaArea({ pelada }) {
 
       <div className="py-20 flex justify-center items-start gap-20">
         <div className="w-1/4 Chat Area border rounded-xl p-4 py-16">
-          <PeladaChat></PeladaChat>
+          <PeladaChat
+            playersAssociated={playersAssociated}
+            allImages={allImages}
+            peladaId={id}
+          ></PeladaChat>
         </div>
 
         <div className="w-1/2 flex flex-col gap-75 items-center">

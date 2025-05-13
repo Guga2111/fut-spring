@@ -186,3 +186,29 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .scrollbar-custom {
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted-foreground) var(--secondary);
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: var(--secondary);
+    border-radius: var(--radius-sm);
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: var(--muted-foreground);
+    border-radius: var(--radius-sm);
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
+}

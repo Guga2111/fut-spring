@@ -121,7 +121,7 @@ export default function PeladaArea({ pelada }) {
           </div>
         </div>
 
-        <div className="w-1/4 border rounded p-4 ">
+        <div className="w-1/4 border rounded-xl p-4 ">
           <RankingGrid
             ranking={ranking}
             associatedPlayers={playersAssociated}

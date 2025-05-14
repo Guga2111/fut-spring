@@ -119,7 +119,7 @@ function App() {
             path="/stats"
             element={
               <>
-                <div className="m--0 font-semibold">
+                <div className="m-0 font-semibold">
                   <NavigationBar user={user} />
                 </div>
                 <div className="mb-20">

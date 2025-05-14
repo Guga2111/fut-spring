@@ -39,7 +39,7 @@ export default function LandingPageContent() {
                 </p>
                 <div className="flex justify-center">
                   <img
-                    src="/public/backgroundbalotelli.jpg"
+                    src="/public/gerrard-kissing.jfif"
                     alt="Soccer illustration"
                     className="h-40 mx-auto drop-shadow-lg rounded-full object-cover"
                   />

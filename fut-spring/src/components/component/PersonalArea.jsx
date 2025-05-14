@@ -1,3 +1,5 @@
+import { Star } from "lucide-react";
+
 export default function PersonalArea({ user }) {
   const getImageSrc = (filename) => {
     if (!filename) return "/default-avatar.jpg";
@@ -25,17 +27,29 @@ export default function PersonalArea({ user }) {
       </div>
 
       {/* Profile picture - moved more to the right and down */}
-      <div className="absolute -bottom-[70px] left-10 w-[168px] h-[168px] rounded-full border-4 border-white overflow-hidden">
+      <div className="absolute -bottom-[30px] left-10 w-[168px] h-[168px] rounded-full border-4 border-white overflow-hidden">
         <img
           src={user ? getImageSrc(user.image) : "/default-avatar.jpg"}
           alt="Profile"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover "
         />
       </div>
 
       {/* Username positioned outside the cover image */}
-      <div className="mr-[850px] mt-2 pt-2">
-        <h2 className="text-2xl font-bold">{user.username}</h2>
+      <div className="mr-[850px] mt-2 pt-2 relative">
+        <div className="grid justify-center gap-4">
+          <h2 className="text-2xl font-bold">{user.username}</h2>
+
+          <h3 className="text-yellow-500 flex items-center gap-1">
+            <Star></Star>
+            <div className="font-extrabold">{user.stars}</div>
+          </h3>
+        </div>
+
+        {/* Button positioned absolutely to the right */}
+        <div className="absolute right-[-800px] top-0">
+          <button>Your Button</button>
+        </div>
       </div>
     </div>
   );

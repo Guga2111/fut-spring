@@ -14,6 +14,7 @@ import PeladaArea from "./components/component/PeladaArea";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Toaster } from "sonner";
+import PersonalArea from "./components/component/PersonalArea";
 
 function App() {
   const [peladas, setPeladas] = useState([]);
@@ -118,10 +119,12 @@ function App() {
             path="/stats"
             element={
               <>
-                <div className="m-2 font-semibold">
+                <div className="m--0 font-semibold">
                   <NavigationBar user={user} />
                 </div>
-                <h1 className="font-extrabold">FutSpring</h1>
+                <div className="mb-20">
+                  <PersonalArea user={user}></PersonalArea>
+                </div>
                 <div>
                   <StatsGrid stats={stats} />
                 </div>

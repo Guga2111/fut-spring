@@ -4,7 +4,7 @@ import ProfileNotLogged from "./ProfileNotLogged";
 
 export default function NavigationBar({ user }) {
   return (
-    <div className="py-2 w-full border-b border-gray-200 bg-white">
+    <div className="py-2 w-full border-b !border-gray-500 bg-white">
       <BreadcrumMenu></BreadcrumMenu>
       {user ? (
         <Profile user={user}></Profile>

@@ -8,7 +8,7 @@ import RankingGrid from "./RankingGrid";
 import PeladaHeader from "./PeladaHeader";
 import PeladaChat from "./PeladaChat";
 
-export default function PeladaArea({ pelada }) {
+export default function PeladaArea({ pelada, user }) {
   const { id } = useParams();
   const [peladaData, setPeladaData] = useState(pelada);
   const [loading, setLoading] = useState(!pelada);
@@ -105,6 +105,7 @@ export default function PeladaArea({ pelada }) {
             playersAssociated={playersAssociated}
             allImages={allImages}
             peladaId={id}
+            user={user}
           ></PeladaChat>
         </div>
 

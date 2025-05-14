@@ -136,7 +136,7 @@ function App() {
                   <NavigationBar user={user} />
                 </div>
                 <div>
-                  <PeladaArea pelada={selectedPelada}></PeladaArea>
+                  <PeladaArea pelada={selectedPelada} user={user}></PeladaArea>
                 </div>
               </>
             }

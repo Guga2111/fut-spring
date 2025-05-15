@@ -54,6 +54,11 @@ public class UserController {
         return new ResponseEntity<>(userService.saveUserImage(id , imageFile), HttpStatus.OK);
     }
 
+    @PutMapping(value = "/background/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<User> saveBackgroundUserImage(@PathVariable Long id, @RequestPart(value = "image", required = false)MultipartFile imageFile) throws IOException {
+        return new ResponseEntity<>(userService.saveUserImage(id, imageFile), HttpStatus.OK);
+    }
+
     @GetMapping("/images/{filename:.+}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         Resource imageResource = userService.getImage(filename);

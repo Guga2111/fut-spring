@@ -18,5 +18,6 @@ public interface UserService {
     Stats getStats(Long id);
     Resource getImage(String filename);
     User saveUserImage(Long id, MultipartFile imageFile) throws IOException;
+    User saveBackgroundUserImage(Long id, MultipartFile imageFile) throws IOException;
     List<String> getAllImageFilenames();
 }

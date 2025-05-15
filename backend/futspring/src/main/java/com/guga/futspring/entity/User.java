@@ -30,6 +30,9 @@ public class User {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "background_image")
+    private String backgroundImage;
+
     @NonNull
     @NotBlank
     @Column(name = "password")

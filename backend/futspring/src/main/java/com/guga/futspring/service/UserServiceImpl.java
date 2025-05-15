@@ -109,6 +109,26 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User saveBackgroundUserImage(Long id, MultipartFile imageFile) throws IOException {
+        if(imageFile != null && !imageFile.isEmpty()) {
+            File directory = new File(uploadDir);
+            if(!directory.exists()) {
+                directory.mkdirs();
+            }
+        }
+
+        String filename = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+        Path filePath = Paths.get(uploadDir, filename);
+
+        Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        User user = getUser(id);
+        user.setBackgroundImage(filename);
+
+        return userRepository.save(user);
+    }
+
+    @Override
     public Resource getImage(String filename) {
 
         try{

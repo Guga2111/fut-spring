@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User saveUserImage(Long id ,MultipartFile imageFile) throws IOException {
+    public User saveUserImage(Long id ,MultipartFile imageFile, String imageType) throws IOException {
         if(imageFile != null && !imageFile.isEmpty()) {
             File directory = new File(uploadDir);
             if(!directory.exists()) {
@@ -97,33 +97,24 @@ public class UserServiceImpl implements UserService{
             }
         }
 
-        String filename = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
-        Path filePath = Paths.get(uploadDir, filename);
-
-        Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        User user = getUser(id);
-        user.setImage(filename);
-
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User saveBackgroundUserImage(Long id, MultipartFile imageFile) throws IOException {
-        if(imageFile != null && !imageFile.isEmpty()) {
-            File directory = new File(uploadDir);
-            if(!directory.exists()) {
-                directory.mkdirs();
-            }
+        String prefix = "default";
+        if(imageFile.equals("profile")) {
+            prefix = "profile";
+        } else if(imageFile.equals("background")) {
+            prefix = "background";
         }
 
-        String filename = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+        String filename = prefix + "_" + UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
         Path filePath = Paths.get(uploadDir, filename);
 
         Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
         User user = getUser(id);
-        user.setBackgroundImage(filename);
+        if ("profile".equals(imageType)) {
+            user.setImage(filename);
+        } else if ("background".equals(imageType)) {
+            user.setBackgroundImage(filename);
+        }
 
         return userRepository.save(user);
     }

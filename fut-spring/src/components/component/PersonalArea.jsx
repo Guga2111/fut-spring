@@ -8,6 +8,10 @@ import axios from "axios";
 export default function PersonalArea({ user }) {
   const [isUploading, setIsUploading] = useState(false);
   const [profileImage, setProfileImage] = useState(user?.image || null);
+  const [backgroundImage, setBackgroundImage] = useState(
+    user?.backgroundImage || null
+  );
+  const [isUploadingBg, setIsUploadingBg] = useState(false);
 
   const getImageSrc = (filename) => {
     if (!filename) return "/default-avatar.jpg";
@@ -23,6 +27,7 @@ export default function PersonalArea({ user }) {
 
       const formData = new FormData();
       formData.append("image", file);
+      formData.append("imageType", "profile");
 
       const token = localStorage.getItem("jwt");
 
@@ -54,11 +59,58 @@ export default function PersonalArea({ user }) {
     }
   };
 
+  const handleBackgroundChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      setIsUploadingBg(true);
+
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("imageType", "background");
+
+      const token = localStorage.getItem("jwt");
+      if (!token) {
+        alert("You must be logged in to change your background image");
+        setIsUploadingBg(false);
+        return;
+      }
+
+      const response = await axios.put(
+        `http://localhost:8080/user/image/${user.id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const updatedUser = response.data;
+      setBackgroundImage(updatedUser.backgroundImage);
+    } catch (error) {
+      console.error("Error updating background image:", error);
+      alert("Failed to update background image");
+    } finally {
+      setIsUploadingBg(false);
+    }
+  };
+
   useEffect(() => {
     setProfileImage(
       user?.image && user.image.trim() !== "" ? user.image : null
     );
   }, [user?.image]);
+
+  useEffect(() => {
+    setBackgroundImage(
+      user?.backgroundImage && user.backgroundImage.trim() !== ""
+        ? user.backgroundImage
+        : null
+    );
+  }, [user?.backgroundImage]);
 
   if (user === null) {
     return (
@@ -68,14 +120,25 @@ export default function PersonalArea({ user }) {
     );
   }
 
+  console.log(backgroundImage);
+
   return (
     <div className="relative w-full !font-[system-ui,Avenir,Helvetica,Arial,sans-serif]">
       <div className="relative w-full h-[350px] rounded-b-xl overflow-hidden group">
         <img
-          src={user?.coverImage || "/public/backgroundbalotelli.jpg"}
+          src={
+            backgroundImage && backgroundImage.trim() !== ""
+              ? getImageSrc(backgroundImage)
+              : "/public/backgroundbalotelli.jpg"
+          }
           alt="Cover"
           className="w-full h-full object-cover"
         />
+        {isUploadingBg && (
+          <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-t-white border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
         <div className="absolute inset-0 bg-black/30 opacity-0 rounded-b-xl group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"></div>
       </div>
 
@@ -128,10 +191,24 @@ export default function PersonalArea({ user }) {
           </h3>
         </div>
 
-        <div className="absolute right-[-800px] top-0 ">
-          <Button className="!bg-green-600 !text-white hover:!bg-green-700 hover:!border-white">
+        <div className="absolute right-[-800px] top-0 flex items-center">
+          <Button
+            className="!bg-green-600 !text-white hover:!bg-green-700 hover:!border-white"
+            onClick={() =>
+              document.getElementById("background-image-upload").click()
+            }
+            disabled={isUploadingBg}
+          >
             <UserRoundPen className="mr-2" /> Change Background
           </Button>
+          <input
+            type="file"
+            id="background-image-upload"
+            className="hidden"
+            accept="image/*"
+            onChange={handleBackgroundChange}
+            disabled={isUploadingBg}
+          />
         </div>
       </div>
     </div>

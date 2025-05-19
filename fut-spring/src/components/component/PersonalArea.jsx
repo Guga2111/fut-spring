@@ -2,6 +2,7 @@ import { Star, Camera } from "lucide-react";
 import { UserRoundPen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ImageUp } from "lucide-react";
 import defaultAvatar from "/public/rashford-celebration.jpg";
 import axios from "axios";
 
@@ -191,7 +192,10 @@ export default function PersonalArea({ user }) {
           </h3>
         </div>
 
-        <div className="absolute right-[-800px] top-0 flex items-center">
+        <div className="absolute right-[-800px] top-0 flex items-center gap-2">
+          <Button className=" !text-white hover:!bg-neutral-800 hover:!border-white">
+            <UserRoundPen className="mr-2" /> Edit Profile
+          </Button>
           <Button
             className="!bg-green-600 !text-white hover:!bg-green-700 hover:!border-white"
             onClick={() =>
@@ -199,7 +203,7 @@ export default function PersonalArea({ user }) {
             }
             disabled={isUploadingBg}
           >
-            <UserRoundPen className="mr-2" /> Change Background
+            <ImageUp className="mr-2" /> Change Background
           </Button>
           <input
             type="file"

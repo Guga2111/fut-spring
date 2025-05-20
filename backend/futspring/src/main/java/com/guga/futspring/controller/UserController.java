@@ -54,6 +54,11 @@ public class UserController {
         return new ResponseEntity<>(userService.saveUserImage(id , imageFile, imageType), HttpStatus.OK);
     }
 
+    @PutMapping("/info/{id}")
+    public ResponseEntity<User> updateUserInfo(@PathVariable Long id,@RequestParam(value = "stars") int stars) {
+        return new ResponseEntity<>(userService.updateUserInfo(id, stars), HttpStatus.OK);
+    }
+
     @GetMapping("/images/{filename:.+}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         Resource imageResource = userService.getImage(filename);

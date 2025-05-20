@@ -13,10 +13,11 @@ public interface UserService {
     User getUser(String email);
     List<User> getUsers();
     User saveUser(User user);
-    User updateUser(int stars, Long id);
     void deleteUser(Long id);
     Stats getStats(Long id);
     Resource getImage(String filename);
     User saveUserImage(Long id, MultipartFile imageFile, String imageType) throws IOException;
     List<String> getAllImageFilenames();
+    User updateUserInfo(Long id, int stars);
+
 }

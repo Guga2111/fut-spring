@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User updateUser(int stars, Long id) {
+    public User updateUserInfo(Long id, int stars) {
         Optional<User> user = userRepository.findById(id);
         User unwrapUser = unwrapUser(user, id);
         unwrapUser.setStars(stars);

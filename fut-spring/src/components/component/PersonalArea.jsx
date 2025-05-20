@@ -193,7 +193,7 @@ export default function PersonalArea({ user }) {
         </div>
 
         <div className="absolute right-[-800px] top-0 flex items-center gap-2">
-          <EditProfile></EditProfile>
+          <EditProfile user={user}></EditProfile>
 
           <Button
             className="!bg-green-600 !text-white hover:!bg-green-700 hover:!border-white"

@@ -126,7 +126,7 @@ function App() {
                   <PersonalArea user={user}></PersonalArea>
                 </div>
                 <div>
-                  <StatsGrid stats={stats} />
+                  <StatsGrid user={user} />
                 </div>
               </>
             }

@@ -32,13 +32,30 @@ const starsOptions = [
   { value: "5", label: "5" },
 ];
 
+const positionOptions = [
+  { value: "Goalkeeper", label: "Goalkeeper" },
+  { value: "Center Back", label: "Center Back" },
+  { value: "Left Back", label: "Left Back" },
+  { value: "Right Back", label: "Right Back" },
+  { value: "Defensive Midfielder", label: "Defensive Midfielder" },
+  { value: "Central Midfielder", label: "Central Midfielder" },
+  {
+    value: "Central Attacking Midfielder",
+    label: "Central Attacking Midfielder",
+  },
+  { value: "Left Wing", label: "Left Wing" },
+  { value: "Right Wing", label: "Right Wing" },
+  { value: "Striker", label: "Striker" },
+];
+
 export default function EditProfile({ user }) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedStars, setSelectedStars] = useState("");
+  const [selectedPosition, setSelectedPosition] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting with value:", selectedValue);
+    console.log("Submitting with value:", selectedStars);
 
     const token = localStorage.getItem("jwt");
     if (!token) {
@@ -47,7 +64,8 @@ export default function EditProfile({ user }) {
     }
 
     const formData = new FormData();
-    formData.append("stars", selectedValue);
+    formData.append("stars", selectedStars);
+    formData.append("position", selectedPosition);
 
     try {
       const userId = user.id;
@@ -95,13 +113,13 @@ export default function EditProfile({ user }) {
                 </Label>
                 <div className="col-span-3">
                   <Select
-                    value={selectedValue}
+                    value={selectedStars}
                     onValueChange={(value) => {
                       console.log("Selected:", value);
-                      setSelectedValue(value);
+                      setSelectedStars(value);
                     }}
                   >
-                    <SelectTrigger className="w-[200px] !bg-white !border-gray-300 text-black hover:!bg-gray-300">
+                    <SelectTrigger className="w-[200px] !bg-white !border-gray-300 !text-neutral-800 hover:!bg-gray-300">
                       <SelectValue placeholder="Select your star..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -119,15 +137,33 @@ export default function EditProfile({ user }) {
                 </div>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="username" className="text-right">
-                  Username
+                <Label htmlFor="position" className="text-right">
+                  Position
                 </Label>
-                <Input
-                  id="username"
-                  defaultValue="@peduarte"
-                  className="col-span-3"
-                  readOnly
-                />
+                <div className="col-span-3">
+                  <Select
+                    value={selectedPosition}
+                    onValueChange={(value) => {
+                      console.log("Selected position:", value);
+                      setSelectedPosition(value);
+                    }}
+                  >
+                    <SelectTrigger className="w-[200px] !bg-white !border-gray-300 !text-neutral-800 hover:!bg-gray-300">
+                      <SelectValue placeholder="Select your position..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {positionOptions.map((option) => (
+                        <SelectItem
+                          key={option.value}
+                          value={option.value}
+                          className="cursor-pointer hover:bg-gray-100"
+                        >
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
             <DialogFooter>

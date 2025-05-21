@@ -76,10 +76,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User updateUserInfo(Long id, int stars) {
+    public User updateUserInfo(Long id, int stars, String position) {
         Optional<User> user = userRepository.findById(id);
         User unwrapUser = unwrapUser(user, id);
         unwrapUser.setStars(stars);
+        unwrapUser.setPosition(position);
         return userRepository.save(unwrapUser);
     }
 

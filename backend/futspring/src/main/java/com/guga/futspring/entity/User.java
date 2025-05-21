@@ -39,7 +39,10 @@ public class User {
     private String password;
 
     @Column(name = "stars")
-    int stars;
+    private int stars;
+
+    @Column(name = "position")
+    private String position;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "stats_id", referencedColumnName = "id", unique = true)

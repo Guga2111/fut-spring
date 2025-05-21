@@ -18,6 +18,6 @@ public interface UserService {
     Resource getImage(String filename);
     User saveUserImage(Long id, MultipartFile imageFile, String imageType) throws IOException;
     List<String> getAllImageFilenames();
-    User updateUserInfo(Long id, int stars);
+    User updateUserInfo(Long id, int stars, String position);
 
 }

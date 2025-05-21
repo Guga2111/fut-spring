@@ -3,6 +3,7 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from "@/components/ui/resizable";
+import { Star } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -11,6 +12,7 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
+import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator"; // Útil para separar seções dentro de cards maiores
 import { Progress } from "@/components/ui/progress"; // Para barras de progresso
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // Para avatares de jogadores
@@ -62,6 +64,21 @@ const playerData = {
 export default function StatsGrid({ user }) {
   // Cores para os gráficos de pizza (exemplo)
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
+  const [progress, setProgress] = useState(13);
+  useEffect(() => {
+    const timer = setTimeout(() => setProgress(66), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  console.log("User: ", user);
+
+  if (user === null) {
+    return (
+      <div>
+        <Progress value={progress}></Progress>
+      </div>
+    );
+  }
 
   return (
     <ResizablePanelGroup
@@ -76,17 +93,22 @@ export default function StatsGrid({ user }) {
             {/* Ajustar h-full e flex-col */}
             <CardHeader className="flex flex-col items-center text-center">
               <Avatar className="h-24 w-24 mb-4">
-                <AvatarImage src={playerData.avatarUrl} alt={playerData.name} />
+                <AvatarImage src={playerData.avatarUrl} alt={user.username} />
                 <AvatarFallback>
-                  {playerData.name
+                  {user.username
                     .split(" ")
                     .map((n) => n[0])
                     .join("")}
                 </AvatarFallback>
               </Avatar>
-              <CardTitle className="text-2xl">{playerData.name}</CardTitle>
+              <CardTitle className="text-2xl">{user.username}</CardTitle>
               <CardDescription>
-                Avaliação Geral: {playerData.overallRating.toFixed(1)}
+                <div class="flex items-center">
+                  <span class="mr-1">
+                    Avaliação Geral: {user.stars.toFixed(1)}
+                  </span>
+                  <Star class="inline-block align-middle w-4 h-4 text-amber-400"></Star>
+                </div>
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col justify-around">
@@ -95,11 +117,9 @@ export default function StatsGrid({ user }) {
               <div>
                 <p className="text-lg font-medium">Próxima Pelada:</p>
                 <p className="text-muted-foreground">
-                  Sábado, 25 de Maio, 10:00 AM
+                  Quinta, 22 de Maio, 9:00 PM
                 </p>
-                <p className="text-muted-foreground">
-                  Local: Campo da Boa Vista
-                </p>
+                <p className="text-muted-foreground">Local: Ilha do Retiro</p>
               </div>
               <Separator className="my-4" />
               <div>
@@ -146,18 +166,19 @@ export default function StatsGrid({ user }) {
                 <CardContent className="grid grid-cols-2 gap-4">
                   <div className="text-center">
                     <p className="text-5xl font-bold text-primary">
-                      {playerData.stats.totalGoals}
+                      {user.stats.goals}
                     </p>
                     <p className="text-lg text-muted-foreground">Gols Totais</p>
                   </div>
                   <div className="text-center">
                     <p className="text-5xl font-bold text-accent-foreground">
-                      {playerData.stats.totalAssists}
+                      {user.stats.assists}
                     </p>
                     <p className="text-lg text-muted-foreground">
                       Assistências
                     </p>
                   </div>
+
                   <div className="col-span-2 mt-4">
                     <Progress
                       value={

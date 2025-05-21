@@ -11,7 +11,6 @@ export default function PeladaGrid({
   onPeladaSelect,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
-  console.log("peladas: ", peladas);
 
   const matchesSearchTerm = (pelada, searchTerm) => {
     return pelada.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -20,8 +19,6 @@ export default function PeladaGrid({
   const filteredPeladas = peladas.filter((pelada) =>
     matchesSearchTerm(pelada, searchTerm)
   );
-
-  console.log("PeladaGrid rendered with peladas:", peladas);
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-5">

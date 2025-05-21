@@ -55,7 +55,6 @@ export default function EditProfile({ user }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting with value:", selectedStars);
 
     const token = localStorage.getItem("jwt");
     if (!token) {
@@ -115,7 +114,6 @@ export default function EditProfile({ user }) {
                   <Select
                     value={selectedStars}
                     onValueChange={(value) => {
-                      console.log("Selected:", value);
                       setSelectedStars(value);
                     }}
                   >
@@ -144,7 +142,6 @@ export default function EditProfile({ user }) {
                   <Select
                     value={selectedPosition}
                     onValueChange={(value) => {
-                      console.log("Selected position:", value);
                       setSelectedPosition(value);
                     }}
                   >

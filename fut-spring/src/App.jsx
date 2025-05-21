@@ -31,7 +31,7 @@ function App() {
   const getPeladas = async (filters) => {
     try {
       const response = await api.get("/pelada", { params: filters });
-      console.log("Fetched peladas:", response.data);
+
       setPeladas(response.data);
     } catch (error) {
       console.error("Error fetching peladas:", error);
@@ -39,7 +39,6 @@ function App() {
   };
 
   const handlePeladaCreated = (newPelada) => {
-    console.log("New pelada created:", newPelada);
     setPeladas((prevPeladas) => [...prevPeladas, newPelada]);
   };
 
@@ -65,13 +64,10 @@ function App() {
         },
       });
 
-      console.log("Stats response:", userResponse.data);
-
       const userStats = userResponse.data.stats;
-      console.log("SET USER");
-      console.log(userResponse);
+
       setUser(userResponse.data);
-      console.log("User data loaded: ", userResponse.data);
+
       setStats(userStats);
     } catch (error) {
       console.error("Error fetching stats:", error);

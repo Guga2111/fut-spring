@@ -121,8 +121,6 @@ export default function PersonalArea({ user }) {
     );
   }
 
-  console.log(backgroundImage);
-
   return (
     <div className="relative w-full !font-[system-ui,Avenir,Helvetica,Arial,sans-serif]">
       <div className="relative w-full h-[350px] rounded-b-xl overflow-hidden group">
@@ -192,11 +190,6 @@ export default function PersonalArea({ user }) {
               </h4>
             </div>
           </div>
-
-          <h3 className="text-yellow-500 flex items-center gap-1">
-            <Star></Star>
-            <div className="font-extrabold">{user.stars}</div>
-          </h3>
         </div>
 
         <div className="absolute right-[-800px] top-0 flex items-center gap-2">

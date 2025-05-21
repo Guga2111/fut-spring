@@ -33,19 +33,19 @@ const starsOptions = [
 ];
 
 const positionOptions = [
-  { value: "Goalkeeper", label: "Goalkeeper" },
-  { value: "Center Back", label: "Center Back" },
-  { value: "Left Back", label: "Left Back" },
-  { value: "Right Back", label: "Right Back" },
-  { value: "Defensive Midfielder", label: "Defensive Midfielder" },
-  { value: "Central Midfielder", label: "Central Midfielder" },
+  { value: "GK", label: "GK" },
+  { value: "CB", label: "CB" },
+  { value: "LB", label: "LB" },
+  { value: "RB", label: "RB" },
+  { value: "DM", label: "DM" },
+  { value: "CM", label: "CM" },
   {
-    value: "Central Attacking Midfielder",
-    label: "Central Attacking Midfielder",
+    value: "CAM",
+    label: "CAM",
   },
-  { value: "Left Wing", label: "Left Wing" },
-  { value: "Right Wing", label: "Right Wing" },
-  { value: "Striker", label: "Striker" },
+  { value: "LW", label: "LW" },
+  { value: "RW", label: "RW" },
+  { value: "ST", label: "ST" },
 ];
 
 export default function EditProfile({ user }) {
@@ -93,7 +93,7 @@ export default function EditProfile({ user }) {
         <DialogTrigger asChild>
           <Button
             variant="outline"
-            className="text-white hover:bg-neutral-800 hover:border-white"
+            className="!text-white hover:!bg-neutral-800 hover:!border-white"
           >
             <UserRoundPen className="mr-2" /> Edit Profile
           </Button>

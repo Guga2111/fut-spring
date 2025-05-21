@@ -184,7 +184,14 @@ export default function PersonalArea({ user }) {
 
       <div className="mr-[850px] mt-2 pt-2 relative">
         <div className="grid justify-center gap-4">
-          <h2 className="text-2xl font-bold">{user.username}</h2>
+          <div className="">
+            <h2 className="text-2xl font-extrabold">{user.username}</h2>
+            <div className="grid justify-center">
+              <h4 className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold mt-1">
+                {user.position}
+              </h4>
+            </div>
+          </div>
 
           <h3 className="text-yellow-500 flex items-center gap-1">
             <Star></Star>

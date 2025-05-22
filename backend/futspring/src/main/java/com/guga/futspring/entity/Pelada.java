@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.List;
 
 @Setter
@@ -24,8 +26,15 @@ public class Pelada {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "time")
-    private String time;
+    @Column(name = "time_of_day")
+    private LocalTime timeOfDay; // Para armazenar a hora (HH:MM:SS)
+
+    @Enumerated(EnumType.STRING) // Armazena o nome do enum (ex: "MONDAY")
+    @Column(name = "day_of_week")
+    private DayOfWeek dayOfWeek;
+
+    @Column(name = "auto_create_daily_enabled")
+    private Boolean autoCreateDailyEnabled; // Habilita/desabilita o agendamento automático
 
     @Column(name = "image")
     private String image;
@@ -59,4 +68,11 @@ public class Pelada {
     @OneToMany(mappedBy = "pelada", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Message> messages;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.autoCreateDailyEnabled == null) {
+            this.autoCreateDailyEnabled = false; // Valor padrão
+        }
+    }
 }

@@ -2,12 +2,16 @@ package com.guga.futspring.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.guga.futspring.entity.embedded.RankingEntry;
+import com.guga.futspring.entity.enums.DailyStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -24,13 +28,29 @@ public class Daily {
 
     //criar atributo imagem para colocar a imagem do time campeao!
 
+    @Column(name = "daily_date")
+    private LocalDate dailyDate;
 
+    @Column(name = "daily_time")
+    private LocalTime dailyTime;
+
+    // Data e hora em que esta Daily foi registrada no sistema (criada pelo scheduler ou manualmente)
+    @Column(name = "creation_datetime")
+    private LocalDateTime creationDateTime;
+
+    @Column(name = "champion_image")
+    private String championImage;
 
     @Column(name = "finished")
     private Boolean isFinished;
 
     @ElementCollection
     private List<RankingEntry> prizeEntries;
+
+    // Status da Daily (AGENDADA, CONFIRMADA, CANCELADA, FINALIZADA)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private DailyStatus status;
 
     @ManyToMany
     @JsonIgnore

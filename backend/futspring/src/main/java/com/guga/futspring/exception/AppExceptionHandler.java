@@ -70,4 +70,10 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+    
+    @ExceptionHandler(DailyInThatDateAlreadyInThatPeladaException.class)
+    public ResponseEntity<Object> handleDailyInThatDateAlreadyInThatPeladaException(DailyInThatDateAlreadyInThatPeladaException e) {
+        ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
 }

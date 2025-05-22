@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("/match/**").permitAll()
                         .requestMatchers("/team/**").permitAll()
                         .requestMatchers("/chat/**").permitAll()
+                        .requestMatchers("_test/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/user/images/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)

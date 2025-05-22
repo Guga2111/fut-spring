@@ -2,16 +2,21 @@ package com.guga.futspring.controller;
 
 import com.guga.futspring.entity.Daily;
 import com.guga.futspring.entity.Match;
+import com.guga.futspring.entity.Pelada;
 import com.guga.futspring.entity.Team;
 import com.guga.futspring.entity.embedded.RankingEntry;
+import com.guga.futspring.entity.enums.DailyStatus;
+import com.guga.futspring.repository.DailyRepository;
 import com.guga.futspring.service.DailyServiceImpl;
 import com.guga.futspring.service.MatchServiceImpl;
+import com.guga.futspring.service.PeladaServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -21,6 +26,8 @@ public class DailyController {
 
     DailyServiceImpl dailyService;
     MatchServiceImpl matchService;
+    DailyRepository dailyRepository;
+    PeladaServiceImpl peladaService;
 
     @GetMapping("{id}")
     public ResponseEntity<Daily> getDaily(@PathVariable Long id) {
@@ -32,9 +39,29 @@ public class DailyController {
         return new ResponseEntity<>(dailyService.getDailys(), HttpStatus.OK);
     }
 
+    @GetMapping("/peladas/{peladaId}/dailies")
+    public ResponseEntity<List<Daily>> getDailiesByPelada(@PathVariable Long peladaId) {
+        Pelada pelada = peladaService.getPelada(peladaId);
+        return new ResponseEntity<>(dailyRepository.findByPeladaOrderByDailyDateAscDailyTimeAsc(pelada), HttpStatus.OK);
+    }
+
     @PostMapping("/pelada/{peladaId}")
     public ResponseEntity<Daily> saveDaily(@RequestBody @Valid Daily daily, @PathVariable Long peladaId) {
-        return new ResponseEntity<>(dailyService.createDaily(daily, peladaId), HttpStatus.CREATED);
+
+        Pelada pelada = peladaService.getPelada(peladaId);
+
+        if (dailyRepository.findByPeladaAndDailyDate(pelada, daily.getDailyDate()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // 409 Conflict
+        }
+
+        daily.setPelada(pelada);
+        daily.setCreationDateTime(LocalDateTime.now());
+        daily.setIsFinished(false);
+        daily.setStatus(DailyStatus.SCHEDULED);
+
+        Daily createdDaily = dailyService.createDaily(daily, peladaId);
+
+        return new ResponseEntity<>(createdDaily, HttpStatus.CREATED);
     }
 
     @PostMapping("/{id}/sort-teams")

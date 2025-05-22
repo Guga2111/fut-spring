@@ -2,7 +2,9 @@ package com.guga.futspring.service;
 
 import com.guga.futspring.entity.*;
 import com.guga.futspring.entity.embedded.RankingEntry;
+import com.guga.futspring.entity.enums.DailyStatus;
 import com.guga.futspring.exception.AlreadyPlayerInDailyException;
+import com.guga.futspring.exception.DailyInThatDateAlreadyInThatPeladaException;
 import com.guga.futspring.exception.DailyNotFoundException;
 import com.guga.futspring.exception.PlayerNotInPeladaException;
 import com.guga.futspring.repository.DailyRepository;
@@ -13,6 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -41,10 +44,15 @@ public class DailyServiceImpl implements DailyService{
     @Transactional
     public Daily createDaily(Daily daily, Long peladaId) {
         Pelada pelada = peladaService.getPelada(peladaId);
-        pelada.getDailies().add(daily);
-        peladaRepository.save(pelada);
+
+        if(dailyRepository.findByPeladaAndDailyDate(pelada, daily.getDailyDate()).isPresent()) {
+            throw new DailyInThatDateAlreadyInThatPeladaException();
+        }
+
         daily.setPelada(pelada);
         daily.setIsFinished(false);
+        daily.setCreationDateTime(LocalDateTime.now());
+        daily.setStatus(DailyStatus.SCHEDULED);
         return dailyRepository.save(daily);
     }
 
@@ -162,12 +170,12 @@ public class DailyServiceImpl implements DailyService{
 
     static Daily unwrapDaily(Optional<Daily> entity, Long id) {
         if(entity.isPresent()) return entity.get();
-        else throw new RuntimeException();
+        else throw new DailyNotFoundException(id);
     }
 
     private List<User> redistributeExtraPlayers(List<User> higherStars) {
         List<User> redistributed = new ArrayList<>();
-        while (higherStars.size() > redistributed.size() + 1) {
+        while (higherStars.size() > redistributed.size() + 1 && higherStars.size() > 0) {
             User player = higherStars.remove(higherStars.size() - 1); // Remove o último jogador
             redistributed.add(player); // Adiciona à lista temporária
         }

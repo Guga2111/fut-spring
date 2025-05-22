@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -48,8 +50,19 @@ public class PeladaController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Pelada> savePelada(@RequestPart("peladaData") String peladaJson, @RequestPart(value = "image", required = false)MultipartFile imageFile) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
         Pelada pelada = mapper.readValue(peladaJson, Pelada.class);
+
+        if (pelada.getAutoCreateDailyEnabled() == null) {
+            pelada.setAutoCreateDailyEnabled(false);
+        }
+
         return new ResponseEntity<>(peladaService.savePelada(pelada, imageFile), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Pelada> updatePelada(@PathVariable Long id, @RequestBody Pelada pelada) {
+        return new ResponseEntity<>(peladaService.updatePelada(id, pelada.getName(), pelada.getDuration(), pelada.getDayOfWeek(), pelada.getTimeOfDay(), pelada.getAutoCreateDailyEnabled()), HttpStatus.OK);
     }
 
     @GetMapping("/images/{filename:.+}")

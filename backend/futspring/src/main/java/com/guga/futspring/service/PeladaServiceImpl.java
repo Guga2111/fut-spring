@@ -5,6 +5,7 @@ import com.guga.futspring.entity.Ranking;
 import com.guga.futspring.entity.Stats;
 import com.guga.futspring.entity.User;
 import com.guga.futspring.exception.AlreadyPlayerAssociatedException;
+import com.guga.futspring.exception.PeladaNotFoundException;
 import com.guga.futspring.repository.PeladaRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -69,6 +72,10 @@ public class PeladaServiceImpl implements PeladaService{
         Ranking ranking = rankingService.initializeRanking(pelada);
         pelada.setRanking(ranking);
 
+        if (pelada.getAutoCreateDailyEnabled() == null) {
+            pelada.setAutoCreateDailyEnabled(false);
+        }
+
         return peladaRepository.save(pelada);
     }
 
@@ -94,8 +101,21 @@ public class PeladaServiceImpl implements PeladaService{
     }
 
     @Override
-    public Pelada updatePelada(Long id, String name, float duration, String time) {
-        return null;
+    @Transactional
+    // Adaptei seu método updatePelada para aceitar os novos campos de agendamento
+    public Pelada updatePelada(Long id, String name, float duration,
+                               DayOfWeek dayOfWeek, LocalTime timeOfDay, Boolean autoCreateDailyEnabled) {
+        Pelada existingPelada = getPelada(id); // Reusa o método para buscar e verificar existência
+
+        if (name != null) existingPelada.setName(name);
+        if (duration != 0) existingPelada.setDuration(duration); // Cuidado com '0' como valor para ignorar
+        // Se você tem um campo 'time' String, pode ser 'existingPelada.setTime(time);'
+        // Mas o ideal é migrar para LocalTime. Abaixo, estou usando timeOfDay.
+        if (timeOfDay != null) existingPelada.setTimeOfDay(timeOfDay);
+        if (dayOfWeek != null) existingPelada.setDayOfWeek(dayOfWeek);
+        if (autoCreateDailyEnabled != null) existingPelada.setAutoCreateDailyEnabled(autoCreateDailyEnabled);
+
+        return peladaRepository.save(existingPelada);
     }
 
         @Override
@@ -132,6 +152,6 @@ public class PeladaServiceImpl implements PeladaService{
 
     static Pelada unwrapPelada(Optional<Pelada> entity, Long id) {
         if(entity.isPresent()) return entity.get();
-        else throw new RuntimeException();
+        else throw new PeladaNotFoundException(id);
     }
 }

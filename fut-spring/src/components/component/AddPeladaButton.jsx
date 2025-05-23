@@ -14,15 +14,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
+
+const dayOfWeekOptions = [
+  { value: "MONDAY", label: "Segunda-feira" },
+  { value: "TUESDAY", label: "Terça-feira" },
+  { value: "WEDNESDAY", label: "Quarta-feira" },
+  { value: "THURSDAY", label: "Quinta-feira" },
+  { value: "FRIDAY", label: "Sexta-feira" },
+  { value: "SATURDAY", label: "Sábado" },
+  { value: "SUNDAY", label: "Domingo" },
+];
 
 export default function AddPeladaButton({ onPeladaCreated }) {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     duration: "",
-    time: "",
+    timeOfDay: "21:00:00",
     address: "",
     reference: "",
+    dayOfWeek: "",
+    autoCreateDailyEnabled: false,
   });
   const [imageFile, setImageFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,6 +53,20 @@ export default function AddPeladaButton({ onPeladaCreated }) {
     setFormData({
       ...formData,
       [name]: value,
+    });
+  };
+
+  const handleCheckboxChange = (checked) => {
+    setFormData({
+      ...formData,
+      autoCreateDailyEnabled: checked,
+    });
+  };
+
+  const handleSelectChange = (value) => {
+    setFormData({
+      ...formData,
+      dayOfWeek: value,
     });
   };
 
@@ -68,9 +103,11 @@ export default function AddPeladaButton({ onPeladaCreated }) {
       setFormData({
         name: "",
         duration: "",
-        time: "",
+        timeOfDay: "21:00:00",
         address: "",
         reference: "",
+        dayOfWeek: "",
+        autoCreateDailyEnabled: false,
       });
       setImageFile(null);
 
@@ -134,15 +171,38 @@ export default function AddPeladaButton({ onPeladaCreated }) {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="time" className="text-right">
-                Time
+              <Label htmlFor="dayOfWeek" className="text-right">
+                Day of Week
+              </Label>
+              <Select
+                value={formData.dayOfWeek}
+                onValueChange={handleSelectChange}
+                required
+              >
+                <SelectTrigger className="col-span-3 !bg-white !border-gray-200 !text-neutral-900">
+                  <SelectValue placeholder="Select a day" />
+                </SelectTrigger>
+                <SelectContent>
+                  {dayOfWeekOptions.map((option) => (
+                    <SelectItem
+                      key={option.value}
+                      value={option.value}
+                      className="hover:!bg-neutral-200"
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Label htmlFor="timeOfDay" className="text-right">
+                Time of Day
               </Label>
               <Input
                 required
-                id="time"
-                name="time"
-                value={formData.time}
-                type="text"
+                id="timeOfDay"
+                name="timeOfDay"
+                value={formData.timeOfDay}
+                type="time"
                 onChange={handleChange}
                 className="col-span-3"
               />
@@ -170,6 +230,22 @@ export default function AddPeladaButton({ onPeladaCreated }) {
                 onChange={handleChange}
                 className="col-span-3"
               />
+
+              <div className="justify-self-end flex items-center space-x-2">
+                <Checkbox
+                  id="autoCreateDailyEnabled"
+                  name="autoCreateDailyEnabled"
+                  checked={formData.autoCreateDailyEnabled}
+                  onCheckedChange={handleCheckboxChange} // Use onCheckedChange
+                  className="!border-gray-300 data-[state=checked]:!bg-green-600 data-[state=checked]:!text-white"
+                />
+                <Label
+                  htmlFor="autoCreateDailyEnabled"
+                  className="text-right col-span-3"
+                >
+                  Enable Auto Daily Creation
+                </Label>
+              </div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="image" className="text-right">

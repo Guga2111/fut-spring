@@ -22,8 +22,8 @@ public class DailySchedulerService {
     PeladaRepository peladaRepository;
     DailyRepository dailyRepository;
 
-
-    @Scheduled(cron = "0 0 0 * * ?")
+    //em deploy alterar cron para 0 0 0 * * ? a cada 24 hrs, o de teste esta a cada 10 segundos
+    @Scheduled(cron = "0/10 * * * * ?")
     public void criarDailySemanalmente() {
         System.out.println("Executando scheduler para criar Daily em: " + LocalDateTime.now());
 

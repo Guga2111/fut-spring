@@ -21,6 +21,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowDownUp } from "lucide-react";
+import { Star } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -64,20 +65,36 @@ export default function DailyTeamsSort({ daily }) {
               {confirmedPlayers && confirmedPlayers.length > 0 ? (
                 confirmedPlayers.map((player) => (
                   <React.Fragment key={player.id}>
-                    <div className="flex items-center space-x-2 text-sm mb-2">
+                    <div className="flex items-center justify-between space-x-2 text-sm mb-2">
                       {" "}
-                      <img
-                        src={getImageSrc(player.image)}
-                        alt={player.username}
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
-                      <span>{player.username}</span>
+                      {/* Adicionado justify-between */}
+                      <div className="flex items-center space-x-2">
+                        {" "}
+                        {/* Agrupando imagem e nome */}
+                        <img
+                          src={getImageSrc(player.image)}
+                          alt={player.username}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                        <span>{player.username}</span>
+                      </div>
+                      {/* Adicionado o ícone Stars aqui, iterando o número de estrelas do player */}
+                      <div className="flex">
+                        {Array.from({ length: player.stars }).map(
+                          (_, index) => (
+                            <Star
+                              key={index}
+                              className="h-4 w-4 text-yellow-500"
+                            />
+                          )
+                        )}
+                      </div>
                     </div>
                     <Separator className="my-2" />
                   </React.Fragment>
                 ))
               ) : (
-                <p>Nenhum jogador confirmado encontrado ou carregando...</p> //
+                <p>Nenhum jogador confirmado encontrado ou carregando...</p>
               )}
             </div>
           </ScrollArea>

@@ -18,7 +18,6 @@ export default function DailyCard({ pelada, onDailySelect }) {
       console.warn(
         "Nenhuma diária com status 'SCHEDULED' encontrada para esta pelada."
       );
-      //se der erro mostrar um alert no canto superior direito
     }
   };
 

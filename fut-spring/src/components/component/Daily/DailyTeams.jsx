@@ -129,7 +129,7 @@ export default function DailyTeams({ dailyId }) {
                       className="w-6 h-6 rounded-full object-cover"
                     />
                     <span>
-                      {player.username} ({player.stars} stars)
+                      {player.username} ({player.position})
                     </span>
                     <div className="flex ml-auto">
                       {Array.from({ length: player.stars }).map((_, index) => (

@@ -1,14 +1,48 @@
 import React from "react";
 import DailyTeamsSort from "./DailyTeamsSort";
+import DailyTeams from "./DailyTeams";
+import { useState, useCallback, useEffect } from "react";
+import axios from "axios";
 
 export default function DailyGrid({ daily }) {
+  const [teamsExist, setTeamsExist] = useState(false);
+  const [loadingTeamsStatus, setLoadingTeamsStatus] = useState(true);
+
+  const checkTeamsStatus = useCallback(async () => {
+    setLoadingTeamsStatus(true);
+    try {
+      const resp = await axios.get(
+        `http://localhost:8080/daily/${daily.id}/teams`
+      );
+
+      setTeamsExist(resp.data && resp.data.length > 0);
+    } catch (error) {
+      console.error("Error checking daily teams status:", error);
+      setTeamsExist(false);
+    } finally {
+      setLoadingTeamsStatus(false);
+    }
+  }, [daily.id]);
+
+  useEffect(() => {
+    checkTeamsStatus();
+  }, [checkTeamsStatus]);
+
+  const handleSortComplete = () => {
+    setTeamsExist(true);
+  };
+
   return (
     <div className="flex justify-around items-start p-5 gap-5 text-white min-h-screen box-border">
       {/* Coluna 1: Sorteio */}
       <div className="flex-1 min-w-[250px] p-4">
         {/* Conteúdo da tela de sorteio das equipes */}
         <div className="text-center text-gray-500 h-full flex items-center justify-center">
-          <DailyTeamsSort daily={daily}></DailyTeamsSort>
+          {teamsExist ? (
+            <DailyTeams dailyId={daily.id} />
+          ) : (
+            <DailyTeamsSort daily={daily} onTeamsSorted={handleSortComplete} />
+          )}
         </div>
       </div>
 

@@ -25,8 +25,9 @@ import { Star } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function DailyTeamsSort({ daily }) {
+export default function DailyTeamsSort({ daily, onTeamsSorted }) {
   const [confirmedPlayers, setConfirmedPlayers] = useState(null);
+  const [numberOfTeams, setNumberOfTeams] = useState("4");
 
   const getImageSrc = (filename) => {
     if (!filename) return "/backgroundbalotelli.jpg";
@@ -47,6 +48,31 @@ export default function DailyTeamsSort({ daily }) {
     fetchConfirmedPlayers();
   }, [daily.id]);
 
+  const handleSortTeams = async () => {
+    try {
+      if (
+        !confirmedPlayers ||
+        confirmedPlayers.length < parseInt(numberOfTeams, 10)
+      ) {
+        alert("Not enough confirmed players for the selected number of teams!");
+        return;
+      }
+
+      const resp = await axios.post(
+        `http://localhost:8080/daily/${daily.id}/sort-teams?numberOfTeams=${numberOfTeams}`
+      );
+      console.log("Teams sorted successfully:", resp.data);
+
+      // Call the callback function provided by the parent (DailyGrid)
+      if (onTeamsSorted) {
+        onTeamsSorted();
+      }
+    } catch (error) {
+      console.error("Error sorting teams:", error);
+      alert("Failed to sort teams. Please try again.");
+    }
+  };
+
   return (
     <div>
       <Card className="w-[350px]">
@@ -57,6 +83,24 @@ export default function DailyTeamsSort({ daily }) {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="grid gap-4 mb-4">
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="numberOfTeams">Number of Teams</Label>
+              <Select
+                onValueChange={setNumberOfTeams}
+                defaultValue={numberOfTeams}
+              >
+                <SelectTrigger id="numberOfTeams" className="!bg-white">
+                  <SelectValue placeholder="Select number of teams" />
+                </SelectTrigger>
+                <SelectContent position="popper">
+                  <SelectItem value="2">2 Teams</SelectItem>
+                  <SelectItem value="3">3 Teams</SelectItem>
+                  <SelectItem value="4">4 Teams</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
           <ScrollArea className="rounded-md border">
             <div className="p-4">
               <h4 className="mb-4 text-sm font-medium leading-none">
@@ -100,7 +144,7 @@ export default function DailyTeamsSort({ daily }) {
           </ScrollArea>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button>
+          <Button onClick={handleSortTeams}>
             Sort <ArrowDownUp className="ml-2" />{" "}
           </Button>
         </CardFooter>

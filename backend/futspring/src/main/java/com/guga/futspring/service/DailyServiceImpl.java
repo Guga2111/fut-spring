@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -106,50 +107,46 @@ public class DailyServiceImpl implements DailyService{
         Daily daily = getDaily(id);
         List<User> confirmedPlayers = daily.getPlayersPresence();
 
-        if(confirmedPlayers.size() < numberOfTeams) throw new IllegalArgumentException("Not suficient players to form a team");
+        if (confirmedPlayers.size() < numberOfTeams) {
+            throw new IllegalArgumentException("Not sufficient players to form a team");
+        }
 
         Collections.shuffle(confirmedPlayers);
 
-        List<User> stars5 = new ArrayList<>();
-        List<User> stars4 = new ArrayList<>();
-        List<User> stars3 = new ArrayList<>();
-        List<User> stars2 = new ArrayList<>();
-        List<User> stars1 = new ArrayList<>();
+        Map<Integer, List<User>> playersByStars = confirmedPlayers.stream()
+                .collect(Collectors.groupingBy(User::getStars, Collectors.toList()));
 
-        for(User player : confirmedPlayers) {
-            switch(player.getStars()) {
-                case 5 -> stars5.add(player);
-                case 4 -> stars4.add(player);
-                case 3 -> stars3.add(player);
-                case 2 -> stars2.add(player);
-                case 1 ->stars1.add(player);
-            }
+        List<Integer> starLevels = Arrays.asList(5, 4, 3, 2, 1);
+        List<List<User>> sortedPlayerLists = new ArrayList<>();
+        for (Integer stars : starLevels) {
+            List<User> players = playersByStars.getOrDefault(stars, new ArrayList<>());
+            Collections.shuffle(players); // Embaralha jogadores dentro da mesma estrela
+            sortedPlayerLists.add(players);
         }
 
-        stars4.addAll(redistributeExtraPlayers(stars5));
-        stars3.addAll(redistributeExtraPlayers(stars4));
-        stars2.addAll(redistributeExtraPlayers(stars3));
-        stars1.addAll(redistributeExtraPlayers(stars2));
-
         List<Team> teams = new ArrayList<>();
-        for(int i = 0; i < numberOfTeams; i++) {
+        for (int i = 0; i < numberOfTeams; i++) {
             Team team = new Team();
             team.setName("Team " + (i + 1));
             team.setDaily(daily);
             team.setPoints(0);
+            team.setPlayers(new ArrayList<>());
             teams.add(team);
         }
 
-        for (int i = 0; i < numberOfTeams; i++) {
-            List<User> teamPlayers = new ArrayList<>();
+        int teamIndex = 0;
 
-            if (i < stars5.size()) teamPlayers.add(stars5.get(i));
-            if (i < stars4.size()) teamPlayers.add(stars4.get(i));
-            if (i < stars3.size()) teamPlayers.add(stars3.get(i));
-            if (i < stars2.size()) teamPlayers.add(stars2.get(i));
-            if (i < stars1.size()) teamPlayers.add(stars1.get(i));
+        for (List<User> playerList : sortedPlayerLists) {
+            for (User player : playerList) {
+                teams.get(teamIndex).getPlayers().add(player);
+                teamIndex = (teamIndex + 1) % numberOfTeams;
+            }
+        }
 
-            teams.get(i).setPlayers(teamPlayers);
+        int totalPlayersDistributed = teams.stream().mapToInt(team -> team.getPlayers().size()).sum();
+        if (totalPlayersDistributed != confirmedPlayers.size()) {
+
+            System.err.println("Erro: Nem todos os jogadores foram distribuídos! Distribuídos: " + totalPlayersDistributed + ", Confirmados: " + confirmedPlayers.size());
         }
 
         Iterable<Team> savedTeams = teamRepository.saveAll(teams);
@@ -185,12 +182,4 @@ public class DailyServiceImpl implements DailyService{
         else throw new DailyNotFoundException(id);
     }
 
-    private List<User> redistributeExtraPlayers(List<User> higherStars) {
-        List<User> redistributed = new ArrayList<>();
-        while (higherStars.size() > redistributed.size() + 1 && higherStars.size() > 0) {
-            User player = higherStars.remove(higherStars.size() - 1); // Remove o último jogador
-            redistributed.add(player); // Adiciona à lista temporária
-        }
-        return redistributed;
-    }
 }

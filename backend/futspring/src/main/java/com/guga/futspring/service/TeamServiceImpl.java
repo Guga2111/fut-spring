@@ -28,6 +28,12 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
+    public List<User> getPlayersOfATeam(Long id) {
+        Team team = getTeam(id);
+        return team.getPlayers();
+    }
+
+    @Override
     public Team saveTeam(Team team) {
         return teamRepository.save(team);
     }

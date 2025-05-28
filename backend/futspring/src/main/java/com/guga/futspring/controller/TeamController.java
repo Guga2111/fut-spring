@@ -1,6 +1,7 @@
 package com.guga.futspring.controller;
 
 import com.guga.futspring.entity.Team;
+import com.guga.futspring.entity.User;
 import com.guga.futspring.service.TeamServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,11 @@ public class TeamController {
     @GetMapping
     public ResponseEntity<List<Team>> getTeams() {
         return new ResponseEntity<>(teamService.getTeams(), HttpStatus.OK);
+    }
+
+    @GetMapping("{id}/players")
+    public ResponseEntity<List<User>> getTeamPlayers(@PathVariable Long id) {
+        return new ResponseEntity<>(teamService.getPlayersOfATeam(id), HttpStatus.OK);
     }
 
     @PostMapping

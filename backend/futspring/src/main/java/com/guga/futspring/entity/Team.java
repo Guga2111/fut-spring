@@ -30,6 +30,7 @@ public class Team {
     private int points;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "daily_id", referencedColumnName = "id")
     private Daily daily;
 

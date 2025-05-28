@@ -107,7 +107,7 @@ export default function StatsGrid({ user }) {
                   <span class="mr-1">
                     Avaliação Geral: {user.stars.toFixed(1)}
                   </span>
-                  <Star class="inline-block align-middle w-4 h-4 text-amber-400"></Star>
+                  <Star class="inline-block align-middle w-4 h-4 text-amber-400 fill-current"></Star>
                 </div>
               </CardDescription>
             </CardHeader>

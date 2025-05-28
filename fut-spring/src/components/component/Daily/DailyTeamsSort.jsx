@@ -128,7 +128,7 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
                           (_, index) => (
                             <Star
                               key={index}
-                              className="h-4 w-4 text-yellow-500"
+                              className="h-4 w-4 text-yellow-500 fill-current"
                             />
                           )
                         )}

@@ -111,7 +111,11 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
 
         <div className="w-1/2 flex flex-col gap-75 items-center">
           <div className="w-full">
-            <DailyCard pelada={peladaData} onDailySelect={onDailySelect} />
+            <DailyCard
+              pelada={peladaData}
+              onDailySelect={onDailySelect}
+              user={user}
+            />
           </div>
           <div className="w-full">
             <ViewPeladaPlayersDialog

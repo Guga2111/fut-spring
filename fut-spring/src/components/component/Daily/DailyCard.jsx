@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import axios from "axios";
 
-export default function DailyCard({ pelada, onDailySelect }) {
+export default function DailyCard({ pelada, onDailySelect, user }) {
   const navigate = useNavigate();
   const [dailyScheduled, setDailyScheduled] = useState(null);
 
@@ -17,6 +19,33 @@ export default function DailyCard({ pelada, onDailySelect }) {
       console.log(dailyScheduled);
     }
   }, [pelada]);
+
+  const handleConfirmPresence = async () => {
+    if (!dailyScheduled || !user || !user.id) {
+      console.warn(
+        "Não foi possível confirmar presença: daily agendada ou ID do usuário não disponível."
+      );
+      return;
+    }
+
+    try {
+      const dailyId = dailyScheduled.id;
+      const userId = user.id;
+
+      const url = `http://localhost:8080/daily/${dailyId}/confirm-presence/${userId}`;
+
+      const response = await axios.put(url, {});
+
+      if (response.status === 200) {
+        toast.success(`Presence of "${user.username}" confirmed successfully!`);
+      } else {
+        console.error("Erro na resposta da API:", response.data);
+      }
+    } catch (error) {
+      console.error("Erro ao confirmar presença:", error);
+      toast.error("Failed to confirm your presence. Please try again.");
+    }
+  };
 
   const handleClick = () => {
     if (dailyScheduled) {
@@ -98,7 +127,10 @@ export default function DailyCard({ pelada, onDailySelect }) {
         </CardContent>
 
         <CardFooter className="flex justify-center gap-4 pt-2 pb-4">
-          <Button className="px-6 font-semibold bg-black text-white hover:!bg-green-600 hover:!border-white">
+          <Button
+            className="px-6 font-semibold bg-black text-white hover:!bg-green-600 hover:!border-white"
+            onClick={handleConfirmPresence}
+          >
             CONFIRM
           </Button>
           <Button className="px-6 font-semibold bg-black text-white hover:!bg-red-900 hover:!border-white">

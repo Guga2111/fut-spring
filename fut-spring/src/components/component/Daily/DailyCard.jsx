@@ -2,23 +2,61 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export default function DailyCard({ pelada, onDailySelect }) {
   const navigate = useNavigate();
+  const [dailyScheduled, setDailyScheduled] = useState(null);
+
+  useEffect(() => {
+    if (pelada && pelada.dailies) {
+      const scheduledDaily = pelada.dailies.find(
+        (daily) => daily.status === "SCHEDULED"
+      );
+      setDailyScheduled(scheduledDaily);
+      console.log(dailyScheduled);
+    }
+  }, [pelada]);
 
   const handleClick = () => {
-    const dailyScheduled = pelada.dailies.find(
-      (daily) => daily.status === "SCHEDULED"
-    );
-
     if (dailyScheduled) {
       onDailySelect(dailyScheduled);
-      navigate(`/daily/${dailyScheduled.id}`); // Redireciona usando o ID da diária encontrada
+      navigate(`/daily/${dailyScheduled.id}`);
     } else {
       console.warn(
         "Nenhuma diária com status 'SCHEDULED' encontrada para esta pelada."
       );
     }
+  };
+
+  const formatDailyDate = (dateString) => {
+    if (!dateString) return "Data não disponível";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("pt-BR", {
+      day: "numeric",
+      month: "long",
+    });
+  };
+
+  const formatDailyTime = (timeString, durationHours) => {
+    if (!timeString || !durationHours) return "Horário não disponível";
+
+    const startTime = timeString.slice(0, 5);
+
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+
+    const tempDate = new Date();
+    tempDate.setHours(startHour);
+    tempDate.setMinutes(startMinute);
+    tempDate.setSeconds(0);
+
+    tempDate.setHours(tempDate.getHours() + durationHours);
+
+    const endHour = String(tempDate.getHours()).padStart(2, "0");
+    const endMinute = String(tempDate.getMinutes()).padStart(2, "0");
+    const endTime = `${endHour}:${endMinute}`;
+
+    return `${startTime}-${endTime}hr`;
   };
 
   const imageUrl = pelada.image
@@ -44,9 +82,16 @@ export default function DailyCard({ pelada, onDailySelect }) {
 
         <CardContent className="pt-4 pb-2 px-4">
           <div className="flex justify-between items-center">
-            <p className="text-sm font-semibold">Ilha do Retiro, 01 de maio</p>
+            <p className="text-sm font-semibold">
+              {pelada.reference},{" "}
+              {dailyScheduled
+                ? formatDailyDate(dailyScheduled.dailyDate)
+                : "Carregando data..."}
+            </p>
             <div className="flex items-center gap-1">
-              <span className="text-sm font-semibold">21-23hr</span>
+              <span className="text-sm font-semibold">
+                {formatDailyTime(dailyScheduled?.dailyTime, pelada.duration)}
+              </span>
               <Clock className="h-4 w-4" />
             </div>
           </div>

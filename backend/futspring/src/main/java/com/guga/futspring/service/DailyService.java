@@ -16,4 +16,5 @@ public interface DailyService {
     List<Team> sortTeamsBasedOnStars(Long id, int numberOfTeams);
     void removeDaily(Long id);
     Daily finalizeDaily(Long dailyId, List<RankingEntry> prizes);
+    List<Team> getAssociatedTeams(Long id);
 }

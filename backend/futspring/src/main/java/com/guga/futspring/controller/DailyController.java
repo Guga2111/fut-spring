@@ -39,6 +39,11 @@ public class DailyController {
         return new ResponseEntity<>(dailyService.getDailys(), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/teams")
+    public ResponseEntity<List<Team>> getAssociatedTeams(@PathVariable Long id) {
+        return new ResponseEntity<>(dailyService.getAssociatedTeams(id), HttpStatus.OK);
+    }
+
     @GetMapping("/peladas/{peladaId}/dailies")
     public ResponseEntity<List<Daily>> getDailiesByPelada(@PathVariable Long peladaId) {
         Pelada pelada = peladaService.getPelada(peladaId);

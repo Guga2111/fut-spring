@@ -41,6 +41,12 @@ public class DailyServiceImpl implements DailyService{
     }
 
     @Override
+    public List<Team> getAssociatedTeams(Long id) {
+        Daily daily = getDaily(id);
+        return daily.getTeams();
+    }
+
+    @Override
     @Transactional
     public Daily createDaily(Daily daily, Long peladaId) {
         Pelada pelada = peladaService.getPelada(peladaId);

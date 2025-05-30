@@ -15,11 +15,13 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Toaster } from "sonner";
 import PersonalArea from "./components/component/PersonalArea";
+import DailyArea from "./components/component/Daily/DailyArea";
 
 function App() {
   const [peladas, setPeladas] = useState([]);
   const [stats, setStats] = useState(null);
   const [selectedPelada, setSelectedPelada] = useState(null);
+  const [selectedDaily, setSelectedDaily] = useState(null);
 
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
@@ -44,6 +46,10 @@ function App() {
 
   const handlePeladaSelect = (pelada) => {
     setSelectedPelada(pelada);
+  };
+
+  const handleDailySelect = (daily) => {
+    setSelectedDaily(daily);
   };
 
   const getUser = async () => {
@@ -135,11 +141,23 @@ function App() {
                   <NavigationBar user={user} />
                 </div>
                 <div>
-                  <PeladaArea pelada={selectedPelada} user={user}></PeladaArea>
+                  <PeladaArea
+                    pelada={selectedPelada}
+                    user={user}
+                    onDailySelect={handleDailySelect}
+                  ></PeladaArea>
                 </div>
               </>
             }
           />
+          <Route
+            path="/daily/:id"
+            element={
+              <>
+                <DailyArea daily={selectedDaily}></DailyArea>
+              </>
+            }
+          ></Route>
         </Routes>
         <Footer />
       </Router>

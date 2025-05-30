@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function DailyCard({ pelada }) {
+export default function DailyCard({ pelada, onDailySelect }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -12,6 +12,7 @@ export default function DailyCard({ pelada }) {
     );
 
     if (dailyScheduled) {
+      onDailySelect(dailyScheduled);
       navigate(`/daily/${dailyScheduled.id}`); // Redireciona usando o ID da diária encontrada
     } else {
       console.warn(

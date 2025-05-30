@@ -8,7 +8,7 @@ import RankingGrid from "./RankingGrid";
 import PeladaHeader from "./PeladaHeader";
 import PeladaChat from "./PeladaChat";
 
-export default function PeladaArea({ pelada, user }) {
+export default function PeladaArea({ pelada, user, onDailySelect }) {
   const { id } = useParams();
   const [peladaData, setPeladaData] = useState(pelada);
   const [loading, setLoading] = useState(!pelada);
@@ -111,7 +111,7 @@ export default function PeladaArea({ pelada, user }) {
 
         <div className="w-1/2 flex flex-col gap-75 items-center">
           <div className="w-full">
-            <DailyCard pelada={peladaData} />
+            <DailyCard pelada={peladaData} onDailySelect={onDailySelect} />
           </div>
           <div className="w-full">
             <ViewPeladaPlayersDialog

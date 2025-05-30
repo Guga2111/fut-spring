@@ -3,18 +3,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import axios from "axios";
 import "./App.css";
 import { jwtDecode } from "jwt-decode";
-import PeladaGrid from "./components/component/PeladaGrid";
+import PeladaGrid from "./components/component/Pelada/PeladaGrid";
 import Footer from "./components/component/Footer";
 import Profile from "./components/component/Profile";
 import SignUpPage from "./components/component/SignUpPage";
 import NavigationBar from "./components/component/NavigationBar";
-import StatsGrid from "./components/component/StatsGrid";
+import StatsGrid from "./components/component/PersonalArea/StatsGrid";
 import LandingPage from "./components/component/LandingPage";
-import PeladaArea from "./components/component/PeladaArea";
+import PeladaArea from "./components/component/Pelada/PeladaArea";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Toaster } from "sonner";
-import PersonalArea from "./components/component/PersonalArea";
+import PersonalArea from "./components/component/PersonalArea/PersonalArea";
 import DailyArea from "./components/component/Daily/DailyArea";
 
 function App() {
@@ -154,6 +154,9 @@ function App() {
             path="/daily/:id"
             element={
               <>
+                <div className="m-2 font-semibold">
+                  <NavigationBar user={user} />
+                </div>
                 <DailyArea daily={selectedDaily}></DailyArea>
               </>
             }

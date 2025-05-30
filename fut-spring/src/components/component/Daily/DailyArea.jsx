@@ -2,6 +2,7 @@ import AddMatchButton from "./AddMatchButton";
 import DailyGrid from "./DailyGrid";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import DailyHeader from "./DailyHeader";
 
 export default function DailyArea({ daily }) {
   const [teams, setTeams] = useState(null);
@@ -30,6 +31,7 @@ export default function DailyArea({ daily }) {
   return (
     <div>
       <div>
+        <DailyHeader daily={daily}></DailyHeader>
         <AddMatchButton dailyId={daily.id} teams={teams}></AddMatchButton>
       </div>
       <div>

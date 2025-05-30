@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DailyCard from "./DailyCard";
+import DailyCard from "../Daily/DailyCard";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import ViewPeladaPlayersDialog from "./ViewPeladaPlayersDialog";

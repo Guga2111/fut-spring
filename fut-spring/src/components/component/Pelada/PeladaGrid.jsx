@@ -3,7 +3,7 @@ import PeladaCard from "./PeladaCard";
 import AddPeladaButton from "./AddPeladaButton";
 import { Button } from "@/components/ui/button";
 import { Search, PlusCircle } from "lucide-react";
-import SearchBar from "./SearchBar";
+import SearchBar from "../SearchBar";
 
 export default function PeladaGrid({
   peladas,

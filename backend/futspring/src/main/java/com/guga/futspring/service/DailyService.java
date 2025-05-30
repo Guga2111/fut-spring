@@ -17,4 +17,5 @@ public interface DailyService {
     void removeDaily(Long id);
     Daily finalizeDaily(Long dailyId, List<RankingEntry> prizes);
     List<Team> getAssociatedTeams(Long id);
+    List<User> getConfirmedPlayers(Long id);
 }

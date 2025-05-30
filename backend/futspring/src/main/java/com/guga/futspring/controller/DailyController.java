@@ -1,9 +1,6 @@
 package com.guga.futspring.controller;
 
-import com.guga.futspring.entity.Daily;
-import com.guga.futspring.entity.Match;
-import com.guga.futspring.entity.Pelada;
-import com.guga.futspring.entity.Team;
+import com.guga.futspring.entity.*;
 import com.guga.futspring.entity.embedded.RankingEntry;
 import com.guga.futspring.entity.enums.DailyStatus;
 import com.guga.futspring.repository.DailyRepository;
@@ -42,6 +39,11 @@ public class DailyController {
     @GetMapping("/{id}/teams")
     public ResponseEntity<List<Team>> getAssociatedTeams(@PathVariable Long id) {
         return new ResponseEntity<>(dailyService.getAssociatedTeams(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/confirmed-players")
+    public ResponseEntity<List<User>> getConfirmedPlayers(@PathVariable Long id) {
+        return new ResponseEntity<>(dailyService.getConfirmedPlayers(id), HttpStatus.OK);
     }
 
     @GetMapping("/peladas/{peladaId}/dailies")

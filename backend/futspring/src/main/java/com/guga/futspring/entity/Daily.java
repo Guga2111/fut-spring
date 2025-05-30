@@ -53,7 +53,6 @@ public class Daily {
     private DailyStatus status;
 
     @ManyToMany
-    @JsonIgnore
     @JoinTable(
             name = "daily_players",
             joinColumns = @JoinColumn(name = "daily_id"),

@@ -9,7 +9,7 @@ import Profile from "./components/component/Profile";
 import SignUpPage from "./components/component/SignUpPage";
 import NavigationBar from "./components/component/NavigationBar";
 import StatsGrid from "./components/component/PersonalArea/StatsGrid";
-import LandingPage from "./components/component/LandingPage";
+import LandingPage from "./components/component/LandingPage/LandingPage";
 import PeladaArea from "./components/component/Pelada/PeladaArea";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";

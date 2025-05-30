@@ -29,13 +29,17 @@ export default function DailyArea({ daily }) {
   }
 
   return (
-    <div>
+    <div class="relative w-full">
       <div>
-        <DailyHeader daily={daily}></DailyHeader>
-        <AddMatchButton dailyId={daily.id} teams={teams}></AddMatchButton>
+        <div class="flex justify-center items-center py-4">
+          <DailyHeader daily={daily}></DailyHeader>
+        </div>
+        <div class="absolute top-4 right-4">
+          <AddMatchButton dailyId={daily.id} teams={teams}></AddMatchButton>
+        </div>
       </div>
       <div>
-        <DailyGrid></DailyGrid>
+        <DailyGrid daily={daily}></DailyGrid>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import { Clock } from "lucide-react";
 
 export default function DailyHeader({ daily }) {
   const date = new Date(daily.dailyDate);
@@ -8,10 +8,16 @@ export default function DailyHeader({ daily }) {
 
   const formatedDate = `${day}/${month}`;
 
+  const displayTime = daily.dailyTime ? daily.dailyTime.substring(0, 2) : "";
+
+  const finishtime = parseInt(displayTime) + 2;
+
   return (
-    <div className="font-extrabold">
-      <h1>Daily, {formatedDate}</h1>
-      <h2>{daily.dailyTime}</h2>
+    <div className="font-semibold">
+      <h1 className="font-extrabold">Daily, {formatedDate}</h1>
+      <h2 className="flex items-center justify-center mt-2 gap-2">
+        {displayTime}-{finishtime}hr <Clock size={18}></Clock>
+      </h2>
     </div>
   );
 }

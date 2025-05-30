@@ -1,5 +1,6 @@
 package com.guga.futspring.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -49,9 +50,11 @@ public class User {
     private Stats stats;
 
     @ManyToMany(mappedBy = "players")
+    @JsonIgnore
     private List<Pelada> peladas;
 
     @ManyToMany(mappedBy = "playersPresence")
+    @JsonIgnore
     private List<Daily> dailies;
 
     @ManyToMany(mappedBy = "players")

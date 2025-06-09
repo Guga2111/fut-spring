@@ -144,7 +144,7 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
           </ScrollArea>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button onClick={handleSortTeams}>
+          <Button onClick={handleSortTeams} className="hover:!border-white">
             Sort <ArrowDownUp className="ml-2" />{" "}
           </Button>
         </CardFooter>

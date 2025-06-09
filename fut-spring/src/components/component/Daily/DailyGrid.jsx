@@ -3,6 +3,7 @@ import DailyTeamsSort from "./DailyTeamsSort";
 import DailyTeams from "./DailyTeams";
 import { useState, useCallback, useEffect } from "react";
 import axios from "axios";
+import DailyMatchesHistory from "./DailyMatchesHistory";
 
 export default function DailyGrid({ daily }) {
   const [teamsExist, setTeamsExist] = useState(false);
@@ -47,7 +48,7 @@ export default function DailyGrid({ daily }) {
       </div>
 
       {/* Coluna 2: Conteúdo Principal (Time Campeão + Histórico de Partidas) */}
-      <div className="flex-1 min-w-[250px] p-4 flex flex-col gap-5">
+      <div className="flex-1 min-w-[250px] p-4 flex flex-col gap-160">
         {/* Bloco do Time Campeão e Prêmios Individuais */}
         <div className="flex-grow text-center text-gray-500 h-full flex items-center justify-center">
           Foto do Time Campeão e Prêmios Individuais
@@ -55,7 +56,7 @@ export default function DailyGrid({ daily }) {
 
         {/* Bloco do Botão "Histórico Partidas" - FORA do card de prêmios */}
         <div className="text-center text-gray-500">
-          Botão Visualizar Partidas
+          <DailyMatchesHistory daily={daily} />
         </div>
       </div>
 

@@ -42,6 +42,12 @@ public class DailyServiceImpl implements DailyService{
     }
 
     @Override
+    public List<Match> getDailyMatches(Long id) {
+        Daily daily = getDaily(id);
+        return daily.getMatches();
+    }
+
+    @Override
     public List<Team> getAssociatedTeams(Long id) {
         Daily daily = getDaily(id);
         return daily.getTeams();

@@ -36,6 +36,11 @@ public class DailyController {
         return new ResponseEntity<>(dailyService.getDailys(), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/matches")
+    public ResponseEntity<List<Match>> getDailyMatches(@PathVariable Long id) {
+        return new ResponseEntity<>(dailyService.getDailyMatches(id), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}/teams")
     public ResponseEntity<List<Team>> getAssociatedTeams(@PathVariable Long id) {
         return new ResponseEntity<>(dailyService.getAssociatedTeams(id), HttpStatus.OK);

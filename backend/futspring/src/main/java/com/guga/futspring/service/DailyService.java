@@ -1,6 +1,7 @@
 package com.guga.futspring.service;
 
 import com.guga.futspring.entity.Daily;
+import com.guga.futspring.entity.Match;
 import com.guga.futspring.entity.Team;
 import com.guga.futspring.entity.User;
 import com.guga.futspring.entity.embedded.RankingEntry;
@@ -18,4 +19,5 @@ public interface DailyService {
     Daily finalizeDaily(Long dailyId, List<RankingEntry> prizes);
     List<Team> getAssociatedTeams(Long id);
     List<User> getConfirmedPlayers(Long id);
+    List<Match> getDailyMatches(Long id);
 }

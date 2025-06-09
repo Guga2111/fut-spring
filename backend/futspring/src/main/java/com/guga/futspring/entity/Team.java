@@ -44,5 +44,6 @@ public class Team {
     private List<User> players;
 
     @ManyToMany(mappedBy = "teams")
+    @JsonIgnore
     private Set<Match> matches = new HashSet<>();
 }

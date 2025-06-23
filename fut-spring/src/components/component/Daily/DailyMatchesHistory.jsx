@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -63,8 +64,10 @@ export default function DailyMatchesHistory({ daily }) {
                       <span className=" dark:text-gray-200">
                         {match.teams[0]?.name || "Time Desconhecido"}
                       </span>
-                      <span className="font-bold text-lg mx-4">
-                        {match.score}
+                      <span className="font-bold text-lg mx-4 flex items-center">
+                        {match.team1Score}
+                        <X className="mx-2" />
+                        {match.team2Score}
                       </span>
                       <span className=" dark:text-gray-200">
                         {match.teams[1]?.name || "Time Desconhecido"}

@@ -31,7 +31,6 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
   const [team1Score, setTeam1Score] = useState("");
   const [team2Score, setTeam2Score] = useState("");
 
-  const [score, setScore] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCreateMatchRequest = async (e) => {
@@ -78,11 +77,13 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
       const newMatch = await response.json();
       toast.success("Match created successfully!");
       setOpen(false);
+
       setTeam1Id("");
       setTeam2Id("");
-      setScore("");
+
       setTeam1Score("");
       setTeam2Score("");
+
       if (onMatchCreated) {
         onMatchCreated(newMatch);
       }

@@ -63,7 +63,6 @@ public class MatchServiceImpl implements MatchService{
         Optional<Match> match = matchRepository.findById(id);
         Match unwrapedMatch = unwrapMatch(match, id);
 
-        unwrapedMatch.setScore(score);
 
         return matchRepository.save(unwrapedMatch);
     }

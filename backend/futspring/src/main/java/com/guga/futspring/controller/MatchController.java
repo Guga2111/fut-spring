@@ -29,7 +29,7 @@ public class MatchController {
 
     @PutMapping("{id}")
     public ResponseEntity<Match> updateMatchScore(@PathVariable Long id, @RequestBody @Valid Match match) {
-        return new ResponseEntity<>(matchService.updateMatch(id, match.getScore()), HttpStatus.OK);
+        return new ResponseEntity<>(matchService.updateMatch(id, "null"), HttpStatus.OK);
     }
 
 }

@@ -46,4 +46,8 @@ public class Team {
     @ManyToMany(mappedBy = "teams")
     @JsonIgnore
     private Set<Match> matches = new HashSet<>();
+
+    @OneToMany(mappedBy = "winner")
+    @JsonIgnore
+    private Set<Match> wonMatches = new HashSet<>();
 }

@@ -1,5 +1,3 @@
-// src/components/AddMatchButton.jsx (ou onde quer que seu arquivo esteja)
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,19 +27,31 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
   const [open, setOpen] = useState(false);
   const [team1Id, setTeam1Id] = useState("");
   const [team2Id, setTeam2Id] = useState("");
+
+  const [team1Score, setTeam1Score] = useState("");
+  const [team2Score, setTeam2Score] = useState("");
+
   const [score, setScore] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCreateMatchRequest = async (e) => {
     e.preventDefault();
 
-    if (!team1Id || !team2Id || !score) {
+    if (!team1Id || !team2Id || team1Score === "" || team2Score === "") {
       toast.error("Please select both teams and enter a score.");
       return;
     }
 
     if (team1Id === team2Id) {
       toast.error("Team 1 and Team 2 cannot be the same.");
+      return;
+    }
+
+    const parsedTeam1Score = parseInt(team1Score, 10);
+    const parsedTeam2Score = parseInt(team2Score, 10);
+
+    if (isNaN(parsedTeam1Score) || isNaN(parsedTeam2Score)) {
+      toast.error("Scores must be valid numbers.");
       return;
     }
 
@@ -54,7 +64,10 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ score }),
+        body: JSON.stringify({
+          team1Score: parsedTeam1Score,
+          team2Score: parsedTeam2Score,
+        }),
       });
 
       if (!response.ok) {
@@ -68,6 +81,8 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
       setTeam1Id("");
       setTeam2Id("");
       setScore("");
+      setTeam1Score("");
+      setTeam2Score("");
       if (onMatchCreated) {
         onMatchCreated(newMatch);
       }
@@ -108,7 +123,6 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                     <SelectValue placeholder="Select Team 1" />
                   </SelectTrigger>
                   <SelectContent>
-                    {/* Renderiza as opções de time apenas se houver times */}
                     {teams &&
                       teams.map((team) => (
                         <SelectItem key={team.id} value={team.id}>
@@ -128,7 +142,6 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                     <SelectValue placeholder="Select Team 2" />
                   </SelectTrigger>
                   <SelectContent>
-                    {/* Renderiza as opções de time apenas se houver times */}
                     {teams &&
                       teams.map((team) => (
                         <SelectItem key={team.id} value={team.id}>
@@ -140,15 +153,30 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
               </div>
 
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="score" className="text-right">
-                  Score (e.g., 1x2)
+                <Label htmlFor="team1Score" className="text-right">
+                  Team 1 Score
                 </Label>
                 <Input
-                  id="score"
-                  value={score}
-                  onChange={(e) => setScore(e.target.value)}
+                  id="team1Score"
+                  type="number"
+                  value={team1Score}
+                  onChange={(e) => setTeam1Score(e.target.value)}
                   className="col-span-3"
-                  placeholder="e.g., 1x2"
+                  placeholder="e.g., 2"
+                />
+              </div>
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="team2Score" className="text-right">
+                  Team 2 Score
+                </Label>
+                <Input
+                  id="team2Score"
+                  type="number"
+                  value={team2Score}
+                  onChange={(e) => setTeam2Score(e.target.value)}
+                  className="col-span-3"
+                  placeholder="e.g., 1"
                 />
               </div>
             </div>

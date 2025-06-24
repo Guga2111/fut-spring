@@ -120,14 +120,14 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                   Team 1
                 </Label>
                 <Select value={team1Id} onValueChange={setTeam1Id}>
-                  <SelectTrigger className="col-span-3">
+                  <SelectTrigger className="col-span-3 !bg-white !text-black border !border-gray-200">
                     <SelectValue placeholder="Select Team 1" />
                   </SelectTrigger>
                   <SelectContent>
                     {teams &&
                       teams.map((team) => (
-                        <SelectItem key={team.id} value={team.id}>
-                          {team.id}
+                        <SelectItem key={team.id} value={team.name}>
+                          {team.name}
                         </SelectItem>
                       ))}
                   </SelectContent>
@@ -139,14 +139,14 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                   Team 2
                 </Label>
                 <Select value={team2Id} onValueChange={setTeam2Id}>
-                  <SelectTrigger className="col-span-3">
+                  <SelectTrigger className="col-span-3 !bg-white !text-black border !border-gray-200">
                     <SelectValue placeholder="Select Team 2" />
                   </SelectTrigger>
                   <SelectContent>
                     {teams &&
                       teams.map((team) => (
-                        <SelectItem key={team.id} value={team.id}>
-                          {team.id}
+                        <SelectItem key={team.id} value={team.name}>
+                          {team.name}
                         </SelectItem>
                       ))}
                   </SelectContent>

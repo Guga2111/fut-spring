@@ -22,7 +22,7 @@ import {
 import { toast } from "sonner";
 
 export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
-  console.log(teams); //ta null aq
+  console.log("Teams received in AddMatchButton:", teams);
 
   const [open, setOpen] = useState(false);
   const [team1Id, setTeam1Id] = useState("");
@@ -55,7 +55,10 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
     }
 
     setIsSubmitting(true);
-    const endpoint = `http://localhost:8080/daily/${dailyId}/team1/${team1Id}/team2/${team2Id}`;
+    const endpoint = `http://localhost:8080/daily/${dailyId}/team1/${parseInt(
+      team1Id,
+      10
+    )}/team2/${parseInt(team2Id, 10)}`;
 
     try {
       const response = await fetch(endpoint, {
@@ -126,7 +129,7 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                   <SelectContent>
                     {teams &&
                       teams.map((team) => (
-                        <SelectItem key={team.id} value={team.name}>
+                        <SelectItem key={team.id} value={String(team.id)}>
                           {team.name}
                         </SelectItem>
                       ))}
@@ -145,7 +148,7 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                   <SelectContent>
                     {teams &&
                       teams.map((team) => (
-                        <SelectItem key={team.id} value={team.name}>
+                        <SelectItem key={team.id} value={String(team.id)}>
                           {team.name}
                         </SelectItem>
                       ))}

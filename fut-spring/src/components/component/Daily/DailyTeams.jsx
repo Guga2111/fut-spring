@@ -103,7 +103,7 @@ export default function DailyTeams({ dailyId }) {
   }
 
   return (
-    <ScrollArea className="rounded-md border h-[300px] w-full">
+    <ScrollArea className="rounded-md border h-[600px] w-full">
       <div className="p-4">
         <h4 className="mb-4 text-lg font-medium leading-none text-gray-800 dark:text-gray-200">
           Sorted Teams

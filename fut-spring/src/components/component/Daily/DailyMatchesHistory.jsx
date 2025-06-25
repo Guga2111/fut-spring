@@ -12,29 +12,23 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
+
 import { GalleryVerticalEnd } from "lucide-react";
-import axios from "axios";
+
 import React from "react";
 
-export default function DailyMatchesHistory({ daily }) {
+export default function DailyMatchesHistory({
+  daily,
+  matches,
+  onRefreshMatches,
+}) {
   const [open, setOpen] = useState(false);
-  const [matches, setMatches] = useState([]);
 
   useEffect(() => {
-    const fetchMatches = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/daily/${daily.id}/matches`
-        );
-        setMatches(response.data);
-      } catch (error) {
-        console.error("Error fetching matches: ", error);
-      }
-    };
-
-    fetchMatches();
-  }, [daily.id]);
+    if (open && onRefreshMatches) {
+      onRefreshMatches();
+    }
+  }, [open, onRefreshMatches]);
 
   return (
     <div>
@@ -54,7 +48,7 @@ export default function DailyMatchesHistory({ daily }) {
               View the history of matches of this daily.
             </DialogDescription>
             <ScrollArea className="h-[300px] w-full rounded-md border p-4">
-              {matches.length > 0 ? (
+              {matches && matches.length > 0 ? (
                 <div className="space-y-4">
                   {matches.map((match) => (
                     <div

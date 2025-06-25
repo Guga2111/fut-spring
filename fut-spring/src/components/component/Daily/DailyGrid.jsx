@@ -5,7 +5,7 @@ import { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import DailyMatchesHistory from "./DailyMatchesHistory";
 
-export default function DailyGrid({ daily }) {
+export default function DailyGrid({ daily, matches, onRefreshMatches }) {
   const [teamsExist, setTeamsExist] = useState(false);
   const [loadingTeamsStatus, setLoadingTeamsStatus] = useState(true);
 
@@ -56,7 +56,11 @@ export default function DailyGrid({ daily }) {
 
         {/* Bloco do Botão "Histórico Partidas" - FORA do card de prêmios */}
         <div className="text-center text-gray-500">
-          <DailyMatchesHistory daily={daily} />
+          <DailyMatchesHistory
+            daily={daily}
+            matches={matches}
+            onRefreshMatches={onRefreshMatches}
+          />
         </div>
       </div>
 

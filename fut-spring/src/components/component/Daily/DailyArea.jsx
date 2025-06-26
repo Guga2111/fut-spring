@@ -3,14 +3,39 @@ import DailyGrid from "./DailyGrid";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import DailyHeader from "./DailyHeader";
+import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-export default function DailyArea({ daily }) {
+export default function DailyArea() {
+  const { id } = useParams();
+  const [daily, setDaily] = useState(null);
   const [teams, setTeams] = useState(null);
   const [matches, setMatches] = useState([]);
 
+  useEffect(() => {
+    const fetchDailyById = async () => {
+      if (id) {
+        try {
+          const response = await axios.get(`http://localhost:8080/daily/${id}`);
+          setDaily(response.data);
+        } catch (error) {
+          console.error(`Error fetching daily with ID ${id}: `, error);
+          toast.error("Erro ao carregar detalhes da diária.");
+          setDaily(null);
+        }
+      } else {
+        setDaily(null);
+      }
+    };
+
+    fetchDailyById();
+  }, [id]);
+
   const fetchTeams = useCallback(async () => {
     try {
+      if (!daily || !daily.id) {
+        return;
+      }
       const response = await axios.get(
         `http://localhost:8080/daily/${daily.id}/teams`
       );
@@ -19,9 +44,12 @@ export default function DailyArea({ daily }) {
       console.error("Error fetching teams: ", error);
       toast.error("Erro ao carregar times.");
     }
-  }, [daily.id]);
+  }, [daily?.id]);
 
   const fetchMatches = useCallback(async () => {
+    if (!daily || !daily.id) {
+      return;
+    }
     try {
       const response = await axios.get(
         `http://localhost:8080/daily/${daily.id}/matches`
@@ -31,11 +59,13 @@ export default function DailyArea({ daily }) {
       console.error("Error fetching matches: ", error);
       toast.error("Erro ao carregar histórico de partidas.");
     }
-  }, [daily.id]);
+  }, [daily?.id]);
 
   useEffect(() => {
-    fetchTeams();
-    fetchMatches();
+    if (daily && daily.id) {
+      fetchTeams();
+      fetchMatches();
+    }
   }, [fetchTeams, fetchMatches]);
 
   const handleMatchCreated = useCallback(() => {

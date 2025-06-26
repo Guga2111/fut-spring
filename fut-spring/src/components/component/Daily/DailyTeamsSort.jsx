@@ -63,7 +63,6 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
       );
       console.log("Teams sorted successfully:", resp.data);
 
-      // Call the callback function provided by the parent (DailyGrid)
       if (onTeamsSorted) {
         onTeamsSorted();
       }
@@ -110,11 +109,7 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
                 confirmedPlayers.map((player) => (
                   <React.Fragment key={player.id}>
                     <div className="flex items-center justify-between space-x-2 text-sm mb-2">
-                      {" "}
-                      {/* Adicionado justify-between */}
                       <div className="flex items-center space-x-2">
-                        {" "}
-                        {/* Agrupando imagem e nome */}
                         <img
                           src={getImageSrc(player.image)}
                           alt={player.username}
@@ -122,7 +117,6 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
                         />
                         <span>{player.username}</span>
                       </div>
-                      {/* Adicionado o ícone Stars aqui, iterando o número de estrelas do player */}
                       <div className="flex">
                         {Array.from({ length: player.stars }).map(
                           (_, index) => (

@@ -72,4 +72,7 @@ public class Daily {
 
     @OneToMany(mappedBy = "daily")
     private List<Match> matches;
+
+    @OneToOne(mappedBy = "daily", cascade = CascadeType.ALL, orphanRemoval = true)
+    private LeagueTable leagueTable;
 }

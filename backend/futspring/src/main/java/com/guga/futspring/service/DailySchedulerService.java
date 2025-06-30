@@ -1,9 +1,11 @@
 package com.guga.futspring.service;
 
 import com.guga.futspring.entity.Daily;
+import com.guga.futspring.entity.LeagueTable;
 import com.guga.futspring.entity.Pelada;
 import com.guga.futspring.entity.enums.DailyStatus;
 import com.guga.futspring.repository.DailyRepository;
+import com.guga.futspring.repository.LeagueTableRepository;
 import com.guga.futspring.repository.PeladaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +24,7 @@ public class DailySchedulerService {
 
     PeladaRepository peladaRepository;
     DailyRepository dailyRepository;
+    LeagueTableRepository leagueTableRepository;
 
     //em deploy alterar cron para 0 0 0 * * ? a cada 24 hrs, o de teste esta a cada 10 segundos
     @Scheduled(cron = "0/10 * * * * ?")
@@ -63,7 +67,13 @@ public class DailySchedulerService {
                         novaDaily.setIsFinished(false);
                         novaDaily.setStatus(DailyStatus.SCHEDULED);
 
-                        dailyRepository.save(novaDaily);
+                        Daily savedDaily = dailyRepository.save(novaDaily);
+
+                        LeagueTable newLeagueTable = new LeagueTable();
+                        newLeagueTable.setDaily(savedDaily);
+                        newLeagueTable.setEntries(new ArrayList<>());
+                        leagueTableRepository.save(newLeagueTable);
+
                         System.out.println("Daily CRIADA para a Pelada: " + pelada.getName() +
                                 " em " + dateToHappen + " às " + pelada.getTimeOfDay());
                     } catch (Exception e) {

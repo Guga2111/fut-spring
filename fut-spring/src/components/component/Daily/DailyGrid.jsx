@@ -69,6 +69,7 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
       <div className="flex-1 min-w-[250px] p-4">
         <div className="text-center text-gray-500 h-full flex items-center justify-center">
           Tabela de Classificação
+          <img src="/public/premierleaguetable.png"></img>
         </div>
       </div>
     </div>

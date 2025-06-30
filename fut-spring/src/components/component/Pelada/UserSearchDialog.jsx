@@ -101,7 +101,7 @@ export default function UserSearchDialog({ peladaData }) {
           </div>
         </div>
 
-        <ul className="mt-4 max-h-48 overflow-y-auto">
+        <ul className="mt-4 max-h-48 overflow-y-auto scrollbar-custom">
           {loading && <li className="py-2 text-sm">Loading...</li>}
           {error && <li className="py-2 text-sm !text-red-600">{error}</li>}
           {!loading &&

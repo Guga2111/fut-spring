@@ -26,19 +26,4 @@ public class LeagueTableController {
         return new ResponseEntity<>(leagueTableService.getLeagueTables(), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<LeagueTable> createLeagueTable(LeagueTable leagueTable) {
-        return new ResponseEntity<>(leagueTableService.createLeagueTable(leagueTable), HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<LeagueTable> updateLeagueTable(@PathVariable Long id, LeagueTable leagueTable) {
-        return new ResponseEntity<>(leagueTableService.updateLeagueTable(id, leagueTable), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<LeagueTable> deleteLeagueTable(@PathVariable Long id) {
-        leagueTableService.removeLeagueTable(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 }

@@ -1,5 +1,6 @@
 package com.guga.futspring.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.guga.futspring.entity.embedded.LeagueTableEntry;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class LeagueTable {
 
     @OneToOne
     @JoinColumn(name = "daily_id", referencedColumnName = "id")
+    @JsonIgnore
     private Daily daily;
 
     @ElementCollection

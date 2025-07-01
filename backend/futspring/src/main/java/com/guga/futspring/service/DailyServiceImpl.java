@@ -135,7 +135,6 @@ public class DailyServiceImpl implements DailyService{
             Team team = new Team();
             team.setName("Team " + (i + 1));
             team.setDaily(daily);
-            team.setPoints(0);
             team.setPlayers(new ArrayList<>());
             teams.add(team);
         }

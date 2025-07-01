@@ -1,9 +1,6 @@
 package com.guga.futspring.service;
 
-import com.guga.futspring.entity.Daily;
-import com.guga.futspring.entity.Match;
-import com.guga.futspring.entity.Team;
-import com.guga.futspring.entity.User;
+import com.guga.futspring.entity.*;
 import com.guga.futspring.entity.embedded.RankingEntry;
 
 import java.util.List;
@@ -20,4 +17,5 @@ public interface DailyService {
     List<Team> getAssociatedTeams(Long id);
     List<User> getConfirmedPlayers(Long id);
     List<Match> getDailyMatches(Long id);
+    LeagueTable assignTeamToDailyLeagueTable(Long id, List<Team> teams);
 }

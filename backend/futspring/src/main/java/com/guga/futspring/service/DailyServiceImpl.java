@@ -1,11 +1,13 @@
 package com.guga.futspring.service;
 
 import com.guga.futspring.entity.*;
+import com.guga.futspring.entity.embedded.LeagueTableEntry;
 import com.guga.futspring.entity.embedded.RankingEntry;
 import com.guga.futspring.entity.enums.DailyStatus;
 import com.guga.futspring.exception.AlreadyPlayerInDailyException;
 import com.guga.futspring.exception.DailyInThatDateAlreadyInThatPeladaException;
 import com.guga.futspring.exception.DailyNotFoundException;
+import com.guga.futspring.exception.LeagueTableNotFoundException;
 import com.guga.futspring.exception.PlayerNotInPeladaException;
 import com.guga.futspring.repository.*;
 import jakarta.transaction.Transactional;
@@ -26,6 +28,7 @@ public class DailyServiceImpl implements DailyService{
     PeladaRepository peladaRepository;
     TeamRepository teamRepository;
     RankingRepository rankingRepository;
+    LeagueTableRepository leagueTableRepository;
 
     @Override
     public Daily getDaily(Long id) {
@@ -156,8 +159,38 @@ public class DailyServiceImpl implements DailyService{
 
         List<Team> result = new ArrayList<>();
         savedTeams.forEach(result::add);
+        assignTeamToDailyLeagueTable(id, result);
 
         return result;
+    }
+
+    @Override
+    public LeagueTable assignTeamToDailyLeagueTable(Long id, List<Team> teams) {
+        Daily daily = dailyRepository.findById(id)
+                .orElseThrow(() -> new DailyNotFoundException(id));
+
+        LeagueTable leagueTable = leagueTableRepository.findLeagueTableByDaily(daily)
+                .orElseThrow(() -> new LeagueTableNotFoundException(daily.getLeagueTable().getId()));
+
+        List<LeagueTableEntry> entries = new ArrayList<>();
+
+        for(Team team : teams) {
+            LeagueTableEntry leagueTableEntry = new LeagueTableEntry();
+            leagueTableEntry.setTeam(team);
+            leagueTableEntry.setPoints(0);
+            leagueTableEntry.setDraws(0);
+            leagueTableEntry.setLosses(0);
+            leagueTableEntry.setPosition(0);
+            leagueTableEntry.setGoalDifference(0);
+            leagueTableEntry.setGoalsConceded(0);
+            leagueTableEntry.setGoalsScored(0);
+            entries.add(leagueTableEntry);
+        }
+
+        leagueTable.setEntries(entries);
+        leagueTable.setDaily(daily);
+
+        return leagueTableRepository.save(leagueTable);
     }
 
     @Override

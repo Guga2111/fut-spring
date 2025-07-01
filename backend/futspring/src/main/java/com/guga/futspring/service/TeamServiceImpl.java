@@ -43,15 +43,6 @@ public class TeamServiceImpl implements TeamService{
         teamRepository.deleteById(id);
     }
 
-    @Override
-    public Team addPoints(int points, Long id) {
-        Optional<Team> team = teamRepository.findById(id);
-        Team unwrapedTeam = unwrapTeam(team, id);
-
-        unwrapedTeam.setPoints(unwrapedTeam.getPoints() + points);
-        return teamRepository.save(unwrapedTeam);
-    }
-
     static Team unwrapTeam(Optional<Team> entity, Long id) {
         if(entity.isPresent()) return entity.get();
         else throw new UserNotFoundException(id);

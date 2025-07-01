@@ -10,6 +10,5 @@ public interface TeamService {
     List<Team> getTeams();
     Team saveTeam(Team team);
     void deleteTeam(Long id);
-    Team addPoints(int points, Long id);
     List<User> getPlayersOfATeam(Long id);
 }

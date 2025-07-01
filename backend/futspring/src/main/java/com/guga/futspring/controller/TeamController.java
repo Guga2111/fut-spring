@@ -38,12 +38,6 @@ public class TeamController {
         return new ResponseEntity<>(teamService.saveTeam(team), HttpStatus.CREATED);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<Team> addPoints(@Valid @RequestBody Team team, @PathVariable Long id) {
-        int points = team.getPoints();
-        return new ResponseEntity<>(teamService.addPoints(points, id), HttpStatus.OK);
-    }
-
     @DeleteMapping("{id}")
     public ResponseEntity<Team> deleteTeam(@PathVariable Long id) {
         teamService.deleteTeam(id);

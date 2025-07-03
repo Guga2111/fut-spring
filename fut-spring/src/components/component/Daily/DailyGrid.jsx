@@ -4,6 +4,7 @@ import DailyTeams from "./DailyTeams";
 import { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import DailyMatchesHistory from "./DailyMatchesHistory";
+import DailyLeagueTable from "./DailyLeagueTable";
 
 export default function DailyGrid({ daily, matches, onRefreshMatches }) {
   const [teamsExist, setTeamsExist] = useState(false);
@@ -67,9 +68,8 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
       {/* Coluna 3: Tabela de Classificação */}
 
       <div className="flex-1 min-w-[250px] p-4">
-        <div className="text-center text-gray-500 h-full flex items-center justify-center">
-          Tabela de Classificação
-          <img src="/public/premierleaguetable.png"></img>
+        <div className="text-center text-gray-800 h-full flex items-center justify-center">
+          <DailyLeagueTable dailyId={daily.id}></DailyLeagueTable>
         </div>
       </div>
     </div>

@@ -24,6 +24,11 @@ public class LeagueTableController {
         return new ResponseEntity<>(leagueTableService.getLeagueTable(id), HttpStatus.OK);
     }
 
+    @GetMapping("/daily/{dailyId}")
+    public ResponseEntity<LeagueTable> getLeagueTableFromDailyId(@PathVariable Long dailyId) {
+        return new ResponseEntity<>(leagueTableService.getLeagueTableFromDaily(dailyId), HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<LeagueTable>> getAllLeagueTable() {
         return new ResponseEntity<>(leagueTableService.getLeagueTables(), HttpStatus.OK);

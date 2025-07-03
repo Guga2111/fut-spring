@@ -10,6 +10,8 @@ import com.guga.futspring.repository.LeagueTableRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +25,9 @@ public class LeagueTableServiceImpl implements LeagueTableService{
     @Override
     public LeagueTable getLeagueTable(Long id) {
         Optional<LeagueTable> leagueTable = leagueTableRepository.findById(id);
-        return unwrapLeagueTable(leagueTable, id);
+        LeagueTable fetchedLeagueTable = unwrapLeagueTable(leagueTable, id);
+        sortAndSetPosition(fetchedLeagueTable);
+        return fetchedLeagueTable;
     }
 
     @Override
@@ -37,13 +41,17 @@ public class LeagueTableServiceImpl implements LeagueTableService{
        } else throw new DailyNotFoundException(dailyId);
 
        Optional<LeagueTable> leagueTable = leagueTableRepository.findLeagueTableByDaily(daily);
-       return unwrapLeagueTable(leagueTable, daily.getLeagueTable().getId());
+       LeagueTable fetchedLeagueTable = unwrapLeagueTable(leagueTable, daily.getLeagueTable().getId());
+       sortAndSetPosition(fetchedLeagueTable);
+       return fetchedLeagueTable;
 
     }
 
     @Override
     public List<LeagueTable> getLeagueTables() {
-        return (List<LeagueTable>) leagueTableRepository.findAll();
+        List<LeagueTable> leagueTables = (List<LeagueTable>) leagueTableRepository.findAll();
+        leagueTables.forEach(this::sortAndSetPosition);
+        return leagueTables;
     }
 
     @Override
@@ -62,10 +70,31 @@ public class LeagueTableServiceImpl implements LeagueTableService{
                             lte.setWins(entry.getWins());
                             lte.setLosses(entry.getLosses());
                             lte.setDraws(entry.getDraws());
-                            lte.setPosition(entry.getPosition());
                         }
                 );
+        sortAndSetPosition(leagueTable);
         return leagueTableRepository.save(leagueTable);
+    }
+
+    private void sortAndSetPosition(LeagueTable leagueTable) {
+        if(leagueTable != null && leagueTable.getEntries() != null) {
+            Collections.sort(leagueTable.getEntries(), new Comparator<LeagueTableEntry>() {
+                @Override
+                public int compare(LeagueTableEntry o1, LeagueTableEntry o2) {
+                    int pointsComparison = Integer.compare(o2.getPoints(), o1.getPoints());
+                    if(pointsComparison != 0) return pointsComparison;
+
+                    int goalDifferenceComparison = Integer.compare(o2.getGoalDifference(), o1.getGoalDifference());
+                    if(goalDifferenceComparison != 0) return goalDifferenceComparison;
+
+                    return Integer.compare(o2.getGoalsScored(), o1.getGoalsScored());
+                }
+            });
+
+            for(int i = 0; i < leagueTable.getEntries().size(); i++) {
+                leagueTable.getEntries().get(i).setPosition(i + 1);
+            }
+        }
     }
 
     static LeagueTable unwrapLeagueTable(Optional<LeagueTable> entity, Long id) {

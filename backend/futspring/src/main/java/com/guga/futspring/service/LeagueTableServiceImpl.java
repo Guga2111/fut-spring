@@ -5,6 +5,7 @@ import com.guga.futspring.entity.LeagueTable;
 import com.guga.futspring.entity.embedded.LeagueTableEntry;
 import com.guga.futspring.exception.DailyNotFoundException;
 import com.guga.futspring.exception.LeagueTableNotFoundException;
+import com.guga.futspring.exception.TeamNotFoundInLeagueTableException;
 import com.guga.futspring.repository.DailyRepository;
 import com.guga.futspring.repository.LeagueTableRepository;
 import lombok.AllArgsConstructor;
@@ -55,7 +56,7 @@ public class LeagueTableServiceImpl implements LeagueTableService{
     }
 
     @Override
-    public LeagueTable updateLeagueTable(Long dailyId, Long teamId, LeagueTableEntry entry) {
+    public LeagueTable  updateLeagueTable(Long dailyId, Long teamId, LeagueTableEntry entry) {
         LeagueTable leagueTable = getLeagueTableFromDaily(dailyId);
 
         leagueTable.getEntries().stream()
@@ -73,6 +74,42 @@ public class LeagueTableServiceImpl implements LeagueTableService{
                         }
                 );
         sortAndSetPosition(leagueTable);
+        return leagueTableRepository.save(leagueTable);
+    }
+    @Override
+    public LeagueTable defineMatchResult(Long dailyId, Long winnerTeamId, Long loserTeamId) {
+
+        LeagueTable leagueTable = getLeagueTableFromDaily(dailyId);
+
+        LeagueTableEntry winnerEntry = null;
+        LeagueTableEntry loserEntry = null;
+
+        for (LeagueTableEntry entry : leagueTable.getEntries()) {
+            if (entry.getTeam().getId().equals(winnerTeamId)) {
+                winnerEntry = entry;
+            } else if (entry.getTeam().getId().equals(loserTeamId)) {
+                loserEntry = entry;
+            }
+        }
+
+        if (winnerEntry == null) {
+            throw new TeamNotFoundInLeagueTableException(dailyId, winnerTeamId);
+        }
+        if (loserEntry == null) {
+            throw new TeamNotFoundInLeagueTableException(dailyId, loserTeamId);
+        }
+
+        winnerEntry.setWins(winnerEntry.getWins() + 1);
+        winnerEntry.setPoints(winnerEntry.getPoints() + 3);
+        winnerEntry.setGoalsScored(winnerEntry.getGoalsScored() + 1); // CHANGE THAT (pass into the endpoint Like a requestBody serialized json object)
+        winnerEntry.setGoalDifference(winnerEntry.getGoalsScored() - winnerEntry.getGoalsConceded());
+
+        loserEntry.setLosses(loserEntry.getLosses() + 1);
+        loserEntry.setGoalsConceded(loserEntry.getGoalsConceded() + 1); // CHANGE THAT (pass into the endpoint Like a requestBody serialized json object)
+        loserEntry.setGoalDifference(loserEntry.getGoalsScored() - loserEntry.getGoalsConceded());
+
+        sortAndSetPosition(leagueTable);
+
         return leagueTableRepository.save(leagueTable);
     }
 

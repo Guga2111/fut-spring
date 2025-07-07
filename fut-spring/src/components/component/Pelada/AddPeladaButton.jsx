@@ -25,13 +25,13 @@ import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const dayOfWeekOptions = [
-  { value: "MONDAY", label: "Segunda-feira" },
-  { value: "TUESDAY", label: "Terça-feira" },
-  { value: "WEDNESDAY", label: "Quarta-feira" },
-  { value: "THURSDAY", label: "Quinta-feira" },
-  { value: "FRIDAY", label: "Sexta-feira" },
-  { value: "SATURDAY", label: "Sábado" },
-  { value: "SUNDAY", label: "Domingo" },
+  { value: "MONDAY", label: "Monday" },
+  { value: "TUESDAY", label: "Tuesday" },
+  { value: "WEDNESDAY", label: "Wednesday" },
+  { value: "THURSDAY", label: "Thursday" },
+  { value: "FRIDAY", label: "Friday" },
+  { value: "SATURDAY", label: "Saturday" },
+  { value: "SUNDAY", label: "Sunday" },
 ];
 
 export default function AddPeladaButton({ onPeladaCreated }) {
@@ -230,22 +230,6 @@ export default function AddPeladaButton({ onPeladaCreated }) {
                 onChange={handleChange}
                 className="col-span-3"
               />
-
-              <div className="justify-self-end flex items-center space-x-2">
-                <Checkbox
-                  id="autoCreateDailyEnabled"
-                  name="autoCreateDailyEnabled"
-                  checked={formData.autoCreateDailyEnabled}
-                  onCheckedChange={handleCheckboxChange} // Use onCheckedChange
-                  className="!border-gray-300 data-[state=checked]:!bg-green-600 data-[state=checked]:!text-white"
-                />
-                <Label
-                  htmlFor="autoCreateDailyEnabled"
-                  className="text-right col-span-3"
-                >
-                  Enable Auto Daily Creation
-                </Label>
-              </div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="image" className="text-right">
@@ -260,8 +244,35 @@ export default function AddPeladaButton({ onPeladaCreated }) {
                 className="col-span-3"
               />
             </div>
-            <DialogFooter>
-              <Button type="submit" disabled={isSubmitting}>
+            <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-4 mt-4">
+              <div className="flex items-center gap-2">
+                <div className="flex items-start gap-3">
+                  <Checkbox
+                    id="autoCreateDailyEnabled"
+                    name="autoCreateDailyEnabled"
+                    checked={formData.autoCreateDailyEnabled}
+                    onCheckedChange={handleCheckboxChange}
+                    defaultChecked
+                  />
+                  <div className="grid gap-2">
+                    <Label
+                      htmlFor="autoCreateDailyEnabled"
+                      className="text-right whitespace-nowrap"
+                    >
+                      Accept auto daily
+                    </Label>
+                    <p className="text-muted-foreground text-sm">
+                      By clicking this checkbox, you agree to enable auto daily
+                      creation week a week.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full sm:w-auto"
+              >
                 {isSubmitting ? "Saving..." : "Save Pelada"}
               </Button>
             </DialogFooter>

@@ -103,7 +103,7 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
           <ScrollArea className="rounded-md border">
             <div className="p-4">
               <h4 className="mb-4 text-sm font-medium leading-none">
-                Jogadores confirmados
+                Confirmed Players
               </h4>
               {confirmedPlayers && confirmedPlayers.length > 0 ? (
                 confirmedPlayers.map((player) => (
@@ -132,7 +132,7 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
                   </React.Fragment>
                 ))
               ) : (
-                <p>Nenhum jogador confirmado encontrado ou carregando...</p>
+                <p>No confirmed players wanted or loading...</p>
               )}
             </div>
           </ScrollArea>

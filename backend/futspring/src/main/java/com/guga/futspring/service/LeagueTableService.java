@@ -11,5 +11,5 @@ public interface LeagueTableService {
     LeagueTable getLeagueTableFromDaily(Long dailyId);
     List<LeagueTable> getLeagueTables();
     LeagueTable updateLeagueTable(Long dailyId, Long teamId, LeagueTableEntry leagueTableEntry);
-    LeagueTable defineMatchResult(Long dailyId, Long winnerTeamId, Long loserTeamId);
+    LeagueTable defineMatchResult(Long dailyId, Long winnerTeamId, Long loserTeamId, int team1goals, int team2goals);
 }

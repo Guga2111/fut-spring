@@ -77,7 +77,7 @@ public class LeagueTableServiceImpl implements LeagueTableService{
         return leagueTableRepository.save(leagueTable);
     }
     @Override
-    public LeagueTable defineMatchResult(Long dailyId, Long winnerTeamId, Long loserTeamId) {
+    public LeagueTable defineMatchResult(Long dailyId, Long winnerTeamId, Long loserTeamId, int team1goals, int team2goals) {
 
         LeagueTable leagueTable = getLeagueTableFromDaily(dailyId);
 
@@ -99,14 +99,34 @@ public class LeagueTableServiceImpl implements LeagueTableService{
             throw new TeamNotFoundInLeagueTableException(dailyId, loserTeamId);
         }
 
+        if(team1goals == team2goals) {
+            winnerEntry.setDraws(winnerEntry.getDraws() + 1);
+            winnerEntry.setPoints(winnerEntry.getPoints() + 1);
+            winnerEntry.setGoalsScored(winnerEntry.getGoalsScored() + team1goals);
+            winnerEntry.setGoalDifference(winnerEntry.getGoalsScored() - winnerEntry.getGoalsConceded());
+            winnerEntry.setGoalsConceded(winnerEntry.getGoalsConceded() + team2goals);
+
+            loserEntry.setDraws(loserEntry.getDraws() + 1);
+            loserEntry.setPoints(loserEntry.getPoints() + 1);
+            loserEntry.setGoalsScored(loserEntry.getGoalsScored() + team2goals); // CHANGE THAT (pass into the endpoint Like a requestBody serialized json object)
+            loserEntry.setGoalDifference(loserEntry.getGoalsScored() - loserEntry.getGoalsConceded());
+            loserEntry.setGoalsConceded(loserEntry.getGoalsConceded() + team1goals);
+
+            sortAndSetPosition(leagueTable);
+
+            return leagueTableRepository.save(leagueTable);
+        }
+
         winnerEntry.setWins(winnerEntry.getWins() + 1);
         winnerEntry.setPoints(winnerEntry.getPoints() + 3);
-        winnerEntry.setGoalsScored(winnerEntry.getGoalsScored() + 1); // CHANGE THAT (pass into the endpoint Like a requestBody serialized json object)
+        winnerEntry.setGoalsScored(winnerEntry.getGoalsScored() + team1goals);
         winnerEntry.setGoalDifference(winnerEntry.getGoalsScored() - winnerEntry.getGoalsConceded());
+        winnerEntry.setGoalsConceded(winnerEntry.getGoalsConceded() + team2goals);
 
         loserEntry.setLosses(loserEntry.getLosses() + 1);
-        loserEntry.setGoalsConceded(loserEntry.getGoalsConceded() + 1); // CHANGE THAT (pass into the endpoint Like a requestBody serialized json object)
+        loserEntry.setGoalsScored(loserEntry.getGoalsScored() + team2goals);
         loserEntry.setGoalDifference(loserEntry.getGoalsScored() - loserEntry.getGoalsConceded());
+        loserEntry.setGoalsConceded(loserEntry.getGoalsConceded() + team1goals);
 
         sortAndSetPosition(leagueTable);
 

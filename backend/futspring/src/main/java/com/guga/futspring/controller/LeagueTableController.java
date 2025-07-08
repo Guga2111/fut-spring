@@ -39,8 +39,4 @@ public class LeagueTableController {
         return new ResponseEntity<>(leagueTableService.updateLeagueTable(dailyId, teamId, entry), HttpStatus.OK);
     }
 
-    @PutMapping("/{dailyId}/winner/{team1Id}/looser/{team2Id}")
-    public ResponseEntity<LeagueTable> defineWinnerForLeagueTableEntry(@PathVariable Long dailyId, @PathVariable Long team1Id, @PathVariable Long team2Id) {
-        return new ResponseEntity<>(leagueTableService.updateLeagueTable(null, null, null), HttpStatus.BAD_REQUEST);
-    }
 }

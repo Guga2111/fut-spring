@@ -37,7 +37,7 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
     e.preventDefault();
 
     if (!team1Id || !team2Id || team1Score === "" || team2Score === "") {
-      toast.error("Please select both teams and enter a score.");
+      toast.error("Please, select both teams and enter a score.");
       return;
     }
 
@@ -50,18 +50,19 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
     const parsedTeam2Score = parseInt(team2Score, 10);
 
     if (isNaN(parsedTeam1Score) || isNaN(parsedTeam2Score)) {
-      toast.error("Scores must be valid numbers.");
+      toast.error("The score must be valid numbers.");
       return;
     }
 
     setIsSubmitting(true);
-    const endpoint = `http://localhost:8080/daily/${dailyId}/team1/${parseInt(
-      team1Id,
-      10
-    )}/team2/${parseInt(team2Id, 10)}`;
 
     try {
-      const response = await fetch(endpoint, {
+      const createMatchEndpoint = `http://localhost:8080/daily/${dailyId}/team1/${parseInt(
+        team1Id,
+        10
+      )}/team2/${parseInt(team2Id, 10)}`;
+
+      const createMatchResponse = await fetch(createMatchEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,27 +73,61 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create match.");
+      if (!createMatchResponse.ok) {
+        const errorData = await createMatchResponse.json();
+        throw new Error(errorData.message || "Fail to create a match.");
       }
 
-      const newMatch = await response.json();
-      toast.success("Match created successfully!");
+      const newMatch = await createMatchResponse.json();
+      toast.success("Partida criada com sucesso!");
+
+      let winnerId = team1Id;
+      let looserId = team2Id;
+      if (parsedTeam1Score > parsedTeam2Score) {
+        winnerId = team1Id;
+        looserId = team2Id;
+      } else if (parsedTeam2Score > parsedTeam1Score) {
+        winnerId = team2Id;
+        looserId = team1Id;
+      }
+
+      const updateTableEndpoint = `http://localhost:8080/match/${dailyId}/winner/${parseInt(
+        winnerId,
+        10
+      )}/looser/${parseInt(
+        looserId,
+        10
+      )}?team1goals=${parsedTeam1Score}&team2goals=${parsedTeam2Score}`;
+
+      const updateTableResponse = await fetch(updateTableEndpoint, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!updateTableResponse.ok) {
+        const errorData = await updateTableResponse.json();
+        throw new Error(
+          errorData.message || "Fail when updating the league table."
+        );
+      }
+
+      const updatedLeagueTable = await updateTableResponse.json();
+      toast.success("Sucess, updating league table!");
       setOpen(false);
 
       setTeam1Id("");
       setTeam2Id("");
-
       setTeam1Score("");
       setTeam2Score("");
 
       if (onMatchCreated) {
-        onMatchCreated(newMatch);
+        onMatchCreated(newMatch, updatedLeagueTable); //lembrar de receber league table como param para visualizar no component pai que ainda falta criar
       }
     } catch (error) {
-      console.error("Error creating match:", error);
-      toast.error(`Error creating match: ${error.message}`);
+      console.error("Erro no processo de partida:", error);
+      toast.error(`Erro: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }

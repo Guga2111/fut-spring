@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 import { Rocket } from "lucide-react";
@@ -18,7 +19,7 @@ export default function FinalizeDailyButton() {
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="!bg-green-600 !text-white hover:!bg-green-700 hover:!border-white">
+          <Button className=" !text-white hover:!border-white">
             <Rocket className="mr-2" /> Finalize Daily
           </Button>
         </DialogTrigger>
@@ -28,8 +29,12 @@ export default function FinalizeDailyButton() {
             <DialogDescription>Confirm to finalize daily.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Save Match"}
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="hover:!bg-destructive hover:!border-white"
+            >
+              {isSubmitting ? "Saving..." : "Finish"}
             </Button>
           </DialogFooter>
         </DialogContent>

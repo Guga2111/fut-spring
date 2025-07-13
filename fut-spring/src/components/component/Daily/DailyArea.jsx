@@ -5,6 +5,7 @@ import axios from "axios";
 import DailyHeader from "./DailyHeader";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+import FinalizeDailyButton from "./FinalizeDailyButton";
 
 export default function DailyArea() {
   const { id } = useParams();
@@ -82,7 +83,8 @@ export default function DailyArea() {
         <div class="flex justify-center items-center py-4">
           <DailyHeader daily={daily}></DailyHeader>
         </div>
-        <div class="absolute top-4 right-4">
+        <div class="absolute top-4 right-4 flex items-center space-x-2">
+          <FinalizeDailyButton></FinalizeDailyButton>
           <AddMatchButton
             dailyId={daily.id}
             teams={teams}

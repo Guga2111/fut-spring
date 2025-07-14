@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -59,4 +60,7 @@ public class User {
 
     @ManyToMany(mappedBy = "players")
     private List<Team> teams;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserDailyStats> dailyStats = new ArrayList<>();
 }

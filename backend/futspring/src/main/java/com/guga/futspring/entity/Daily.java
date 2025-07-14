@@ -34,7 +34,6 @@ public class Daily {
     @Column(name = "daily_time")
     private LocalTime dailyTime;
 
-    // Data e hora em que esta Daily foi registrada no sistema (criada pelo scheduler ou manualmente)
     @Column(name = "creation_datetime")
     private LocalDateTime creationDateTime;
 
@@ -75,4 +74,7 @@ public class Daily {
 
     @OneToOne(mappedBy = "daily", cascade = CascadeType.ALL, orphanRemoval = true)
     private LeagueTable leagueTable;
+
+    @OneToMany(mappedBy = "daily", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserDailyStats> dailyStats;
 }

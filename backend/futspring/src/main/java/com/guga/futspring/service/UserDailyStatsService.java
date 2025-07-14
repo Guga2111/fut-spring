@@ -1,5 +1,7 @@
 package com.guga.futspring.service;
 
+import com.guga.futspring.entity.Daily;
+import com.guga.futspring.entity.User;
 import com.guga.futspring.entity.UserDailyStats;
 
 import java.util.List;
@@ -10,4 +12,5 @@ public interface UserDailyStatsService {
     UserDailyStats saveUserDailyStats(UserDailyStats userDailyStats);
     UserDailyStats updateUserDailyStats(Long id, UserDailyStats userDailyStats);
     void deleteUserDailyStats(Long id);
+    void initializeUserDailyStats(List<User> players, Daily daily);
 }

@@ -29,6 +29,7 @@ public class DailyServiceImpl implements DailyService{
     TeamRepository teamRepository;
     RankingRepository rankingRepository;
     LeagueTableRepository leagueTableRepository;
+    UserDailyStatsServiceImpl userDailyStatsService;
 
     @Override
     public Daily getDaily(Long id) {
@@ -155,6 +156,8 @@ public class DailyServiceImpl implements DailyService{
         }
 
         Iterable<Team> savedTeams = teamRepository.saveAll(teams);
+
+        userDailyStatsService.initializeUserDailyStats(confirmedPlayers, daily);
 
         List<Team> result = new ArrayList<>();
         savedTeams.forEach(result::add);

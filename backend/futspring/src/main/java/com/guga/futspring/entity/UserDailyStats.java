@@ -1,5 +1,6 @@
 package com.guga.futspring.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,9 +35,11 @@ public class UserDailyStats {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference("user-dailyStats")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "daily_id")
+    @JsonBackReference("daily-userDailyStats")
     private Daily daily;
 }

@@ -1,9 +1,9 @@
 package com.guga.futspring.controller;
 
-import com.guga.futspring.entity.LeagueTable;
-import com.guga.futspring.entity.Match;
+import com.guga.futspring.entity.*;
 import com.guga.futspring.service.LeagueTableServiceImpl;
 import com.guga.futspring.service.MatchServiceImpl;
+import com.guga.futspring.service.UserDailyStatsServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/match")
@@ -19,6 +20,7 @@ public class MatchController {
 
     MatchServiceImpl matchService;
     LeagueTableServiceImpl leagueTableService;
+    UserDailyStatsServiceImpl userDailyStatsService;
 
     @GetMapping("{id}")
     public ResponseEntity<Match> getMatch(@PathVariable Long id) {
@@ -40,4 +42,12 @@ public class MatchController {
         return new ResponseEntity<>(leagueTableService.defineMatchResult(dailyId, team1Id, team2Id, team1goals, team2goals), HttpStatus.OK);
     }
 
+    @PutMapping("/{dailyId}/player/{playerId}/update-goals-assists")
+    public ResponseEntity<UserDailyStats> updatePlayerGoalsAndAssists(@PathVariable Long dailyId, @PathVariable Long playerId, @RequestBody Map<String, Object> goalsAndAssists) {
+
+        Integer goals = (Integer) goalsAndAssists.getOrDefault("goals", 0);
+        Integer assists = (Integer) goalsAndAssists.getOrDefault("assists", 0);
+
+        return new ResponseEntity<>(userDailyStatsService.updateUserDailyStats(playerId, dailyId, goals, assists), HttpStatus.OK);
+    }
 }

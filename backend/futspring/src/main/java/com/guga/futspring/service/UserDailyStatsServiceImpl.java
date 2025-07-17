@@ -3,7 +3,11 @@ package com.guga.futspring.service;
 import com.guga.futspring.entity.Daily;
 import com.guga.futspring.entity.User;
 import com.guga.futspring.entity.UserDailyStats;
+import com.guga.futspring.exception.DailyNotFoundException;
+import com.guga.futspring.exception.UserNotFoundException;
+import com.guga.futspring.repository.DailyRepository;
 import com.guga.futspring.repository.UserDailyStatsRepository;
+import com.guga.futspring.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,8 @@ import java.util.Optional;
 public class UserDailyStatsServiceImpl implements UserDailyStatsService {
 
     UserDailyStatsRepository userDailyStatsRepository;
+    DailyRepository dailyRepository;
+    UserRepository userRepository;
 
     @Transactional
     @Override
@@ -54,8 +60,30 @@ public class UserDailyStatsServiceImpl implements UserDailyStatsService {
     }
 
     @Override
-    public UserDailyStats updateUserDailyStats(Long id, UserDailyStats userDailyStats) {
-        return null;
+    public UserDailyStats updateUserDailyStats(Long playerId, Long dailyId, Integer goals, Integer assists) {
+
+        Daily daily = dailyRepository.findById(dailyId)
+                .orElseThrow(() -> new DailyNotFoundException(dailyId));
+
+        User player = userRepository.findById(playerId)
+                .orElseThrow(() -> new UserNotFoundException(playerId));
+
+        UserDailyStats userDailyStats = userDailyStatsRepository.findByUserAndDaily(player, daily);
+
+        if(userDailyStats == null) {
+            userDailyStats = new UserDailyStats();
+            userDailyStats.setUser(player);
+            userDailyStats.setDaily(daily);
+            userDailyStats.setGoals(0);
+            userDailyStats.setAssists(0);
+            userDailyStats.setMatches(0);
+            userDailyStats.setWins(0);
+        }
+
+        userDailyStats.setGoals(userDailyStats.getGoals() + goals);
+        userDailyStats.setAssists(userDailyStats.getAssists() + assists);
+
+        return userDailyStatsRepository.save(userDailyStats);
     }
 
     @Override

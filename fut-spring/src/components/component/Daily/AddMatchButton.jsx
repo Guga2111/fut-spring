@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -31,7 +31,79 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
   const [team1Score, setTeam1Score] = useState("");
   const [team2Score, setTeam2Score] = useState("");
 
+  const [team1Players, setTeam1Players] = useState([]);
+  const [team2Players, setTeam2Players] = useState([]);
+
+  const [playerStats, setPlayerStats] = useState({});
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const fetchPlayersByTeam = async (teamId) => {
+    if (!teamId) return [];
+    try {
+      // Endpoint to fetch players for a team
+      const response = await fetch(
+        `http://localhost:8080/team/${teamId}/players`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch players for team " + teamId);
+      }
+      const players = await response.json();
+      return players;
+    } catch (error) {
+      console.error("Error fetching players:", error);
+      toast.error("Failed to load players: " + error.message);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const loadTeamPlayers = async () => {
+      if (team1Id) {
+        const players = await fetchPlayersByTeam(team1Id);
+        setTeam1Players(players);
+        setPlayerStats((prevStats) => {
+          const newStats = { ...prevStats };
+          players.forEach((player) => {
+            if (!newStats[player.id]) {
+              newStats[player.id] = { goals: 0, assists: 0 };
+            }
+          });
+          return newStats;
+        });
+      } else {
+        setTeam1Players([]);
+      }
+
+      if (team2Id) {
+        const players = await fetchPlayersByTeam(team2Id);
+        setTeam2Players(players);
+        setPlayerStats((prevStats) => {
+          const newStats = { ...prevStats };
+          players.forEach((player) => {
+            if (!newStats[player.id]) {
+              newStats[player.id] = { goals: 0, assists: 0 };
+            }
+          });
+          return newStats;
+        });
+      } else {
+        setTeam2Players([]);
+      }
+    };
+
+    loadTeamPlayers();
+  }, [team1Id, team2Id]);
+
+  const handlePlayerStatChange = (playerId, statType, value) => {
+    setPlayerStats((prevStats) => ({
+      ...prevStats,
+      [playerId]: {
+        ...prevStats[playerId],
+        [statType]: parseInt(value, 10) || 0,
+      },
+    }));
+  };
 
   const handleCreateMatchRequest = async (e) => {
     e.preventDefault();
@@ -54,9 +126,31 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
       return;
     }
 
+    const totalGoalsTeam1ByPlayers = team1Players.reduce((sum, player) => {
+      return sum + (playerStats[player.id]?.goals || 0);
+    }, 0);
+
+    const totalGoalsTeam2ByPlayers = team2Players.reduce((sum, player) => {
+      return sum + (playerStats[player.id]?.goals || 0);
+    }, 0);
+
+    if (totalGoalsTeam1ByPlayers !== parsedTeam1Score) {
+      toast.error(
+        `Team 1's total player goals (${totalGoalsTeam1ByPlayers}) do not match Team 1 Score (${parsedTeam1Score}).`
+      );
+      return;
+    }
+    if (totalGoalsTeam2ByPlayers !== parsedTeam2Score) {
+      toast.error(
+        `Team 2's total player goals (${totalGoalsTeam2ByPlayers}) do not match Team 2 Score (${parsedTeam2Score}).`
+      );
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
+      // FIRST REQUEST: Create the Match
       const createMatchEndpoint = `http://localhost:8080/daily/${dailyId}/team1/${parseInt(
         team1Id,
         10
@@ -75,29 +169,47 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
 
       if (!createMatchResponse.ok) {
         const errorData = await createMatchResponse.json();
-        throw new Error(errorData.message || "Fail to create a match.");
+        throw new Error(errorData.message || "Failed to create a match.");
       }
 
       const newMatch = await createMatchResponse.json();
-      toast.success("Partida criada com sucesso!");
+      toast.success("Match created successfully!");
 
-      let winnerId = team1Id;
-      let looserId = team2Id;
+      // --- DETERMINE WINNER AND LOSER FOR LEAGUE TABLE ---
+      let winnerTeamId = null;
+      let looserTeamId = null;
       if (parsedTeam1Score > parsedTeam2Score) {
-        winnerId = team1Id;
-        looserId = team2Id;
+        winnerTeamId = parseInt(team1Id, 10);
+        looserTeamId = parseInt(team2Id, 10);
       } else if (parsedTeam2Score > parsedTeam1Score) {
-        winnerId = team2Id;
-        looserId = team1Id;
+        winnerTeamId = parseInt(team2Id, 10);
+        looserTeamId = parseInt(team1Id, 10);
       }
 
-      const updateTableEndpoint = `http://localhost:8080/match/${dailyId}/winner/${parseInt(
-        winnerId,
-        10
-      )}/looser/${parseInt(
-        looserId,
-        10
-      )}?team1goals=${parsedTeam1Score}&team2goals=${parsedTeam2Score}`;
+      let goalsForWinner = 0;
+      let goalsForLooser = 0;
+      let urlWinnerId = team1Id;
+      let urlLooserId = team2Id;
+
+      if (winnerTeamId === parseInt(team1Id, 10)) {
+        goalsForWinner = parsedTeam1Score;
+        goalsForLooser = parsedTeam2Score;
+        urlWinnerId = team1Id;
+        urlLooserId = team2Id;
+      } else if (winnerTeamId === parseInt(team2Id, 10)) {
+        goalsForWinner = parsedTeam2Score;
+        goalsForLooser = parsedTeam1Score;
+        urlWinnerId = team2Id;
+        urlLooserId = team1Id;
+      } else {
+        // In case of a tie, or if winner/loser logic isn't strictly applied (e.g., for display purposes)
+        goalsForWinner = parsedTeam1Score;
+        goalsForLooser = parsedTeam2Score;
+        urlWinnerId = team1Id;
+        urlLooserId = team2Id;
+      }
+
+      const updateTableEndpoint = `http://localhost:8080/match/${dailyId}/winner/${urlWinnerId}/looser/${urlLooserId}?team1goals=${goalsForWinner}&team2goals=${goalsForLooser}`;
 
       const updateTableResponse = await fetch(updateTableEndpoint, {
         method: "PUT",
@@ -109,25 +221,97 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
       if (!updateTableResponse.ok) {
         const errorData = await updateTableResponse.json();
         throw new Error(
-          errorData.message || "Fail when updating the league table."
+          errorData.message || "Failed when updating the league table."
         );
       }
 
       const updatedLeagueTable = await updateTableResponse.json();
-      toast.success("Sucess, updating league table!");
+      toast.success("League table updated successfully!");
+
+      // THIRD REQUEST (and subsequent ones): Update Player Goals and Assists
+      // NOW USING REQUEST BODY INSTEAD OF QUERY PARAMS
+      const updatePlayerGoalsAssistsPromises = [];
+
+      const addPlayerGoalsAssistsUpdate = (player) => {
+        const goals = playerStats[player.id]?.goals || 0;
+        const assists = playerStats[player.id]?.assists || 0;
+
+        // URL for the endpoint (without query params for goals and assists)
+        const updatePlayerEndpoint = `http://localhost:8080/match/${dailyId}/player/${player.id}/update-goals-assists`;
+
+        updatePlayerGoalsAssistsPromises.push(
+          fetch(updatePlayerEndpoint, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json", // VERY IMPORTANT for @RequestBody
+            },
+            body: JSON.stringify({
+              // THE REQUEST BODY IS NOW JSON
+              goals: goals,
+              assists: assists,
+              // We are not sending playedMatch/wonMatch to this endpoint, as per its current definition.
+            }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.json().then((errorData) => {
+                  throw new Error(
+                    errorData.message || `Failed to update ${player.name}`
+                  );
+                });
+              }
+              return response;
+            })
+            .catch((error) => {
+              console.error(
+                `Error updating goals/assists for ${player.name}:`,
+                error
+              );
+              return Promise.reject(
+                new Error(`Critical failure for ${player.name}`)
+              );
+            })
+        );
+      };
+
+      team1Players.forEach((player) => addPlayerGoalsAssistsUpdate(player));
+      team2Players.forEach((player) => addPlayerGoalsAssistsUpdate(player));
+
+      const playerResults = await Promise.allSettled(
+        updatePlayerGoalsAssistsPromises
+      );
+
+      const failedPlayerUpdates = playerResults.filter(
+        (result) => result.status === "rejected"
+      );
+      if (failedPlayerUpdates.length > 0) {
+        console.error(
+          "Some player goals/assists updates failed:",
+          failedPlayerUpdates
+        );
+        toast.error(
+          `Completed with ${failedPlayerUpdates.length} failures in goals/assists updates.`
+        ); // Adjusted toast message
+      } else {
+        toast.success("Player goals and assists updated successfully!");
+      }
+
       setOpen(false);
 
       setTeam1Id("");
       setTeam2Id("");
       setTeam1Score("");
       setTeam2Score("");
+      setTeam1Players([]);
+      setTeam2Players([]);
+      setPlayerStats({});
 
       if (onMatchCreated) {
-        onMatchCreated(newMatch, updatedLeagueTable); //lembrar de receber league table como param para visualizar no component pai que ainda falta criar
+        onMatchCreated(newMatch, updatedLeagueTable);
       }
     } catch (error) {
-      console.error("Erro no processo de partida:", error);
-      toast.error(`Erro: ${error.message}`);
+      console.error("Error in match process:", error);
+      toast.error(`Error: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -144,11 +328,12 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
             <Plus className="mr-2" /> Create Match
           </Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[700px]">
           <DialogHeader>
             <DialogTitle>Create Match</DialogTitle>
             <DialogDescription>
-              Select the teams and enter the score for the new match.
+              Select the teams, enter the score, and assign player stats for the
+              new match.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCreateMatchRequest}>
@@ -218,6 +403,104 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                   placeholder="e.g., 1"
                 />
               </div>
+
+              {(team1Players.length > 0 || team2Players.length > 0) && (
+                <div className="mt-6 border-t pt-4">
+                  <h3 className="text-lg font-semibold mb-4">
+                    Player Statistics
+                  </h3>
+
+                  {team1Players.length > 0 && (
+                    <div className="mb-4">
+                      <h4 className="text-md font-medium mb-2">
+                        Team 1:{" "}
+                        {teams.find((t) => String(t.id) === team1Id)?.name}
+                      </h4>
+                      {team1Players.map((player) => (
+                        <div
+                          key={player.id}
+                          className="grid grid-cols-4 items-center gap-2 mb-2"
+                        >
+                          <Label className="col-span-1">{player.name}</Label>
+                          <Input
+                            type="number"
+                            placeholder="Goals"
+                            value={playerStats[player.id]?.goals || 0}
+                            onChange={(e) =>
+                              handlePlayerStatChange(
+                                player.id,
+                                "goals",
+                                e.target.value
+                              )
+                            }
+                            className="col-span-1"
+                            min="0"
+                          />
+                          <Input
+                            type="number"
+                            placeholder="Assists"
+                            value={playerStats[player.id]?.assists || 0}
+                            onChange={(e) =>
+                              handlePlayerStatChange(
+                                player.id,
+                                "assists",
+                                e.target.value
+                              )
+                            }
+                            className="col-span-1"
+                            min="0"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {team2Players.length > 0 && (
+                    <div>
+                      <h4 className="text-md font-medium mb-2">
+                        Team 2:{" "}
+                        {teams.find((t) => String(t.id) === team2Id)?.name}
+                      </h4>
+                      {team2Players.map((player) => (
+                        <div
+                          key={player.id}
+                          className="grid grid-cols-4 items-center gap-2 mb-2"
+                        >
+                          <Label className="col-span-1">{player.name}</Label>
+                          <Input
+                            type="number"
+                            placeholder="Goals"
+                            value={playerStats[player.id]?.goals || 0}
+                            onChange={(e) =>
+                              handlePlayerStatChange(
+                                player.id,
+                                "goals",
+                                e.target.value
+                              )
+                            }
+                            className="col-span-1"
+                            min="0"
+                          />
+                          <Input
+                            type="number"
+                            placeholder="Assists"
+                            value={playerStats[player.id]?.assists || 0}
+                            onChange={(e) =>
+                              handlePlayerStatChange(
+                                player.id,
+                                "assists",
+                                e.target.value
+                              )
+                            }
+                            className="col-span-1"
+                            min="0"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             <DialogFooter>
               <Button type="submit" disabled={isSubmitting}>

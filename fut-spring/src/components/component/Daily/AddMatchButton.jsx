@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus } from "lucide-react";
+import { Plus, Handshake } from "lucide-react";
+import { PiSoccerBallFill } from "react-icons/pi"; // Import PiSoccerBallFill icon
 import {
   Select,
   SelectContent,
@@ -20,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { ScrollArea } from "@/components/ui/scroll-area"; // Import ScrollArea
 
 export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
   console.log("Teams received in AddMatchButton:", teams);
@@ -41,7 +43,6 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
   const fetchPlayersByTeam = async (teamId) => {
     if (!teamId) return [];
     try {
-      // Endpoint to fetch players for a team
       const response = await fetch(
         `http://localhost:8080/team/${teamId}/players`
       );
@@ -150,7 +151,6 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
     setIsSubmitting(true);
 
     try {
-      // FIRST REQUEST: Create the Match
       const createMatchEndpoint = `http://localhost:8080/daily/${dailyId}/team1/${parseInt(
         team1Id,
         10
@@ -175,7 +175,6 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
       const newMatch = await createMatchResponse.json();
       toast.success("Match created successfully!");
 
-      // --- DETERMINE WINNER AND LOSER FOR LEAGUE TABLE ---
       let winnerTeamId = null;
       let looserTeamId = null;
       if (parsedTeam1Score > parsedTeam2Score) {
@@ -202,7 +201,6 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
         urlWinnerId = team2Id;
         urlLooserId = team1Id;
       } else {
-        // In case of a tie, or if winner/loser logic isn't strictly applied (e.g., for display purposes)
         goalsForWinner = parsedTeam1Score;
         goalsForLooser = parsedTeam2Score;
         urlWinnerId = team1Id;
@@ -228,28 +226,23 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
       const updatedLeagueTable = await updateTableResponse.json();
       toast.success("League table updated successfully!");
 
-      // THIRD REQUEST (and subsequent ones): Update Player Goals and Assists
-      // NOW USING REQUEST BODY INSTEAD OF QUERY PARAMS
       const updatePlayerGoalsAssistsPromises = [];
 
       const addPlayerGoalsAssistsUpdate = (player) => {
         const goals = playerStats[player.id]?.goals || 0;
         const assists = playerStats[player.id]?.assists || 0;
 
-        // URL for the endpoint (without query params for goals and assists)
         const updatePlayerEndpoint = `http://localhost:8080/match/${dailyId}/player/${player.id}/update-goals-assists`;
 
         updatePlayerGoalsAssistsPromises.push(
           fetch(updatePlayerEndpoint, {
             method: "PUT",
             headers: {
-              "Content-Type": "application/json", // VERY IMPORTANT for @RequestBody
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              // THE REQUEST BODY IS NOW JSON
               goals: goals,
               assists: assists,
-              // We are not sending playedMatch/wonMatch to this endpoint, as per its current definition.
             }),
           })
             .then((response) => {
@@ -291,7 +284,7 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
         );
         toast.error(
           `Completed with ${failedPlayerUpdates.length} failures in goals/assists updates.`
-        ); // Adjusted toast message
+        );
       } else {
         toast.success("Player goals and assists updated successfully!");
       }
@@ -337,172 +330,192 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCreateMatchRequest}>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="team1" className="text-right">
-                  Team 1
-                </Label>
-                <Select value={team1Id} onValueChange={setTeam1Id}>
-                  <SelectTrigger className="col-span-3 !bg-white !text-black border !border-gray-200">
-                    <SelectValue placeholder="Select Team 1" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {teams &&
-                      teams.map((team) => (
-                        <SelectItem key={team.id} value={String(team.id)}>
-                          {team.name}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="team2" className="text-right">
-                  Team 2
-                </Label>
-                <Select value={team2Id} onValueChange={setTeam2Id}>
-                  <SelectTrigger className="col-span-3 !bg-white !text-black border !border-gray-200">
-                    <SelectValue placeholder="Select Team 2" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {teams &&
-                      teams.map((team) => (
-                        <SelectItem key={team.id} value={String(team.id)}>
-                          {team.name}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="team1Score" className="text-right">
-                  Team 1 Score
-                </Label>
-                <Input
-                  id="team1Score"
-                  type="number"
-                  value={team1Score}
-                  onChange={(e) => setTeam1Score(e.target.value)}
-                  className="col-span-3"
-                  placeholder="e.g., 2"
-                />
-              </div>
-
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="team2Score" className="text-right">
-                  Team 2 Score
-                </Label>
-                <Input
-                  id="team2Score"
-                  type="number"
-                  value={team2Score}
-                  onChange={(e) => setTeam2Score(e.target.value)}
-                  className="col-span-3"
-                  placeholder="e.g., 1"
-                />
-              </div>
-
-              {(team1Players.length > 0 || team2Players.length > 0) && (
-                <div className="mt-6 border-t pt-4">
-                  <h3 className="text-lg font-semibold mb-4">
-                    Player Statistics
-                  </h3>
-
-                  {team1Players.length > 0 && (
-                    <div className="mb-4">
-                      <h4 className="text-md font-medium mb-2">
-                        Team 1:{" "}
-                        {teams.find((t) => String(t.id) === team1Id)?.name}
-                      </h4>
-                      {team1Players.map((player) => (
-                        <div
-                          key={player.id}
-                          className="grid grid-cols-4 items-center gap-2 mb-2"
-                        >
-                          <Label className="col-span-1">{player.name}</Label>
-                          <Input
-                            type="number"
-                            placeholder="Goals"
-                            value={playerStats[player.id]?.goals || 0}
-                            onChange={(e) =>
-                              handlePlayerStatChange(
-                                player.id,
-                                "goals",
-                                e.target.value
-                              )
-                            }
-                            className="col-span-1"
-                            min="0"
-                          />
-                          <Input
-                            type="number"
-                            placeholder="Assists"
-                            value={playerStats[player.id]?.assists || 0}
-                            onChange={(e) =>
-                              handlePlayerStatChange(
-                                player.id,
-                                "assists",
-                                e.target.value
-                              )
-                            }
-                            className="col-span-1"
-                            min="0"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {team2Players.length > 0 && (
-                    <div>
-                      <h4 className="text-md font-medium mb-2">
-                        Team 2:{" "}
-                        {teams.find((t) => String(t.id) === team2Id)?.name}
-                      </h4>
-                      {team2Players.map((player) => (
-                        <div
-                          key={player.id}
-                          className="grid grid-cols-4 items-center gap-2 mb-2"
-                        >
-                          <Label className="col-span-1">{player.name}</Label>
-                          <Input
-                            type="number"
-                            placeholder="Goals"
-                            value={playerStats[player.id]?.goals || 0}
-                            onChange={(e) =>
-                              handlePlayerStatChange(
-                                player.id,
-                                "goals",
-                                e.target.value
-                              )
-                            }
-                            className="col-span-1"
-                            min="0"
-                          />
-                          <Input
-                            type="number"
-                            placeholder="Assists"
-                            value={playerStats[player.id]?.assists || 0}
-                            onChange={(e) =>
-                              handlePlayerStatChange(
-                                player.id,
-                                "assists",
-                                e.target.value
-                              )
-                            }
-                            className="col-span-1"
-                            min="0"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
+            <ScrollArea className="h-[calc(100vh-250px)] pr-4">
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="team1" className="text-right">
+                    Team 1
+                  </Label>
+                  <Select value={team1Id} onValueChange={setTeam1Id}>
+                    <SelectTrigger className="col-span-3 !bg-white !text-black border !border-gray-200">
+                      <SelectValue placeholder="Select Team 1" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {teams &&
+                        teams.map((team) => (
+                          <SelectItem key={team.id} value={String(team.id)}>
+                            {team.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              )}
-            </div>
-            <DialogFooter>
+
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="team2" className="text-right">
+                    Team 2
+                  </Label>
+                  <Select value={team2Id} onValueChange={setTeam2Id}>
+                    <SelectTrigger className="col-span-3 !bg-white !text-black border !border-gray-200">
+                      <SelectValue placeholder="Select Team 2" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {teams &&
+                        teams.map((team) => (
+                          <SelectItem key={team.id} value={String(team.id)}>
+                            {team.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="team1Score" className="text-right">
+                    Team 1 Score
+                  </Label>
+                  <Input
+                    id="team1Score"
+                    type="number"
+                    value={team1Score}
+                    onChange={(e) => setTeam1Score(e.target.value)}
+                    className="col-span-3"
+                    placeholder="e.g., 2"
+                  />
+                </div>
+
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="team2Score" className="text-right">
+                    Team 2 Score
+                  </Label>
+                  <Input
+                    id="team2Score"
+                    type="number"
+                    value={team2Score}
+                    onChange={(e) => setTeam2Score(e.target.value)}
+                    className="col-span-3"
+                    placeholder="e.g., 1"
+                  />
+                </div>
+
+                {(team1Players.length > 0 || team2Players.length > 0) && (
+                  <div className="mt-6 border-t pt-4">
+                    <h3 className="text-lg font-semibold mb-4">
+                      Player Statistics
+                    </h3>
+
+                    {team1Players.length > 0 && (
+                      <div className="mb-4">
+                        <h4 className="text-md font-medium mb-2">
+                          {teams.find((t) => String(t.id) === team1Id)?.name}
+                        </h4>
+                        {team1Players.map((player) => (
+                          <div
+                            key={player.id}
+                            className="grid grid-cols-4 items-center gap-2 mb-2"
+                          >
+                            <Label className="col-span-1">
+                              {player.username}
+                            </Label>
+                            <div className="flex items-center col-span-1">
+                              <PiSoccerBallFill className="h-4 w-4 mr-1 text-gray-500" />{" "}
+                              {/* PiSoccerBallFill Icon for Goals */}
+                              <Input
+                                type="number"
+                                placeholder="Goals"
+                                value={playerStats[player.id]?.goals || 0}
+                                onChange={(e) =>
+                                  handlePlayerStatChange(
+                                    player.id,
+                                    "goals",
+                                    e.target.value
+                                  )
+                                }
+                                className="w-full"
+                                min="0"
+                              />
+                            </div>
+                            <div className="flex items-center col-span-1">
+                              <Handshake className="h-4 w-4 mr-1 text-gray-500" />{" "}
+                              {/* Handshake Icon for Assists */}
+                              <Input
+                                type="number"
+                                placeholder="Assists"
+                                value={playerStats[player.id]?.assists || 0}
+                                onChange={(e) =>
+                                  handlePlayerStatChange(
+                                    player.id,
+                                    "assists",
+                                    e.target.value
+                                  )
+                                }
+                                className="w-full"
+                                min="0"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {team2Players.length > 0 && (
+                      <div>
+                        <h4 className="text-md font-medium mb-2">
+                          {teams.find((t) => String(t.id) === team2Id)?.name}
+                        </h4>
+                        {team2Players.map((player) => (
+                          <div
+                            key={player.id}
+                            className="grid grid-cols-4 items-center gap-2 mb-2"
+                          >
+                            <Label className="col-span-1">
+                              {player.username}
+                            </Label>
+                            <div className="flex items-center col-span-1">
+                              <PiSoccerBallFill className="h-4 w-4 mr-1 text-gray-500" />{" "}
+                              {/* PiSoccerBallFill Icon for Goals */}
+                              <Input
+                                type="number"
+                                placeholder="Goals"
+                                value={playerStats[player.id]?.goals || 0}
+                                onChange={(e) =>
+                                  handlePlayerStatChange(
+                                    player.id,
+                                    "goals",
+                                    e.target.value
+                                  )
+                                }
+                                className="w-full"
+                                min="0"
+                              />
+                            </div>
+                            <div className="flex items-center col-span-1">
+                              <Handshake className="h-4 w-4 mr-1 text-gray-500" />{" "}
+                              {/* Handshake Icon for Assists */}
+                              <Input
+                                type="number"
+                                placeholder="Assists"
+                                value={playerStats[player.id]?.assists || 0}
+                                onChange={(e) =>
+                                  handlePlayerStatChange(
+                                    player.id,
+                                    "assists",
+                                    e.target.value
+                                  )
+                                }
+                                className="w-full"
+                                min="0"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+            <DialogFooter className="mt-4">
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Saving..." : "Save Match"}
               </Button>

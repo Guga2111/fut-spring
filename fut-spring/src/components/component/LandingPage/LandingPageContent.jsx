@@ -14,12 +14,12 @@ export default function LandingPageContent() {
         <ResizablePanel defaultSize={25}>
           <div className="flex h-full items-center justify-center p-6">
             <span className="font-semibold">
-              <h2>Recursos</h2>
+              <h2>Features</h2>
               <ul>
-                <li>✔️ Marque jogos facilmente</li>
-                <li>✔️ Controle de presença</li>
-                <li>✔️ Estatísticas dos jogadores</li>
-                <li>✔️ Grupos privados e públicos</li>
+                <li>✔️ Schedule games easily</li>
+                <li>✔️ Presence control</li>
+                <li>✔️ Players statistics</li>
+                <li>✔️ Private and public groups</li>
               </ul>
             </span>
           </div>
@@ -30,12 +30,13 @@ export default function LandingPageContent() {
             <span className="font-semibold">
               <div className="w-full max-w-xl text-center space-y-6">
                 <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
-                  Jogue, marque, <span className="text-green-600">conecte</span>
+                  Play, schedule,{" "}
+                  <span className="text-green-600">connect</span>
                 </h1>
                 <p className="text-lg text-gray-600">
-                  Organize suas peladas, acompanhe presenças e estatísticas, e
-                  mantenha seu grupo sempre em campo. Futspring é a plataforma
-                  feita para quem ama futebol entre amigos!
+                  Organize your soccer games, track attendance and stats, and
+                  keep your team on the field. Futspring is the platform made
+                  for those who love soccer with friends
                 </p>
                 <div className="flex justify-center">
                   <img

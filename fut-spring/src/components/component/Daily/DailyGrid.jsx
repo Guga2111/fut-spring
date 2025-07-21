@@ -5,6 +5,7 @@ import { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import DailyMatchesHistory from "./DailyMatchesHistory";
 import DailyLeagueTable from "./DailyLeagueTable";
+import DailyPersonalStats from "./DailyPersonalStats";
 
 export default function DailyGrid({ daily, matches, onRefreshMatches }) {
   const [teamsExist, setTeamsExist] = useState(false);
@@ -35,41 +36,46 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
   };
 
   return (
-    <div className="flex justify-around items-start p-5 gap-5 text-white min-h-screen box-border">
-      {/* Coluna 1: Sorteio */}
-      <div className="flex-1 min-w-[250px] p-4">
-        {/* Conteúdo da tela de sorteio das equipes */}
-        <div className="text-center text-gray-500 h-full flex items-center justify-center">
-          {teamsExist ? (
-            <DailyTeams dailyId={daily.id} />
-          ) : (
-            <DailyTeamsSort daily={daily} onTeamsSorted={handleSortComplete} />
-          )}
+    <div className="flex flex-col min-h-[calc(100vh-100px)] justify-between">
+      {" "}
+      <div className="flex justify-around items-start p-5 gap-5 text-white flex-grow">
+        {/* Coluna 1: Sorteio */}
+        <div className="flex-1 min-w-[250px] p-4">
+          <div className="text-center text-gray-500 h-full flex items-center justify-center">
+            {teamsExist ? (
+              <DailyTeams dailyId={daily.id} />
+            ) : (
+              <DailyTeamsSort
+                daily={daily}
+                onTeamsSorted={handleSortComplete}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Coluna 2: Conteúdo Principal (Time Campeão) */}
+        <div className="flex-1 min-w-[250px] p-4 flex flex-col justify-between">
+          <div className="text-gray-500 mb-4">
+            Foto do Time Campeão e Prêmios Individuais
+          </div>
+        </div>
+
+        {/* Coluna 3: Tabela de Classificação */}
+        <div className="flex-1 min-w-[250px] p-4">
+          <div className="text-center text-gray-800 h-full flex items-center justify-center">
+            <DailyLeagueTable dailyId={daily.id}></DailyLeagueTable>
+          </div>
         </div>
       </div>
-
-      {/* Coluna 2: Conteúdo Principal (Time Campeão + Histórico de Partidas) */}
-      <div className="flex-1 min-w-[250px] p-4 flex flex-col gap-160">
-        {/* Bloco do Time Campeão e Prêmios Individuais */}
-        <div className="flex-grow text-center text-gray-500 h-full flex items-center justify-center">
-          Foto do Time Campeão e Prêmios Individuais
-        </div>
-
-        {/* Bloco do Botão "Histórico Partidas" - FORA do card de prêmios */}
-        <div className="text-center text-gray-500">
+      {/* Coluna Footer: Botões de Histórico de partidas e Desempenho individual*/}
+      <div className="w-full flex justify-center pb-30">
+        <div className="flex items-center text-gray-500 gap-x-2">
           <DailyMatchesHistory
             daily={daily}
             matches={matches}
             onRefreshMatches={onRefreshMatches}
           />
-        </div>
-      </div>
-
-      {/* Coluna 3: Tabela de Classificação */}
-
-      <div className="flex-1 min-w-[250px] p-4">
-        <div className="text-center text-gray-800 h-full flex items-center justify-center">
-          <DailyLeagueTable dailyId={daily.id}></DailyLeagueTable>
+          <DailyPersonalStats />
         </div>
       </div>
     </div>

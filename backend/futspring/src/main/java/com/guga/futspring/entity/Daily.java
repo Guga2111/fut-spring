@@ -43,6 +43,11 @@ public class Daily {
     @Column(name = "finished")
     private Boolean isFinished;
 
+    //Passa o ID do jogador, a data (string por enquanto) e o tipo de premio(enum)
+    //TOPSCORER,
+    //TOPASSIST,
+    //PUSKAS,
+    //WILTBALL (bola murcha)
     @ElementCollection
     private List<RankingEntry> prizeEntries;
 

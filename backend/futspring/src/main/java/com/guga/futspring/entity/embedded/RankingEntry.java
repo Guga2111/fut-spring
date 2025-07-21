@@ -16,7 +16,7 @@ public class RankingEntry {
     private Long userId;
 
     private String date;
-
+    
     private Prize typeOfPrize;
 
 }

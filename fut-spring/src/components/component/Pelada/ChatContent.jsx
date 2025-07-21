@@ -37,7 +37,7 @@ export default function ChatContent({
       className="chat-container p-4 flex flex-col"
       style={{ height: "600px" }}
     >
-      <h3 className="text-lg font-medium mb-4">Chat da Pelada</h3>
+      <h3 className="text-lg font-medium mb-4">Chat of Pelada</h3>
 
       <div
         className="flex-1 overflow-y-auto pr-1"
@@ -81,9 +81,7 @@ export default function ChatContent({
             );
           })
         ) : (
-          <div className="text-center text-gray-500 py-4">
-            Nenhuma mensagem encontrada
-          </div>
+          <div className="text-center text-gray-500 py-4">No message found</div>
         )}
 
         {messages.length > 0 && (

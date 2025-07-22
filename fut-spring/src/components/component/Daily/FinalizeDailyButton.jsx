@@ -19,7 +19,7 @@ export default function FinalizeDailyButton() {
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className=" !text-white hover:!border-white">
+          <Button className=" text-neutral-300 hover:text-white hover:!border-white">
             <Rocket className="mr-2" /> Finalize Daily
           </Button>
         </DialogTrigger>

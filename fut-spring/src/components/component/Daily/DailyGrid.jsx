@@ -75,7 +75,7 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
             matches={matches}
             onRefreshMatches={onRefreshMatches}
           />
-          <DailyPersonalStats />
+          <DailyPersonalStats daily={daily} />
         </div>
       </div>
     </div>

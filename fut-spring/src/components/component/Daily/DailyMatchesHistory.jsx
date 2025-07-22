@@ -35,7 +35,7 @@ export default function DailyMatchesHistory({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button
-            className="bg-green-600 !text-white hover:!border-white"
+            className="bg-green-600 text-neutral-300 hover:text-white hover:!border-white"
             onClick={() => setOpen(true)}
           >
             <GalleryVerticalEnd className="mr-2" /> Match History

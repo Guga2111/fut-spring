@@ -22,25 +22,24 @@ import {
 } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { ClipboardList, ArrowUpDown } from "lucide-react"; // Importe o ícone ArrowUpDown
+import { ClipboardList, ArrowUpDown } from "lucide-react";
 
 export default function DailyPersonalStats({ daily }) {
   const [userDailyStats, setUserDailyStats] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
+  const getImageSrc = (filename) => {
+    if (!filename) return "/backgroundbalotelli.jpg";
+    return `http://localhost:8080/user/images/${filename}`;
+  };
+
   useEffect(() => {
     if (daily && daily.playersPresence) {
       const formattedStats = daily.playersPresence.map((player) => {
-        const playerDailyStat =
-          player.dailyStats && player.dailyStats.length > 0
-            ? player.dailyStats.find((stat) => stat.id === daily.id)
-            : { goals: 0, assists: 0, matches: 0, wins: 0 };
-
         const finalDailyStat =
-          playerDailyStat ||
-          (player.dailyStats && player.dailyStats.length > 0
+          player.dailyStats && player.dailyStats.length > 0
             ? player.dailyStats[0]
-            : { goals: 0, assists: 0, matches: 0, wins: 0 });
+            : { goals: 0, assists: 0, matches: 0, wins: 0 };
 
         const teamName =
           player.teams && player.teams.length > 0
@@ -50,6 +49,7 @@ export default function DailyPersonalStats({ daily }) {
         return {
           id: player.id,
           name: player.username,
+          image: player.image,
           goals: finalDailyStat.goals,
           assists: finalDailyStat.assists,
           team: teamName,
@@ -170,7 +170,12 @@ export default function DailyPersonalStats({ daily }) {
                     {sortedStats.length > 0 ? (
                       sortedStats.map((user) => (
                         <TableRow key={user.id}>
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium flex items-center">
+                            <img
+                              src={getImageSrc(user.image)}
+                              alt={user.name}
+                              className="w-6 h-6 rounded-full object-cover mr-2"
+                            />
                             {user.name}
                           </TableCell>
                           <TableCell>{user.goals}</TableCell>

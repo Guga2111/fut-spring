@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus, Handshake } from "lucide-react";
-import { PiSoccerBallFill } from "react-icons/pi"; // Import PiSoccerBallFill icon
+import { PiSoccerBallFill } from "react-icons/pi";
 import {
   Select,
   SelectContent,
@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ScrollArea } from "@/components/ui/scroll-area"; // Import ScrollArea
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
   console.log("Teams received in AddMatchButton:", teams);
@@ -39,6 +39,11 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
   const [playerStats, setPlayerStats] = useState({});
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const getImageSrc = (filename) => {
+    if (!filename) return "/backgroundbalotelli.jpg";
+    return `http://localhost:8080/user/images/${filename}`;
+  };
 
   const fetchPlayersByTeam = async (teamId) => {
     if (!teamId) return [];
@@ -381,6 +386,7 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                     onChange={(e) => setTeam1Score(e.target.value)}
                     className="col-span-3"
                     placeholder="e.g., 2"
+                    min="0"
                   />
                 </div>
 
@@ -395,6 +401,7 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                     onChange={(e) => setTeam2Score(e.target.value)}
                     className="col-span-3"
                     placeholder="e.g., 1"
+                    min="0"
                   />
                 </div>
 
@@ -414,12 +421,16 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                             key={player.id}
                             className="grid grid-cols-4 items-center gap-2 mb-2"
                           >
-                            <Label className="col-span-1">
+                            <Label className="col-span-1 flex items-center">
+                              <img
+                                src={getImageSrc(player.image)}
+                                alt={player.username}
+                                className="w-6 h-6 rounded-full object-cover mr-2"
+                              />
                               {player.username}
                             </Label>
                             <div className="flex items-center col-span-1">
-                              <PiSoccerBallFill className="h-4 w-4 mr-1 text-gray-500" />{" "}
-                              {/* PiSoccerBallFill Icon for Goals */}
+                              <PiSoccerBallFill className="h-4 w-4 mr-1 text-gray-500" />
                               <Input
                                 type="number"
                                 placeholder="Goals"
@@ -436,8 +447,7 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                               />
                             </div>
                             <div className="flex items-center col-span-1">
-                              <Handshake className="h-4 w-4 mr-1 text-gray-500" />{" "}
-                              {/* Handshake Icon for Assists */}
+                              <Handshake className="h-4 w-4 mr-1 text-gray-500" />
                               <Input
                                 type="number"
                                 placeholder="Assists"
@@ -468,12 +478,16 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                             key={player.id}
                             className="grid grid-cols-4 items-center gap-2 mb-2"
                           >
-                            <Label className="col-span-1">
+                            <Label className="col-span-1 flex items-center">
+                              <img
+                                src={getImageSrc(player.image)}
+                                alt={player.username}
+                                className="w-6 h-6 rounded-full object-cover mr-2"
+                              />
                               {player.username}
                             </Label>
                             <div className="flex items-center col-span-1">
-                              <PiSoccerBallFill className="h-4 w-4 mr-1 text-gray-500" />{" "}
-                              {/* PiSoccerBallFill Icon for Goals */}
+                              <PiSoccerBallFill className="h-4 w-4 mr-1 text-gray-500" />
                               <Input
                                 type="number"
                                 placeholder="Goals"
@@ -490,8 +504,7 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
                               />
                             </div>
                             <div className="flex items-center col-span-1">
-                              <Handshake className="h-4 w-4 mr-1 text-gray-500" />{" "}
-                              {/* Handshake Icon for Assists */}
+                              <Handshake className="h-4 w-4 mr-1 text-gray-500" />
                               <Input
                                 type="number"
                                 placeholder="Assists"

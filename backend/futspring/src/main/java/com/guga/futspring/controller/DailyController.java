@@ -91,9 +91,9 @@ public class DailyController {
         return new ResponseEntity<>(dailyService.confirmPresenceInDaily(dailyId, userId), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/finalize")
-    public ResponseEntity<Daily> finalizeDaily(@PathVariable Long id, @RequestBody @Valid List<RankingEntry> prizes) {
+    @PutMapping("/{id}/finalize/puskas/{puskasWinnerId}/wittball/{wittballWinnerId}")
+    public ResponseEntity<Daily> finalizeDaily(@PathVariable Long id, @PathVariable Long puskasWinnerId, @PathVariable Long wittballWinnerId) {
 
-        return new ResponseEntity<>(dailyService.finalizeDaily(id, prizes), HttpStatus.OK);
+        return new ResponseEntity<>(dailyService.finalizeDaily(id, puskasWinnerId, wittballWinnerId), HttpStatus.OK);
     }
 }

@@ -13,7 +13,7 @@ public interface DailyService {
     Daily confirmPresenceInDaily(Long dailyId, Long playerId);
     List<Team> sortTeamsBasedOnStars(Long id, int numberOfTeams);
     void removeDaily(Long id);
-    Daily finalizeDaily(Long dailyId, List<RankingEntry> prizes);
+    Daily finalizeDaily(Long dailyId, Long puskasWinnerId, Long witballWinnerId);
     List<Team> getAssociatedTeams(Long id);
     List<User> getConfirmedPlayers(Long id);
     List<Match> getDailyMatches(Long id);

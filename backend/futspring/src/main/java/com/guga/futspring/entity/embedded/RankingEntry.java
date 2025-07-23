@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Embeddable
 @Getter
 @Setter
@@ -15,7 +17,7 @@ import lombok.Setter;
 public class RankingEntry {
     private Long userId;
 
-    private String date;
+    private LocalDate date;
     
     private Prize typeOfPrize;
 

@@ -4,6 +4,7 @@ import com.guga.futspring.entity.*;
 import com.guga.futspring.entity.embedded.LeagueTableEntry;
 import com.guga.futspring.entity.embedded.RankingEntry;
 import com.guga.futspring.entity.enums.DailyStatus;
+import com.guga.futspring.entity.enums.Prize;
 import com.guga.futspring.exception.AlreadyPlayerInDailyException;
 import com.guga.futspring.exception.DailyInThatDateAlreadyInThatPeladaException;
 import com.guga.futspring.exception.DailyNotFoundException;
@@ -30,6 +31,7 @@ public class DailyServiceImpl implements DailyService{
     RankingRepository rankingRepository;
     LeagueTableRepository leagueTableRepository;
     UserDailyStatsServiceImpl userDailyStatsService;
+    UserDailyStatsRepository userDailyStatsRepository;
 
     @Override
     public Daily getDaily(Long id) {
@@ -91,12 +93,36 @@ public class DailyServiceImpl implements DailyService{
 
     @Override
     @Transactional
-    public Daily finalizeDaily(Long dailyId, List<RankingEntry> prizes) {
+    public Daily finalizeDaily(Long dailyId, Long puskasWinnerId, Long witballWinnerId) {
         Optional<Daily> daily = dailyRepository.findById(dailyId);
 
         if(daily.isEmpty()) throw new DailyNotFoundException(dailyId);
 
         Daily unwrapDaily = daily.get();
+        List<RankingEntry> prizes = new ArrayList<>();
+
+        List<UserDailyStats> userDailyStatsList = unwrapDaily.getDailyStats();
+
+        UserDailyStats mostGoals = getMostGoalsOrAssists(Prize.TOPSCORER, userDailyStatsList);
+        UserDailyStats mostAssists = getMostGoalsOrAssists(Prize.TOPASSIST, userDailyStatsList);
+
+        User puskasWinner = userService.getUser(puskasWinnerId);
+        User witballWinner = userService.getUser(witballWinnerId);
+
+        if(puskasWinner == null || witballWinner == null) {
+            throw new RuntimeException("Without player selected for puskas or witball!");
+        }
+
+        RankingEntry mostGoalsEntry = new RankingEntry(mostGoals.getUser().getId(), unwrapDaily.getDailyDate(), Prize.TOPSCORER);
+        RankingEntry mostAssistsEntry = new RankingEntry(mostAssists.getUser().getId(), unwrapDaily.getDailyDate(), Prize.TOPASSIST);
+        RankingEntry puskasWinnerEntry = new RankingEntry(puskasWinner.getId(), unwrapDaily.getDailyDate(), Prize.PUSKAS);
+        RankingEntry witballWinnerEntry = new RankingEntry(witballWinner.getId(), unwrapDaily.getDailyDate(), Prize.WILTBALL);
+
+        prizes.add(mostGoalsEntry);
+        prizes.add(mostAssistsEntry);
+        prizes.add(puskasWinnerEntry);
+        prizes.add(witballWinnerEntry);
+
         unwrapDaily.setPrizeEntries(prizes);
         unwrapDaily.setIsFinished(true);
 
@@ -218,6 +244,24 @@ public class DailyServiceImpl implements DailyService{
     static Daily unwrapDaily(Optional<Daily> entity, Long id) {
         if(entity.isPresent()) return entity.get();
         else throw new DailyNotFoundException(id);
+    }
+
+    static UserDailyStats getMostGoalsOrAssists(Prize prize, List<UserDailyStats> userDailyStatsList) {
+        if (userDailyStatsList == null || userDailyStatsList.isEmpty()) {
+            return null;
+        }
+
+        if(prize.equals(Prize.TOPSCORER)) {
+            return userDailyStatsList.stream()
+                    .max(Comparator.comparingInt(UserDailyStats::getGoals))
+                    .orElse(null);
+        } else if (prize.equals(Prize.TOPASSIST)) {
+            return userDailyStatsList.stream()
+                    .max(Comparator.comparingInt(UserDailyStats::getAssists))
+                    .orElse(null);
+        } else {
+            return null;
+        }
     }
 
 }

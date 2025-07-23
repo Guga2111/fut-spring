@@ -84,7 +84,7 @@ export default function DailyArea() {
           <DailyHeader daily={daily}></DailyHeader>
         </div>
         <div class="absolute top-4 right-4 flex items-center space-x-2">
-          <FinalizeDailyButton></FinalizeDailyButton>
+          <FinalizeDailyButton daily={daily}></FinalizeDailyButton>
           <AddMatchButton
             dailyId={daily.id}
             teams={teams}

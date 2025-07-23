@@ -103,7 +103,7 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
                 value={puskasWinnerId ? String(puskasWinnerId) : ""}
                 disabled={!hasPlayers || isSubmitting}
               >
-                <SelectTrigger className="col-span-3">
+                <SelectTrigger className="col-span-3 !bg-white !text-neutral-900 hover:!text-neutral-700">
                   <SelectValue placeholder="Select the winner for puskas" />
                 </SelectTrigger>
                 <SelectContent>
@@ -137,7 +137,7 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
                 value={witballWinnerId ? String(witballWinnerId) : ""}
                 disabled={!hasPlayers || isSubmitting}
               >
-                <SelectTrigger className="col-span-3">
+                <SelectTrigger className="col-span-3 !bg-white !text-neutral-900 hover:!text-neutral-700">
                   <SelectValue placeholder="Select wittball winner" />
                 </SelectTrigger>
                 <SelectContent>

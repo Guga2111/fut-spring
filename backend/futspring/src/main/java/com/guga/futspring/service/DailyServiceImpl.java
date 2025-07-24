@@ -125,6 +125,8 @@ public class DailyServiceImpl implements DailyService{
 
         unwrapDaily.setPrizeEntries(prizes);
         unwrapDaily.setIsFinished(true);
+        unwrapDaily.setStatus(DailyStatus.FINISHED);
+        System.out.println(unwrapDaily.getStatus());
 
         Ranking ranking = unwrapDaily.getPelada().getRanking();
         if(ranking == null) throw new IllegalStateException("Ranking não encontrado para a Pelada da Daily " + dailyId);

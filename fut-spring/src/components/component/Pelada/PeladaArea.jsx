@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import RankingGrid from "./RankingGrid";
 import PeladaHeader from "./PeladaHeader";
 import PeladaChat from "./PeladaChat";
+import ViewDailyHistory from "./ViewDailyHistory";
 
 export default function PeladaArea({ pelada, user, onDailySelect }) {
   const { id } = useParams();
@@ -17,6 +18,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
   const [ranking, setRanking] = useState([]);
   const [allImages, setAllImages] = useState([]);
   const [loadingImages, setLoadingImages] = useState(true);
+  const [dailies, setDailies] = useState([]);
 
   useEffect(() => {
     const fetchAllImages = async () => {
@@ -85,6 +87,21 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
     fetchRanking();
   }, [id]);
 
+  useEffect(() => {
+    const fetchDailies = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/pelada/${id}/dailies`
+        );
+        setDailies(response.data);
+      } catch (error) {
+        console.error("Error fetching dailies: ", error);
+      }
+    };
+
+    fetchDailies();
+  }, [id]);
+
   if (loading)
     return (
       <div>
@@ -123,6 +140,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
               playersAssociated={playersAssociated}
               allImages={allImages}
             />
+            <ViewDailyHistory></ViewDailyHistory>
           </div>
         </div>
 

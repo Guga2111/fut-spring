@@ -1,11 +1,9 @@
 package com.guga.futspring.service;
 
-import com.guga.futspring.entity.Pelada;
-import com.guga.futspring.entity.Ranking;
-import com.guga.futspring.entity.Stats;
-import com.guga.futspring.entity.User;
+import com.guga.futspring.entity.*;
 import com.guga.futspring.exception.AlreadyPlayerAssociatedException;
 import com.guga.futspring.exception.PeladaNotFoundException;
+import com.guga.futspring.repository.DailyRepository;
 import com.guga.futspring.repository.PeladaRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -37,6 +35,7 @@ public class PeladaServiceImpl implements PeladaService{
     private final PeladaRepository peladaRepository;
     private final RankingServiceImpl rankingService;
     private final UserServiceImpl userService;
+    private final DailyRepository dailyRepository;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -50,6 +49,12 @@ public class PeladaServiceImpl implements PeladaService{
     @Override
     public List<Pelada> getPeladas() {
         return (List<Pelada>)peladaRepository.findAll();
+    }
+
+    @Override
+    public List<Daily> getAssociatedDailies(Long id) {
+        Pelada pelada = getPelada(id);
+        return pelada.getDailies();
     }
 
     @Override

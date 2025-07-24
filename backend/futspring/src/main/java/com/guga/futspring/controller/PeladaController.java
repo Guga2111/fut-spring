@@ -1,6 +1,7 @@
 package com.guga.futspring.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guga.futspring.entity.Daily;
 import com.guga.futspring.entity.Pelada;
 import com.guga.futspring.entity.User;
 import com.guga.futspring.service.PeladaServiceImpl;
@@ -35,6 +36,11 @@ public class PeladaController {
     @GetMapping("/{id}")
     public ResponseEntity<Pelada> getPelada(@PathVariable Long id) {
         return new ResponseEntity<>(peladaService.getPelada(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/dailies")
+    public ResponseEntity<List<Daily>> getAssociatedDailies(@PathVariable Long id) {
+        return new ResponseEntity<>(peladaService.getAssociatedDailies(id), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/users")

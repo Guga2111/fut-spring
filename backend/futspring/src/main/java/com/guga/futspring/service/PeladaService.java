@@ -1,5 +1,6 @@
 package com.guga.futspring.service;
 
+import com.guga.futspring.entity.Daily;
 import com.guga.futspring.entity.Pelada;
 import com.guga.futspring.entity.User;
 import org.springframework.core.io.Resource;
@@ -20,5 +21,6 @@ public interface PeladaService {
     Pelada associatePlayerToPelada(Long id, Long userId);
     List<User> getPlayerAssociatedToPelada(Long id);
     List<User> getPlayersDisassociated(Long id);
+    List<Daily> getAssociatedDailies(Long id);
 
 }

@@ -1,5 +1,6 @@
 package com.guga.futspring.repository;
 
+import com.guga.futspring.entity.Daily;
 import com.guga.futspring.entity.Pelada;
 import org.springframework.data.repository.CrudRepository;
 

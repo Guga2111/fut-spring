@@ -140,7 +140,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
               playersAssociated={playersAssociated}
               allImages={allImages}
             />
-            <ViewDailyHistory></ViewDailyHistory>
+            <ViewDailyHistory dailies={dailies}></ViewDailyHistory>
           </div>
         </div>
 

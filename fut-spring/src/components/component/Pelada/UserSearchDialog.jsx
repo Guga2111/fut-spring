@@ -66,10 +66,10 @@ export default function UserSearchDialog({ peladaData }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          className="!bg-green-600 !text-white hover:!bg-green-700 hover:!border-white"
+          className="!bg-green-600 !text-neutral-50 hover:!bg-green-700 hover:!border-white "
           onClick={() => setOpen(true)}
         >
-          <Plus className="" /> Include
+          <Plus className="!text-white" /> Include
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">

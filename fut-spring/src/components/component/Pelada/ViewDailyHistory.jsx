@@ -75,9 +75,10 @@ export default function ViewDailyHistory({ dailies }) {
     <div>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button className="hover:!bg-gray-950 hover:!border-white">
-            <User className="mr-2" /> Dailies History{" "}
-            <ChevronRight className="ml-2" />
+          <Button className=" hover:!border-white !text-neutral-300 hover:!text-white">
+            <User className="mr-2 !text-neutral-300 hover:!text-white" />{" "}
+            Dailies History
+            <ChevronRight className="ml-2 !text-neutral-300 hover:!text-white" />
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>

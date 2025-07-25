@@ -134,7 +134,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
               user={user}
             />
           </div>
-          <div className="w-full">
+          <div className="w-full flex justify-center gap-2 mt-4">
             <ViewPeladaPlayersDialog
               isLoading={loadingPlayers}
               playersAssociated={playersAssociated}

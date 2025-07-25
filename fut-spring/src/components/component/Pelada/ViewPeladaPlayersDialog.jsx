@@ -33,9 +33,9 @@ export default function ViewPeladaPlayersDialog({
     <div>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button className="hover:!bg-gray-950 hover:!border-white">
-            {" "}
-            <User /> Show Players <ChevronRight />
+          <Button className=" hover:!border-white text-neutral-300 hover:text-white">
+            <User className="text-neutral-300 hover:text-white" /> Show Players{" "}
+            <ChevronRight className="text-neutral-300 hover:text-white" />
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>

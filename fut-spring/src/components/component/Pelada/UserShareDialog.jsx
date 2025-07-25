@@ -39,7 +39,7 @@ export default function UserShareDialog({ peladaData }) {
         <DialogTrigger asChild>
           <Button
             variant="outline"
-            className="!text-white hover:!border-white hover:!bg-gray-950"
+            className="!text-neutral-300 hover:!text-white hover:!border-white hover:!bg-gray-950"
           >
             <ExternalLink className="mr-2" />
             Share

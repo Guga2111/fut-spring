@@ -10,6 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useNavigate } from "react-router-dom";
 import {
   ChevronRight,
   User,
@@ -37,6 +38,7 @@ import { format, parse, isValid, isSameDay } from "date-fns";
 
 export default function ViewDailyHistory({ dailies }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const filteredDailies = dailies.filter((daily) => {
     if (!searchTerm) {
@@ -69,6 +71,10 @@ export default function ViewDailyHistory({ dailies }) {
       default:
         return <Info className="h-4 w-4 text-gray-500 mr-2" />;
     }
+  };
+
+  const handleClick = (dailyId) => {
+    navigate(`/daily/${dailyId}`);
   };
 
   return (
@@ -135,6 +141,7 @@ export default function ViewDailyHistory({ dailies }) {
                             variant="!outline"
                             size="sm"
                             className="!text-neutral-200 hover:!text-white hover:!bg-green-600 hover:!border-white"
+                            onClick={() => handleClick(daily.id)}
                           >
                             View Details
                           </Button>

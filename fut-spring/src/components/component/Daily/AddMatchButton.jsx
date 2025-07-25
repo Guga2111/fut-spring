@@ -23,7 +23,12 @@ import {
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
+export default function AddMatchButton({
+  dailyId,
+  teams,
+  onMatchCreated,
+  isDailyFinished,
+}) {
   console.log("Teams received in AddMatchButton:", teams);
 
   const [open, setOpen] = useState(false);
@@ -322,6 +327,7 @@ export default function AddMatchButton({ dailyId, teams, onMatchCreated }) {
           <Button
             className="!bg-green-600 !text-white hover:!bg-green-700 hover:!border-white"
             onClick={() => setOpen(true)}
+            disabled={isDailyFinished}
           >
             <Plus className="mr-2" /> Create Match
           </Button>

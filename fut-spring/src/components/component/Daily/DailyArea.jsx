@@ -89,6 +89,7 @@ export default function DailyArea() {
             dailyId={daily.id}
             teams={teams}
             onMatchCreated={handleMatchCreated}
+            isDailyFinished={daily.isFinished}
           ></AddMatchButton>
         </div>
       </div>

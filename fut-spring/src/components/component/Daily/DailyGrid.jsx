@@ -6,6 +6,7 @@ import axios from "axios";
 import DailyMatchesHistory from "./DailyMatchesHistory";
 import DailyLeagueTable from "./DailyLeagueTable";
 import DailyPersonalStats from "./DailyPersonalStats";
+import DailyPrizeCard from "./DailyPrizeCard";
 
 export default function DailyGrid({ daily, matches, onRefreshMatches }) {
   const [teamsExist, setTeamsExist] = useState(false);
@@ -56,7 +57,7 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
         {/* Coluna 2: Conteúdo Principal (Time Campeão) */}
         <div className="flex-1 min-w-[250px] p-4 flex flex-col justify-between">
           <div className="text-gray-500 mb-4">
-            Foto do Time Campeão e Prêmios Individuais
+            <DailyPrizeCard daily={daily} />
           </div>
         </div>
 

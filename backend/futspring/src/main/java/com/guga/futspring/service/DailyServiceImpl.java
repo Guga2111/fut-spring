@@ -32,6 +32,7 @@ public class DailyServiceImpl implements DailyService{
     LeagueTableRepository leagueTableRepository;
     UserDailyStatsServiceImpl userDailyStatsService;
     UserDailyStatsRepository userDailyStatsRepository;
+    StatsServiceImpl statsService;
 
     @Override
     public Daily getDaily(Long id) {
@@ -132,6 +133,9 @@ public class DailyServiceImpl implements DailyService{
         if(ranking == null) throw new IllegalStateException("Ranking não encontrado para a Pelada da Daily " + dailyId);
 
         ranking.getPrizes().addAll(prizes);
+
+        statsService.insertDailyStatistics(userDailyStatsList);
+
         rankingRepository.save(ranking);
         return dailyRepository.save(unwrapDaily);
     }

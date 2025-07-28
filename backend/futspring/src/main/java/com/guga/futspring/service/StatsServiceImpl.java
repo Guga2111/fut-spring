@@ -2,6 +2,7 @@ package com.guga.futspring.service;
 
 import com.guga.futspring.entity.Stats;
 import com.guga.futspring.entity.User;
+import com.guga.futspring.entity.UserDailyStats;
 import com.guga.futspring.exception.StatsNotFoundException;
 import com.guga.futspring.repository.StatsRepository;
 import jakarta.transaction.Transactional;
@@ -56,6 +57,7 @@ public class StatsServiceImpl implements StatsService {
     @Transactional
     public Stats updateStats(int goals, int assists, Long id) {
         Optional<Stats> stats = statsRepository.findById(id);
+
         Stats unwrapStats = unwrapStats(stats, id);
 
         unwrapStats.setGoals(goals);
@@ -66,6 +68,24 @@ public class StatsServiceImpl implements StatsService {
             rankingService.updateTotalGoalsAndAssists(unwrapStats.getRanking().getId());
         }
         return savedStats;
+    }
+
+    @Override
+    @Transactional
+    public void insertDailyStatistics(List<UserDailyStats> userDailyStatsList) {
+
+        for(UserDailyStats userDailyStats : userDailyStatsList) {
+
+            Stats stats = userDailyStats.getUser().getStats();
+
+            stats.setGoals(stats.getGoals() + userDailyStats.getGoals());
+            stats.setAssists(stats.getAssists() + userDailyStats.getAssists());
+            stats.setMatches(stats.getMatches() + userDailyStats.getMatches());
+            stats.setWins(stats.getWins() + userDailyStats.getWins());
+
+            statsRepository.save(stats);
+        }
+
     }
 
     static Stats unwrapStats(Optional<Stats> entity, Long id) {

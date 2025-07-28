@@ -1,13 +1,13 @@
 package com.guga.futspring.service;
 
-import com.guga.futspring.entity.Daily;
-import com.guga.futspring.entity.LeagueTable;
+import com.guga.futspring.entity.*;
 import com.guga.futspring.entity.embedded.LeagueTableEntry;
 import com.guga.futspring.exception.DailyNotFoundException;
 import com.guga.futspring.exception.LeagueTableNotFoundException;
 import com.guga.futspring.exception.TeamNotFoundInLeagueTableException;
 import com.guga.futspring.repository.DailyRepository;
 import com.guga.futspring.repository.LeagueTableRepository;
+import com.guga.futspring.repository.UserDailyStatsRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +22,7 @@ public class LeagueTableServiceImpl implements LeagueTableService{
 
     LeagueTableRepository leagueTableRepository;
     DailyRepository dailyRepository;
+    UserDailyStatsRepository userDailyStatsRepository;
 
     @Override
     public LeagueTable getLeagueTable(Long id) {
@@ -122,6 +123,23 @@ public class LeagueTableServiceImpl implements LeagueTableService{
         winnerEntry.setGoalsScored(winnerEntry.getGoalsScored() + team1goals);
         winnerEntry.setGoalDifference(winnerEntry.getGoalsScored() - winnerEntry.getGoalsConceded());
         winnerEntry.setGoalsConceded(winnerEntry.getGoalsConceded() + team2goals);
+
+        List<User> winners = winnerEntry.getTeam().getPlayers();
+
+        for(User user : winners) {
+            Optional<UserDailyStats> userDailyStats = user.getDailyStats().
+                    stream().
+                    filter(userDailyStatsElement -> userDailyStatsElement.getDaily().getId().equals(dailyId))
+                            .findFirst();
+
+            if(userDailyStats.isPresent()) {
+                UserDailyStats unwrapedDailyStats = userDailyStats.get();
+                unwrapedDailyStats.setWins(unwrapedDailyStats.getWins() + 1);
+                userDailyStatsRepository.save(unwrapedDailyStats);
+            } else {
+                throw new RuntimeException();
+            }
+        }
 
         loserEntry.setLosses(loserEntry.getLosses() + 1);
         loserEntry.setGoalsScored(loserEntry.getGoalsScored() + team2goals);

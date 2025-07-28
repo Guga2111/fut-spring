@@ -23,6 +23,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { ClipboardList, ArrowUpDown } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 export default function DailyPersonalStats({ daily }) {
   const [userDailyStats, setUserDailyStats] = useState([]);
@@ -109,6 +110,7 @@ export default function DailyPersonalStats({ daily }) {
             >
               <ClipboardList className="mr-2" />
               Personal Numbers
+              <ChevronRight />
             </Button>
           </DialogTrigger>
           <DialogContent className="">

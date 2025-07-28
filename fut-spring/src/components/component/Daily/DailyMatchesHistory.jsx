@@ -14,6 +14,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
 import { GalleryVerticalEnd } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 import React from "react";
 
@@ -38,7 +39,8 @@ export default function DailyMatchesHistory({
             className="bg-green-600 text-neutral-300 hover:text-white hover:!border-white"
             onClick={() => setOpen(true)}
           >
-            <GalleryVerticalEnd className="mr-2" /> Match History
+            <GalleryVerticalEnd className="mr-2" /> Match History{" "}
+            <ChevronRight />
           </Button>
         </DialogTrigger>
         <DialogContent>

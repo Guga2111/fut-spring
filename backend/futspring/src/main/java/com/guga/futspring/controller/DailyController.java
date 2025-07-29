@@ -64,7 +64,7 @@ public class DailyController {
         return new ResponseEntity<>(dailyRepository.findByPeladaOrderByDailyDateAscDailyTimeAsc(pelada), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/champions-image/{filename:.+}")
+    @GetMapping("/champions-image/{filename:.+}")
     public ResponseEntity<Resource> getChampionsImage(@PathVariable String filename) {
         Resource imageResource = dailyService.getChampionsImage(filename);
 

@@ -38,13 +38,17 @@ export default function DailyPrizeCard({ daily }) {
     return entry ? `Player ID: ${entry.userId}` : "N/A";
   };
 
+  const imageUrl = daily.championImage
+    ? `http://localhost:8080/daily/champions-image/${daily.championImage}`
+    : null;
+
   return (
     <div>
       <div className="flex justify-center items-center w-full">
         <Card className="w-full max-w-md border overflow-hidden p-0">
           <div className="w-full h-[180px]">
             <img
-              src={daily.championImage}
+              src={imageUrl}
               alt={`Champion Team`}
               className="w-full h-full object-cover hover:opacity-75"
               style={{

@@ -61,11 +61,11 @@ export default function ViewDailyHistory({ dailies }) {
       case "SCHEDULED":
         return <CalendarPlus className="h-4 w-4 text-blue-500 mr-2" />;
       case "CONFIRMED":
-        return <CalendarCheck className="h-4 w-4 text-green-500 mr-2" />;
+        return <CalendarCheck className="h-4 w-4 text-blue-500 mr-2" />;
       case "IN_COURSE":
         return <CirclePlay className="h-4 w-4 text-yellow-500 mr-2" />;
       case "FINISHED":
-        return <FlagTriangleRight className="h-4 w-4 text-purple-500 mr-2" />;
+        return <FlagTriangleRight className="h-4 w-4 text-green-600 mr-2" />;
       case "CANCELED":
         return <CircleX className="h-4 w-4 text-red-500 mr-2" />;
       default:

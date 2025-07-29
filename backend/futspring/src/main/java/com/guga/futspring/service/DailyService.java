@@ -2,7 +2,10 @@ package com.guga.futspring.service;
 
 import com.guga.futspring.entity.*;
 import com.guga.futspring.entity.embedded.RankingEntry;
+import org.springframework.core.io.Resource;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface DailyService {
@@ -18,4 +21,6 @@ public interface DailyService {
     List<User> getConfirmedPlayers(Long id);
     List<Match> getDailyMatches(Long id);
     LeagueTable assignTeamToDailyLeagueTable(Long id, List<Team> teams);
+    Daily addChampionsImage(Long id, MultipartFile imageFile) throws IOException;
+    Resource getChampionsImage(String filename);
 }

@@ -26,8 +26,6 @@ public class Daily {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //criar atributo imagem para colocar a imagem do time campeao!
-
     @Column(name = "daily_date")
     private LocalDate dailyDate;
 

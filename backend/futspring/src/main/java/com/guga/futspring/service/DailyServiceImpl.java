@@ -13,26 +13,41 @@ import com.guga.futspring.exception.PlayerNotInPeladaException;
 import com.guga.futspring.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DailyServiceImpl implements DailyService{
 
-    DailyRepository dailyRepository;
-    PeladaServiceImpl peladaService;
-    UserServiceImpl userService;
-    PeladaRepository peladaRepository;
-    TeamRepository teamRepository;
-    RankingRepository rankingRepository;
-    LeagueTableRepository leagueTableRepository;
-    UserDailyStatsServiceImpl userDailyStatsService;
-    UserDailyStatsRepository userDailyStatsRepository;
-    StatsServiceImpl statsService;
+    private final DailyRepository dailyRepository;
+    private final PeladaServiceImpl peladaService;
+    private final UserServiceImpl userService;
+    private final PeladaRepository peladaRepository;
+    private final TeamRepository teamRepository;
+    private final RankingRepository rankingRepository;
+    private final LeagueTableRepository leagueTableRepository;
+    private final UserDailyStatsServiceImpl userDailyStatsService;
+    private final UserDailyStatsRepository userDailyStatsRepository;
+    private final StatsServiceImpl statsService;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     @Override
     public Daily getDaily(Long id) {
@@ -196,6 +211,44 @@ public class DailyServiceImpl implements DailyService{
         assignTeamToDailyLeagueTable(id, result);
 
         return result;
+    }
+
+    @Override
+    public Daily addChampionsImage(Long id, MultipartFile imageFile) throws IOException {
+
+        Daily daily = getDaily(id);
+
+        if(imageFile != null && !imageFile.isEmpty()) {
+            File directory = new File(uploadDir);
+            if(!directory.exists()) {
+                directory.mkdirs();
+            }
+        }
+
+        String filename = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+        Path filepath = Paths.get(uploadDir, filename);
+
+        Files.copy(imageFile.getInputStream(), filepath, StandardCopyOption.REPLACE_EXISTING);
+
+        daily.setChampionImage(filename);
+
+        return dailyRepository.save(daily);
+    }
+
+    @Override
+    public Resource getChampionsImage(String filename) {
+        try {
+            Path imagePath = Paths.get(uploadDir).resolve(filename).normalize();
+            Resource resource = new UrlResource(imagePath.toUri());
+
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Could not read image file: " + filename); //create custom exception
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
     }
 
     @Override

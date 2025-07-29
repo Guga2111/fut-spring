@@ -9,10 +9,17 @@ import com.guga.futspring.service.MatchServiceImpl;
 import com.guga.futspring.service.PeladaServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -57,6 +64,31 @@ public class DailyController {
         return new ResponseEntity<>(dailyRepository.findByPeladaOrderByDailyDateAscDailyTimeAsc(pelada), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/champions-image/{filename:.+}")
+    public ResponseEntity<Resource> getChampionsImage(@PathVariable String filename) {
+        Resource imageResource = dailyService.getChampionsImage(filename);
+
+        if (imageResource != null && imageResource.exists()) {
+
+            String contentType = "image/jpeg";
+            try {
+                contentType = Files.probeContentType(
+                        Paths.get(imageResource.getFile().getAbsolutePath())
+                );
+            } catch (IOException e) {
+
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(contentType));
+
+            return new ResponseEntity<>(imageResource, headers, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
+
     @PostMapping("/pelada/{peladaId}")
     public ResponseEntity<Daily> saveDaily(@RequestBody @Valid Daily daily, @PathVariable Long peladaId) {
 
@@ -95,5 +127,10 @@ public class DailyController {
     public ResponseEntity<Daily> finalizeDaily(@PathVariable Long id, @PathVariable Long puskasWinnerId, @PathVariable Long wittballWinnerId) {
 
         return new ResponseEntity<>(dailyService.finalizeDaily(id, puskasWinnerId, wittballWinnerId), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{id}/champions-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Daily> addChampionsImage(@PathVariable Long id, @RequestPart(value = "image")MultipartFile imageFile) throws IOException {
+        return new ResponseEntity<>(dailyService.addChampionsImage(id, imageFile), HttpStatus.OK);
     }
 }

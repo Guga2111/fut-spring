@@ -4,18 +4,43 @@ import { Clock } from "lucide-react";
 import { Check } from "lucide-react";
 import { Loader } from "lucide-react";
 
-export default function DailyPrizeCard({ daily }) {
+export default function DailyPrizeCard({ daily, confirmedPlayers }) {
+  const mapPrizeEntries = (type) => {
+    const filteredEntries = (daily.prizeEntries || []).filter(
+      (entry) => entry.typeOfPrize === type
+    );
+
+    const mappedEntries = filteredEntries.map((entry) => {
+      const user = confirmedPlayers.find((p) => {
+        return Number(p.id) === Number(entry.userId);
+      }) || {
+        id: entry.userId,
+        name: "Unknown",
+        photo: "",
+      };
+      return {
+        ...entry,
+        user: user,
+      };
+    });
+    return mappedEntries;
+  };
+
+  const topScorerPrizes = mapPrizeEntries("TOPSCORER");
+  const topAssistPrizes = mapPrizeEntries("TOPASSIST");
+  const puskasPrizes = mapPrizeEntries("PUSKAS");
+  const wiltBallPrizes = mapPrizeEntries("WILTBALL");
+
   const formatDailyDate = (date) => {
     if (!date) return "";
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(date).toLocaleDateString("en-US", options);
   };
 
-  const getPrizeWinner = (prizeType) => {
-    const entry = daily.prizeEntries?.find(
-      (entry) => entry.typeOfPrize === prizeType
-    );
-    return entry ? `Player ID: ${entry.userId}` : "N/A";
+  const getPrizeWinnerName = (prizeEntries) => {
+    return prizeEntries.length > 0 && prizeEntries[0].user
+      ? prizeEntries[0].user.username
+      : "N/A";
   };
 
   const imageUrl = daily.championImage
@@ -50,7 +75,7 @@ export default function DailyPrizeCard({ daily }) {
                 <span className="text-sm font-semibold">
                   {daily.isFinished ? (
                     <div className="flex items-center gap-1">
-                      Finished <Check size={16} />
+                      Finished <Check size={20} className="text-green-600" />
                     </div>
                   ) : (
                     <div className="flex items-center gap-1">
@@ -72,19 +97,19 @@ export default function DailyPrizeCard({ daily }) {
               <h4 className="text-md font-bold mb-2">Daily Prizes:</h4>
               <p className="text-sm">
                 <span className="font-semibold">Top Scorer:</span>{" "}
-                {getPrizeWinner("TOPSCORER")}
+                {getPrizeWinnerName(topScorerPrizes)}
               </p>
               <p className="text-sm">
                 <span className="font-semibold">Top Assist:</span>{" "}
-                {getPrizeWinner("TOPASSIST")}
+                {getPrizeWinnerName(topAssistPrizes)}
               </p>
               <p className="text-sm">
                 <span className="font-semibold">Puskas Winner:</span>{" "}
-                {getPrizeWinner("PUSKAS")}
+                {getPrizeWinnerName(puskasPrizes)}
               </p>
               <p className="text-sm">
                 <span className="font-semibold">Wilt Ball Winner:</span>{" "}
-                {getPrizeWinner("WILTBALL")}
+                {getPrizeWinnerName(wiltBallPrizes)}
               </p>
             </div>
           </CardContent>

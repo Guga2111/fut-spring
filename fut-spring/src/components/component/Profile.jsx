@@ -32,7 +32,7 @@ export default function Profile({ user }) {
   };
 
   return (
-    <div>
+    <div className="bg-white">
       <Popover>
         <PopoverTrigger asChild>
           <Avatar className="absolute top-4 right-4 cursor-pointer">

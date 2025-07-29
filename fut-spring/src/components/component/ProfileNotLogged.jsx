@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function ProfileNotLogged() {
   return (
-    <div className="absolute top-4 right-4">
+    <div className="absolute top-4 right-4 bg-white">
       <div className="flex flex-row-reverse items-center gap-x-3 cursor-pointer">
         <Avatar className="w-8 h-8">
           <AvatarImage src="https://github.com/shadcn.png" />

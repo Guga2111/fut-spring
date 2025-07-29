@@ -11,6 +11,7 @@ import DailyPrizeCard from "./DailyPrizeCard";
 export default function DailyGrid({ daily, matches, onRefreshMatches }) {
   const [teamsExist, setTeamsExist] = useState(false);
   const [loadingTeamsStatus, setLoadingTeamsStatus] = useState(true);
+  const [confirmedPlayers, setConfirmedPlayers] = useState([]);
 
   const checkTeamsStatus = useCallback(async () => {
     setLoadingTeamsStatus(true);
@@ -28,9 +29,22 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
     }
   }, [daily.id]);
 
+  const fetchConfirmedPlayers = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/daily/${daily.id}/confirmed-players`
+      );
+      setConfirmedPlayers(response.data);
+    } catch (error) {
+      console.error("Error fetching confirmed players:", error);
+      setConfirmedPlayers([]); // Ensure it's an empty array on error
+    }
+  }, [daily.id]);
+
   useEffect(() => {
     checkTeamsStatus();
-  }, [checkTeamsStatus]);
+    fetchConfirmedPlayers(); // Fetch confirmed players when component mounts or daily.id changes
+  }, [checkTeamsStatus, fetchConfirmedPlayers]);
 
   const handleSortComplete = () => {
     setTeamsExist(true);
@@ -57,7 +71,7 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
         {/* Coluna 2: Conteúdo Principal (Time Campeão) */}
         <div className="flex-1 min-w-[250px] p-4 flex flex-col justify-between">
           <div className="text-gray-500 mb-4">
-            <DailyPrizeCard daily={daily} />
+            <DailyPrizeCard daily={daily} confirmedPlayers={confirmedPlayers} />
           </div>
         </div>
 

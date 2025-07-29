@@ -16,7 +16,7 @@ import {
 
 export default function BreadcrumMenu() {
   return (
-    <div className="absolute top-4 left-4 ">
+    <div className="absolute top-4 left-4 !bg-white">
       <div>
         <span>
           <Breadcrumb>

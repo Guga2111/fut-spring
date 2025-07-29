@@ -1,34 +1,14 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Clock } from "lucide-react";
+import { Check } from "lucide-react";
+import { Loader } from "lucide-react";
 
 export default function DailyPrizeCard({ daily }) {
   const formatDailyDate = (date) => {
     if (!date) return "";
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(date).toLocaleDateString("en-US", options);
-  };
-
-  const formatDailyTime = (time, duration) => {
-    if (!time) return "";
-
-    const [hours, minutes] = time.split(":").map(Number);
-    const startDate = new Date();
-    startDate.setHours(hours, minutes, 0);
-
-    const endDate = new Date(startDate.getTime() + duration * 60 * 1000);
-    const startFormatted = startDate.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-    const endFormatted = endDate.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-
-    return `${startFormatted} - ${endFormatted}`;
   };
 
   const getPrizeWinner = (prizeType) => {
@@ -68,11 +48,22 @@ export default function DailyPrizeCard({ daily }) {
               </p>
               <div className="flex items-center gap-1">
                 <span className="text-sm font-semibold">
-                  {daily.dailyTime
-                    ? formatDailyTime(daily.dailyTime, daily.pelada?.duration)
-                    : "Loading time..."}
+                  {daily.isFinished ? (
+                    <div className="flex items-center gap-1">
+                      Finished <Check size={16} />
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1">
+                      In Play
+                      <Loader
+                        size={16}
+                        style={{
+                          animation: "spin 2.5s linear infinite",
+                        }}
+                      />
+                    </div>
+                  )}
                 </span>
-                <Clock className="h-4 w-4" />
               </div>
             </div>
 

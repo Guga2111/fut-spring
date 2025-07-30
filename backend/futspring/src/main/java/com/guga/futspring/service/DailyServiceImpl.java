@@ -5,11 +5,8 @@ import com.guga.futspring.entity.embedded.LeagueTableEntry;
 import com.guga.futspring.entity.embedded.RankingEntry;
 import com.guga.futspring.entity.enums.DailyStatus;
 import com.guga.futspring.entity.enums.Prize;
-import com.guga.futspring.exception.AlreadyPlayerInDailyException;
+import com.guga.futspring.exception.*;
 import com.guga.futspring.exception.DailyInThatDateAlreadyInThatPeladaException;
-import com.guga.futspring.exception.DailyNotFoundException;
-import com.guga.futspring.exception.LeagueTableNotFoundException;
-import com.guga.futspring.exception.PlayerNotInPeladaException;
 import com.guga.futspring.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -307,6 +304,14 @@ public class DailyServiceImpl implements DailyService{
 
         if (!daily.getPelada().getPlayers().contains(player)) {
             throw new PlayerNotInPeladaException(player.getId(), daily.getPelada().getId());
+        }
+
+        if(daily.getPlayersPresence().size() >= 20) {
+            throw new MaximumPlayersOnDailyException(20);
+        }
+
+        if(daily.getIsFinished().equals(true)) {
+            throw new AlreadyDailyFinishedException(daily.getId());
         }
     }
 

@@ -88,4 +88,16 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(AlreadyDailyFinishedException.class)
+    public ResponseEntity<Object> handleAlreadyDailyFinishedException(AlreadyDailyFinishedException e) {
+        ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MaximumPlayersOnDailyException.class)
+    public ResponseEntity<Object> handleMaximumPlayersOnDailyException(MaximumPlayersOnDailyException e) {
+        ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
 }

@@ -43,7 +43,12 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
       }
     } catch (error) {
       console.error("Erro ao confirmar presença:", error);
-      toast.error("Failed to confirm your presence. Please try again.");
+
+      if (error.response.status === 403) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Failed to confirm your presence. Please try again.");
+      }
     }
   };
 

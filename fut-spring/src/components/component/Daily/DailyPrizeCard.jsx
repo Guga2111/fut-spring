@@ -1,10 +1,17 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Clock } from "lucide-react";
 import { Check } from "lucide-react";
 import { Loader } from "lucide-react";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogOverlay,
+  DialogContent,
+} from "@/components/ui/custom-dialog";
+import { useState } from "react";
 
 export default function DailyPrizeCard({ daily, confirmedPlayers }) {
+  const [isImageOpen, setIsImageOpen] = useState(false);
+
   const mapPrizeEntries = (type) => {
     const filteredEntries = (daily.prizeEntries || []).filter(
       (entry) => entry.typeOfPrize === type
@@ -51,18 +58,24 @@ export default function DailyPrizeCard({ daily, confirmedPlayers }) {
     <div>
       <div className="flex justify-center items-center w-full">
         <Card className="w-full max-w-md border overflow-hidden p-0">
-          <div className="w-full h-[180px]">
-            <img
-              src={imageUrl}
-              alt={`Champion Team`}
-              className="w-full h-full object-cover hover:opacity-75"
-              style={{
-                display: "block",
-                margin: 0,
-                borderRadius: "0",
-              }}
-            />
-          </div>
+          <Dialog open={isImageOpen} onOpenChange={setIsImageOpen}>
+            <DialogTrigger asChild>
+              <div className="w-full h-[180px] cursor-pointer">
+                <img
+                  src={imageUrl}
+                  alt={`Champion Team`}
+                  className="w-full h-full object-cover transition-opacity duration-300 hover:opacity-75"
+                />
+              </div>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl p-0 overflow-hidden">
+              <img
+                src={imageUrl}
+                alt="Expanded Champion Team"
+                className="w-full h-full object-contain mx-auto"
+              />
+            </DialogContent>
+          </Dialog>
 
           <CardContent className="pt-4 pb-2 px-4">
             <div className="flex justify-between items-center">
@@ -92,7 +105,6 @@ export default function DailyPrizeCard({ daily, confirmedPlayers }) {
               </div>
             </div>
 
-            {/* Prize Winners Section */}
             <div className="mt-4 border-t pt-3">
               <h4 className="text-md font-bold mb-2">Daily Prizes:</h4>
               <p className="text-sm">

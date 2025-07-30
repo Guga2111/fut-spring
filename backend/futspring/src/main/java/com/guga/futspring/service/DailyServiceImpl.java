@@ -108,6 +108,21 @@ public class DailyServiceImpl implements DailyService{
     }
 
     @Override
+    public Daily disconfirmPresenceInDaily(Long dailyId, Long playerId) {
+
+        User player = userService.getUser(playerId);
+        Daily daily = getDaily(dailyId);
+
+        if(!daily.getPlayersPresence().contains(player)) {
+            throw new RuntimeException();
+        }
+
+        daily.getPlayersPresence().remove(player);
+
+        return dailyRepository.save(daily);
+    }
+
+    @Override
     @Transactional
     public Daily finalizeDaily(Long dailyId, Long puskasWinnerId, Long witballWinnerId) {
         Optional<Daily> daily = dailyRepository.findById(dailyId);

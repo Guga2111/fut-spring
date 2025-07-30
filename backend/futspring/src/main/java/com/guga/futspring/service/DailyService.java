@@ -14,6 +14,7 @@ public interface DailyService {
     Daily createDaily(Daily daily, Long peladaId);
     Daily updateDaily();
     Daily confirmPresenceInDaily(Long dailyId, Long playerId);
+    Daily disconfirmPresenceInDaily(Long dailyId, Long playerId);
     List<Team> sortTeamsBasedOnStars(Long id, int numberOfTeams);
     void removeDaily(Long id);
     Daily finalizeDaily(Long dailyId, Long puskasWinnerId, Long witballWinnerId);

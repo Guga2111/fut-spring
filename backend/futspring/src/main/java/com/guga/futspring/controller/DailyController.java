@@ -123,6 +123,11 @@ public class DailyController {
         return new ResponseEntity<>(dailyService.confirmPresenceInDaily(dailyId, userId), HttpStatus.OK);
     }
 
+    @PutMapping("/{dailyId}/disconfirm-presence/{userId}")
+    public ResponseEntity<Daily> disconfirmPresenceInDaily(@PathVariable Long dailyId, @PathVariable Long userId) {
+        return new ResponseEntity<>(dailyService.disconfirmPresenceInDaily(dailyId, userId), HttpStatus.OK);
+    }
+
     @PutMapping("/{id}/finalize/puskas/{puskasWinnerId}/wittball/{wittballWinnerId}")
     public ResponseEntity<Daily> finalizeDaily(@PathVariable Long id, @PathVariable Long puskasWinnerId, @PathVariable Long wittballWinnerId) {
 

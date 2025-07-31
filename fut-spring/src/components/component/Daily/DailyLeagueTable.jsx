@@ -9,6 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function DailyLeagueTable({ dailyId }) {
   const [teamsData, setTeamsData] = useState([]);
@@ -24,11 +31,8 @@ export default function DailyLeagueTable({ dailyId }) {
           `http://localhost:8080/league-table/daily/${dailyId}`
         );
 
-        // --- FIX IS HERE ---
-        // Access the 'entries' array from the response data
         const leagueTableEntries = response.data.entries;
         setTeamsData(leagueTableEntries);
-        // --- END FIX ---
       } catch (err) {
         console.error("Error on finding league table entries:", err);
         setError("Failed to load league table. Please try again later.");
@@ -45,7 +49,14 @@ export default function DailyLeagueTable({ dailyId }) {
   if (loading) {
     return (
       <div className="container mx-auto p-4 text-center">
-        <p>Loading league table...</p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Daily League Standings</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>Loading league table...</p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -53,7 +64,14 @@ export default function DailyLeagueTable({ dailyId }) {
   if (error) {
     return (
       <div className="container mx-auto p-4 text-center text-red-600">
-        <p>{error}</p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Daily League Standings</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>{error}</p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -61,54 +79,63 @@ export default function DailyLeagueTable({ dailyId }) {
   if (!teamsData || teamsData.length === 0) {
     return (
       <div className="container mx-auto p-4 text-center">
-        <p>No league table data available for this daily ID.</p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Daily League Standings</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>No league table data available for this daily ID.</p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Daily League Standings</h2>
-      <Table>
-        <TableCaption>
-          A current snapshot of the daily league table.
-        </TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[50px]">Pos</TableHead>
-            <TableHead>Club</TableHead>
-            <TableHead className="text-right">P</TableHead>{" "}
-            {/* Assuming P means "Played" */}
-            <TableHead className="text-right">GD</TableHead>
-            <TableHead className="text-right">PTS</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {teamsData.map((teamEntry) => {
-            // Calculate played games if not directly provided, assuming P means Played
-            const playedGames =
-              teamEntry.wins + teamEntry.losses + teamEntry.draws;
-
-            return (
-              <TableRow key={teamEntry.team.id}>
-                {" "}
-                {/* Using team.id as a more stable unique key */}
-                <TableCell className="font-medium">
-                  {teamEntry.position}
-                </TableCell>
-                <TableCell>{teamEntry.team.name}</TableCell>
-                <TableCell className="text-right">{playedGames}</TableCell>
-                <TableCell className="text-right">
-                  {teamEntry.goalDifference}
-                </TableCell>
-                <TableCell className="text-right font-bold">
-                  {teamEntry.points}
-                </TableCell>
+    <div className="container mx-auto p-4 h-[600px] w-full">
+      <Card>
+        <CardHeader>
+          <CardTitle>Daily League Standings</CardTitle>
+          <CardDescription>
+            A current snapshot of the daily league table.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[50px]">Pos</TableHead>
+                <TableHead>Club</TableHead>
+                <TableHead className="text-right">P</TableHead>
+                <TableHead className="text-right">GD</TableHead>
+                <TableHead className="text-right">PTS</TableHead>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+            </TableHeader>
+            <TableBody>
+              {teamsData.map((teamEntry) => {
+                const playedGames =
+                  teamEntry.wins + teamEntry.losses + teamEntry.draws;
+
+                return (
+                  <TableRow key={teamEntry.team.id}>
+                    <TableCell className="font-medium">
+                      {teamEntry.position}
+                    </TableCell>
+                    <TableCell>{teamEntry.team.name}</TableCell>
+                    <TableCell className="text-right">{playedGames}</TableCell>
+                    <TableCell className="text-right">
+                      {teamEntry.goalDifference}
+                    </TableCell>
+                    <TableCell className="text-right font-bold">
+                      {teamEntry.points}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }

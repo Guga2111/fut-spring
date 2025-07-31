@@ -1,5 +1,4 @@
-import * as React from "react";
-
+import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -73,16 +72,16 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
   };
 
   return (
-    <div>
-      <Card className="w-[350px]">
+    <div className="w-full p-4">
+      <Card className="w-full max-w-md border flex flex-col overflow-hidden max-h-[536px]">
         <CardHeader>
           <CardTitle>Sort Teams</CardTitle>
           <CardDescription>
             Sort teams based on the stars ability of the players.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 mb-4">
+        <CardContent className="flex flex-col flex-grow min-h-0">
+          <div className="grid gap-4 mb-4 flex-shrink-0">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="numberOfTeams">Number of Teams</Label>
               <Select
@@ -100,7 +99,7 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
               </Select>
             </div>
           </div>
-          <ScrollArea className="rounded-md border">
+          <ScrollArea className="rounded-md border h-[300px]">
             <div className="p-4">
               <h4 className="mb-4 text-sm font-medium leading-none">
                 Confirmed Players
@@ -137,7 +136,7 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
             </div>
           </ScrollArea>
         </CardContent>
-        <CardFooter className="flex justify-center">
+        <CardFooter className="flex justify-center mt-auto">
           <Button onClick={handleSortTeams} className="hover:!border-white">
             Sort <ArrowDownUp className="ml-2" />{" "}
           </Button>

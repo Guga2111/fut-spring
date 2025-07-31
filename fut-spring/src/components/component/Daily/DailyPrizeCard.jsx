@@ -56,7 +56,7 @@ export default function DailyPrizeCard({ daily, confirmedPlayers }) {
 
   return (
     <div>
-      <div className="flex justify-center items-center w-full">
+      <div className="flex justify-center items-center w-full p-4">
         <Card className="w-full max-w-md border overflow-hidden p-0">
           <Dialog open={isImageOpen} onOpenChange={setIsImageOpen}>
             <DialogTrigger asChild>

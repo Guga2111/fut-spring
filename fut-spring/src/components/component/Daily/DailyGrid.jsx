@@ -37,13 +37,13 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
       setConfirmedPlayers(response.data);
     } catch (error) {
       console.error("Error fetching confirmed players:", error);
-      setConfirmedPlayers([]); // Ensure it's an empty array on error
+      setConfirmedPlayers([]);
     }
   }, [daily.id]);
 
   useEffect(() => {
     checkTeamsStatus();
-    fetchConfirmedPlayers(); // Fetch confirmed players when component mounts or daily.id changes
+    fetchConfirmedPlayers();
   }, [checkTeamsStatus, fetchConfirmedPlayers]);
 
   const handleSortComplete = () => {
@@ -52,11 +52,10 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-100px)] justify-between">
-      {" "}
       <div className="flex justify-around items-start p-5 gap-5 text-white flex-grow">
         {/* Coluna 1: Sorteio */}
         <div className="flex-1 min-w-[250px] p-4">
-          <div className="text-center text-gray-500 h-full flex items-center justify-center">
+          <div className="text-center text-gray-500 flex items-center justify-center">
             {teamsExist ? (
               <DailyTeams dailyId={daily.id} />
             ) : (
@@ -77,7 +76,7 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
 
         {/* Coluna 3: Tabela de Classificação */}
         <div className="flex-1 min-w-[250px] p-4">
-          <div className="text-center text-gray-800 h-full flex items-center justify-center">
+          <div className="text-center text-gray-800 flex items-center justify-center">
             <DailyLeagueTable dailyId={daily.id}></DailyLeagueTable>
           </div>
         </div>

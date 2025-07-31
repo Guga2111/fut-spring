@@ -8,6 +8,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -27,8 +29,13 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
   const [puskasWinnerId, setPuskasWinnerId] = useState(null);
   const [witballWinnerId, setWitballWinnerId] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
 
   const hasPlayers = daily?.playersPresence && daily.playersPresence.length > 0;
+
+  const handleImageChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
 
   useEffect(() => {
     if (!isOpen) {
@@ -45,6 +52,13 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
       return;
     }
 
+    const data = new FormData();
+    const updateImageEndpoint = `http://localhost:8080/daily/${daily.id}/champions-image`;
+
+    if (imageFile) {
+      data.append("image", imageFile);
+    }
+
     if (isSubmitting) return;
 
     setIsSubmitting(true);
@@ -52,6 +66,12 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
       const response = await axios.put(
         `http://localhost:8080/daily/${daily.id}/finalize/puskas/${puskasWinnerId}/wittball/${witballWinnerId}`
       );
+
+      const imageResponse = await axios.put(updateImageEndpoint, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       toast.success("Sucess!", {
         description: "Daily finished with sucess!",
@@ -95,9 +115,9 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
 
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <label htmlFor="puskasWinner" className="text-right">
+              <Label htmlFor="puskasWinner" className="text-right">
                 Puskas
-              </label>
+              </Label>
               <Select
                 onValueChange={(value) => setPuskasWinnerId(Number(value))}
                 value={puskasWinnerId ? String(puskasWinnerId) : ""}
@@ -129,9 +149,9 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
             </div>
 
             <div className="grid grid-cols-4 items-center gap-4">
-              <label htmlFor="witballWinner" className="text-right">
+              <Label htmlFor="witballWinner" className="text-right">
                 Wittball
-              </label>
+              </Label>
               <Select
                 onValueChange={(value) => setWitballWinnerId(Number(value))}
                 value={witballWinnerId ? String(witballWinnerId) : ""}
@@ -160,6 +180,19 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              <div className="grid grid-cols-4 items-center gap-30 col-span-3">
+                <Label htmlFor="image" className="text-right">
+                  Image
+                </Label>
+                <Input
+                  id="image"
+                  name="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="col-span-3"
+                />
+              </div>
             </div>
           </div>
 

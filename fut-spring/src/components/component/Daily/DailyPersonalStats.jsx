@@ -91,10 +91,10 @@ export default function DailyPersonalStats({ daily }) {
     }
 
     if (aValue < bValue) {
-      return sortConfig.direction === "asc" ? -1 : 1;
+      return sortConfig.direction === "asc" ? 1 : -1;
     }
     if (aValue > bValue) {
-      return sortConfig.direction === "asc" ? 1 : -1;
+      return sortConfig.direction === "asc" ? -1 : 1;
     }
     return 0;
   });

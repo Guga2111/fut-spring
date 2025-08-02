@@ -15,7 +15,7 @@
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    @Table(name = "match")
+    @Table(name = "daily_match")
     public class Match {
 
         @Id

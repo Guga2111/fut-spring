@@ -57,7 +57,7 @@ public class FutspringApplication {
 			userService.getUsers().forEach(u -> System.out.println("ID: " + u.getId() + ", Username: " + u.getUsername() + ", Email: " + u.getEmail()));
 			System.out.println("----------------------------------------------");
 
-			if(peladaService.getPeladas().isEmpty() && dailyService.getDailys().isEmpty()) {
+			/*if(peladaService.getPeladas().isEmpty() && dailyService.getDailys().isEmpty()) {
 				Pelada pelada = new Pelada();
 
 				pelada.setAddress("Abdias de Carvalho");
@@ -84,7 +84,7 @@ public class FutspringApplication {
 			}
 
 			peladaService.getPeladas().forEach(u -> System.out.println("ID: " + u.getId() + ", Username: " + u.getName() + ", Email: " + u.getAddress()));
-			System.out.println("----------------------------------------------");
+			System.out.println("----------------------------------------------"); */
 
 		};
 	}

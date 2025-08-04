@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from "../../../config";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -47,15 +48,13 @@ export default function AddMatchButton({
 
   const getImageSrc = (filename) => {
     if (!filename) return "/backgroundbalotelli.jpg";
-    return `http://localhost:8080/user/images/${filename}`;
+    return `${API_BASE_URL}/user/images/${filename}`;
   };
 
   const fetchPlayersByTeam = async (teamId) => {
     if (!teamId) return [];
     try {
-      const response = await fetch(
-        `http://localhost:8080/team/${teamId}/players`
-      );
+      const response = await fetch(`${API_BASE_URL}/team/${teamId}/players`);
       if (!response.ok) {
         throw new Error("Failed to fetch players for team " + teamId);
       }
@@ -161,7 +160,7 @@ export default function AddMatchButton({
     setIsSubmitting(true);
 
     try {
-      const createMatchEndpoint = `http://localhost:8080/daily/${dailyId}/team1/${parseInt(
+      const createMatchEndpoint = `${API_BASE_URL}/daily/${dailyId}/team1/${parseInt(
         team1Id,
         10
       )}/team2/${parseInt(team2Id, 10)}`;
@@ -217,7 +216,7 @@ export default function AddMatchButton({
         urlLooserId = team2Id;
       }
 
-      const updateTableEndpoint = `http://localhost:8080/match/${dailyId}/winner/${urlWinnerId}/looser/${urlLooserId}?team1goals=${goalsForWinner}&team2goals=${goalsForLooser}`;
+      const updateTableEndpoint = `${API_BASE_URL}/match/${dailyId}/winner/${urlWinnerId}/looser/${urlLooserId}?team1goals=${goalsForWinner}&team2goals=${goalsForLooser}`;
 
       const updateTableResponse = await fetch(updateTableEndpoint, {
         method: "PUT",
@@ -242,7 +241,7 @@ export default function AddMatchButton({
         const goals = playerStats[player.id]?.goals || 0;
         const assists = playerStats[player.id]?.assists || 0;
 
-        const updatePlayerEndpoint = `http://localhost:8080/match/${dailyId}/player/${player.id}/update-goals-assists`;
+        const updatePlayerEndpoint = `${API_BASE_URL}/match/${dailyId}/player/${player.id}/update-goals-assists`;
 
         updatePlayerGoalsAssistsPromises.push(
           fetch(updatePlayerEndpoint, {

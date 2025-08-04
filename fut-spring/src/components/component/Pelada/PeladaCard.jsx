@@ -7,18 +7,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { LuClock, LuImageOff } from "react-icons/lu";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import { API_BASE_URL } from "../../../config";
 
 export default function PeladaCard({ pelada, onPeladaSelect }) {
-  const imageUrl = pelada.image 
-    ? `http://localhost:8080/pelada/images/${pelada.image}` 
+  const imageUrl = pelada.image
+    ? `${API_BASE_URL}/pelada/images/${pelada.image}`
     : null;
 
-
   const navigate = useNavigate();
-  
+
   const handleClick = () => {
     if (onPeladaSelect) {
       onPeladaSelect(pelada);
@@ -30,16 +30,18 @@ export default function PeladaCard({ pelada, onPeladaSelect }) {
     <div key={pelada.id} className="border rounded-lg p-2">
       <Card className="w-auto">
         <CardHeader className="grid grid-cols-2 gap-4">
-          <CardTitle className="w-auto text-lg font-semibold text-gray-800">{pelada.name}</CardTitle>
+          <CardTitle className="w-auto text-lg font-semibold text-gray-800">
+            {pelada.name}
+          </CardTitle>
           <CardDescription className="w-auto">{pelada.time}</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           {imageUrl ? (
             <div className="flex justify-center">
-              <img 
-                src={imageUrl} 
-                alt={`${pelada.name}`} 
-                className="h-45 w-45 mx-auto drop-shadow-lg rounded-full object-cover" 
+              <img
+                src={imageUrl}
+                alt={`${pelada.name}`}
+                className="h-45 w-45 mx-auto drop-shadow-lg rounded-full object-cover"
               />
             </div>
           ) : (
@@ -57,13 +59,16 @@ export default function PeladaCard({ pelada, onPeladaSelect }) {
               </p>
             </div>
             <div>
-              <p>
-                {pelada.duration}hrs
-              </p>
+              <p>{pelada.duration}hrs</p>
             </div>
           </div>
-          <div >
-              <Button onClick={handleClick} className= "hover:!bg-green-600 hover:!border-white !transition-colors">View</Button>
+          <div>
+            <Button
+              onClick={handleClick}
+              className="hover:!bg-green-600 hover:!border-white !transition-colors"
+            >
+              View
+            </Button>
           </div>
         </CardFooter>
       </Card>

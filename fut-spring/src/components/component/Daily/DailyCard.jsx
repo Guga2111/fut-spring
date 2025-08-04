@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import axios from "axios";
+import { API_BASE_URL } from "../../../config";
 
 export default function DailyCard({ pelada, onDailySelect, user }) {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
       const dailyId = dailyScheduled.id;
       const userId = user.id;
 
-      const url = `http://localhost:8080/daily/${dailyId}/confirm-presence/${userId}`;
+      const url = `${API_BASE_URL}/daily/${dailyId}/confirm-presence/${userId}`;
 
       const response = await axios.put(url, {});
 
@@ -64,7 +65,7 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
       const dailyId = dailyScheduled.id;
       const userId = user.id;
 
-      const url = `http://localhost:8080/daily/${dailyId}/disconfirm-presence/${userId}`;
+      const url = `${API_BASE_URL}/daily/${dailyId}/disconfirm-presence/${userId}`;
 
       const response = await axios.put(url, {});
 
@@ -123,7 +124,7 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
   };
 
   const imageUrl = pelada.image
-    ? `http://localhost:8080/pelada/images/${pelada.image}`
+    ? `${API_BASE_URL}/pelada/images/${pelada.image}`
     : null;
 
   return (

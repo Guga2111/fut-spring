@@ -23,6 +23,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { ArrowBigLeft } from "lucide-react";
+import { API_BASE_URL } from "../../../config";
 
 export default function ViewPeladaPlayersDialog({
   isLoading,
@@ -67,7 +68,7 @@ export default function ViewPeladaPlayersDialog({
                         const imgFilename = player.image;
                         const hasImage = allImages.includes(imgFilename);
                         const imgSrc = hasImage
-                          ? `http://localhost:8080/user/images/${imgFilename}`
+                          ? `${API_BASE_URL}/user/images/${imgFilename}`
                           : "/backgroundbalotelli.jpg";
 
                         return (

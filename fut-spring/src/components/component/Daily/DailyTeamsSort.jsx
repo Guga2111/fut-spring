@@ -22,6 +22,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowDownUp } from "lucide-react";
 import { Star } from "lucide-react";
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from "../../../config";
 import axios from "axios";
 
 export default function DailyTeamsSort({ daily, onTeamsSorted }) {
@@ -30,14 +31,14 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
 
   const getImageSrc = (filename) => {
     if (!filename) return "/backgroundbalotelli.jpg";
-    return `http://localhost:8080/user/images/${filename}`;
+    return `${API_BASE_URL}/user/images/${filename}`;
   };
 
   useEffect(() => {
     const fetchConfirmedPlayers = async () => {
       try {
         const resp = await axios.get(
-          `http://localhost:8080/daily/${daily.id}/confirmed-players`
+          `${API_BASE_URL}/daily/${daily.id}/confirmed-players`
         );
         setConfirmedPlayers(resp.data);
       } catch (error) {
@@ -58,7 +59,7 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
       }
 
       const resp = await axios.post(
-        `http://localhost:8080/daily/${daily.id}/sort-teams?numberOfTeams=${numberOfTeams}`
+        `${API_BASE_URL}/daily/${daily.id}/sort-teams?numberOfTeams=${numberOfTeams}`
       );
       console.log("Teams sorted successfully:", resp.data);
 

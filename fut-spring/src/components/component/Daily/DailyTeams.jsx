@@ -11,19 +11,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-// Lucide React icons
+import { API_BASE_URL } from "../../../config";
 import { Star } from "lucide-react";
 
 export default function DailyTeams({ dailyId }) {
-  // State to hold the teams with their players
   const [teamsWithPlayers, setTeamsWithPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const getImageSrc = (filename) => {
     if (!filename) return "/backgroundbalotelli.jpg";
-    return `http://localhost:8080/user/images/${filename}`;
+    return `${API_BASE_URL}/user/images/${filename}`;
   };
 
   useEffect(() => {
@@ -32,7 +30,7 @@ export default function DailyTeams({ dailyId }) {
       setError(null);
       try {
         const teamsResp = await axios.get(
-          `http://localhost:8080/daily/${dailyId}/teams`
+          `${API_BASE_URL}/daily/${dailyId}/teams`
         );
         const teams = teamsResp.data;
 
@@ -45,7 +43,7 @@ export default function DailyTeams({ dailyId }) {
         const teamsWithPlayersPromises = teams.map(async (team) => {
           try {
             const playersResp = await axios.get(
-              `http://localhost:8080/team/${team.id}/players`
+              `${API_BASE_URL}/team/${team.id}/players`
             );
 
             return {

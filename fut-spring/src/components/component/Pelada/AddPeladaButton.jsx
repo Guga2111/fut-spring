@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
+import { API_BASE_URL } from "../../../config";
 
 const dayOfWeekOptions = [
   { value: "MONDAY", label: "Monday" },
@@ -77,7 +78,7 @@ export default function AddPeladaButton({ onPeladaCreated }) {
   const handleCreatePeladaRequest = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const endpoint = "http://localhost:8080/pelada";
+    const endpoint = `${API_BASE_URL}/pelada`;
 
     const data = new FormData();
 

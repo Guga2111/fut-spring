@@ -8,6 +8,7 @@ import RankingGrid from "./RankingGrid";
 import PeladaHeader from "./PeladaHeader";
 import PeladaChat from "./PeladaChat";
 import ViewDailyHistory from "./ViewDailyHistory";
+import { API_BASE_URL } from "../../../config";
 
 export default function PeladaArea({ pelada, user, onDailySelect }) {
   const { id } = useParams();
@@ -23,7 +24,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
   useEffect(() => {
     const fetchAllImages = async () => {
       try {
-        const resp = await axios.get("http://localhost:8080/user/images");
+        const resp = await axios.get(`${API_BASE_URL}/user/images`);
         setAllImages(resp.data);
       } catch (error) {
         console.error("Erro ao buscar allImages:", error);
@@ -38,9 +39,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
     if (!peladaData && id) {
       const fetchPelada = async () => {
         try {
-          const response = await axios.get(
-            `http://localhost:8080/pelada/${id}`
-          );
+          const response = await axios.get(`${API_BASE_URL}/pelada/${id}`);
           setPeladaData(response.data);
           setLoading(false);
         } catch (error) {
@@ -60,7 +59,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
       if (id) {
         try {
           const response = await axios.get(
-            `http://localhost:8080/pelada/${id}/users`
+            `${API_BASE_URL}/pelada/${id}/users`
           );
           setPlayersAssociated(response.data);
           setLoadingPlayers(false);
@@ -77,7 +76,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
   useEffect(() => {
     const fetchRanking = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/ranking/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/ranking/${id}`);
         setRanking(response.data);
       } catch (error) {
         console.error("Error fetching ranking: ", error);
@@ -91,7 +90,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
     const fetchDailies = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/pelada/${id}/dailies`
+          `${API_BASE_URL}/pelada/${id}/dailies`
         );
         setDailies(response.data);
       } catch (error) {

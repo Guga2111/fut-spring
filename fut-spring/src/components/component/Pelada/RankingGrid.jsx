@@ -19,6 +19,8 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
+import { API_BASE_URL } from "../../../config";
+
 import React from "react";
 
 export default function RankingGrid({ ranking, associatedPlayers, allImages }) {
@@ -44,7 +46,7 @@ export default function RankingGrid({ ranking, associatedPlayers, allImages }) {
     if (!filename) return "/default-avatar.jpg";
     const exists = allImages.includes(filename);
     return exists
-      ? `http://localhost:8080/user/images/${filename}`
+      ? `${API_BASE_URL}/user/images/${filename}`
       : "default-avatar.jpg";
   };
 

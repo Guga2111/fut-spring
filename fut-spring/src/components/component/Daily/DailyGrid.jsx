@@ -7,6 +7,7 @@ import DailyMatchesHistory from "./DailyMatchesHistory";
 import DailyLeagueTable from "./DailyLeagueTable";
 import DailyPersonalStats from "./DailyPersonalStats";
 import DailyPrizeCard from "./DailyPrizeCard";
+import { API_BASE_URL } from "../../../config";
 
 export default function DailyGrid({ daily, matches, onRefreshMatches }) {
   const [teamsExist, setTeamsExist] = useState(false);
@@ -16,9 +17,7 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
   const checkTeamsStatus = useCallback(async () => {
     setLoadingTeamsStatus(true);
     try {
-      const resp = await axios.get(
-        `http://localhost:8080/daily/${daily.id}/teams`
-      );
+      const resp = await axios.get(`${API_BASE_URL}/daily/${daily.id}/teams`);
 
       setTeamsExist(resp.data && resp.data.length > 0);
     } catch (error) {
@@ -32,7 +31,7 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
   const fetchConfirmedPlayers = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/daily/${daily.id}/confirmed-players`
+        `${API_BASE_URL}/daily/${daily.id}/confirmed-players`
       );
       setConfirmedPlayers(response.data);
     } catch (error) {

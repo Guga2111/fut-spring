@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ImageUp } from "lucide-react";
 import defaultAvatar from "/public/rashford-celebration.jpg";
 import EditProfile from "./EditProfile";
+import { API_BASE_URL } from "../../../config";
 import axios from "axios";
 
 export default function PersonalArea({ user }) {
@@ -16,7 +17,7 @@ export default function PersonalArea({ user }) {
 
   const getImageSrc = (filename) => {
     if (!filename) return "/default-avatar.jpg";
-    return `http://localhost:8080/user/images/${filename}`;
+    return `${API_BASE_URL}/user/images/${filename}`;
   };
 
   const handleImageChange = async (e) => {
@@ -39,7 +40,7 @@ export default function PersonalArea({ user }) {
       }
 
       const response = await axios.put(
-        `http://localhost:8080/user/image/${user.id}`,
+        `${API_BASE_URL}/user/image/${user.id}`,
         formData,
         {
           headers: {
@@ -79,7 +80,7 @@ export default function PersonalArea({ user }) {
       }
 
       const response = await axios.put(
-        `http://localhost:8080/user/image/${user.id}`,
+        `${API_BASE_URL}/user/image/${user.id}`,
         formData,
         {
           headers: {

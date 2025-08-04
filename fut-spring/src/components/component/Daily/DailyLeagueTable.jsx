@@ -16,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { API_BASE_URL } from "../../../config";
 
 export default function DailyLeagueTable({ dailyId }) {
   const [teamsData, setTeamsData] = useState([]);
@@ -28,7 +29,7 @@ export default function DailyLeagueTable({ dailyId }) {
       setError(null);
       try {
         const response = await axios.get(
-          `http://localhost:8080/league-table/daily/${dailyId}`
+          `${API_BASE_URL}/league-table/daily/${dailyId}`
         );
 
         const leagueTableEntries = response.data.entries;

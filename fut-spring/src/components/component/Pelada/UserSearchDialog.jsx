@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
+import { API_BASE_URL } from "../../../config";
 import { Plus, Search } from "lucide-react";
 
 export default function UserSearchDialog({ peladaData }) {
@@ -27,7 +28,7 @@ export default function UserSearchDialog({ peladaData }) {
     setError(null);
     try {
       const response = await axios.get(
-        `http://localhost:8080/pelada/${peladaData.id}/not-users`
+        `${API_BASE_URL}/pelada/${peladaData.id}/not-users`
       );
 
       setUsers(response.data);
@@ -41,10 +42,8 @@ export default function UserSearchDialog({ peladaData }) {
 
   const addUser = async (userId) => {
     try {
-      await axios.put(
-        `http://localhost:8080/pelada/${peladaData.id}/user/${userId}`
-      );
-      // Refresh
+      await axios.put(`${API_BASE_URL}/pelada/${peladaData.id}/user/${userId}`);
+
       getNotUsers();
     } catch (err) {
       console.error(`Error adding user ${userId}:`, err);

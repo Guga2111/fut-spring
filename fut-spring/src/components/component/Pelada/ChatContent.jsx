@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "../../../config";
 
 export default function ChatContent({
   playersAssociated,
@@ -12,7 +13,7 @@ export default function ChatContent({
     const fetchAllMessages = async () => {
       try {
         const resp = await axios.get(
-          `http://localhost:8080/chat/pelada/${peladaId}/messages`
+          `${API_BASE_URL}/chat/pelada/${peladaId}/messages`
         );
         setMessages(resp.data);
       } catch (error) {
@@ -28,7 +29,7 @@ export default function ChatContent({
   const getUserImage = (imgFilename) => {
     const hasImage = allImages.includes(imgFilename);
     return hasImage
-      ? `http://localhost:8080/user/images/${imgFilename}`
+      ? `${API_BASE_URL}/user/images/${imgFilename}`
       : "/backgroundbalotelli.jpg";
   };
 

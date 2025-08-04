@@ -6,6 +6,7 @@ import DailyHeader from "./DailyHeader";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import FinalizeDailyButton from "./FinalizeDailyButton";
+import { API_BASE_URL } from "../../../config";
 
 export default function DailyArea() {
   const { id } = useParams();
@@ -17,7 +18,7 @@ export default function DailyArea() {
     const fetchDailyById = async () => {
       if (id) {
         try {
-          const response = await axios.get(`http://localhost:8080/daily/${id}`);
+          const response = await axios.get(`${API_BASE_URL}/daily/${id}`);
           setDaily(response.data);
         } catch (error) {
           console.error(`Error fetching daily with ID ${id}: `, error);

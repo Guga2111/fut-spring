@@ -24,6 +24,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { ClipboardList, ArrowUpDown } from "lucide-react";
 import { ChevronRight } from "lucide-react";
+import { API_BASE_URL } from "../../../config";
 
 export default function DailyPersonalStats({ daily }) {
   const [userDailyStats, setUserDailyStats] = useState([]);
@@ -31,7 +32,7 @@ export default function DailyPersonalStats({ daily }) {
 
   const getImageSrc = (filename) => {
     if (!filename) return "/backgroundbalotelli.jpg";
-    return `http://localhost:8080/user/images/${filename}`;
+    return `${API_BASE_URL}/user/images/${filename}`;
   };
 
   useEffect(() => {

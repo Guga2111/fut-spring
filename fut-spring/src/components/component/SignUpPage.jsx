@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../config";
 
 export default function SignUpPage({ onLogin }) {
   const [formData, setFormData] = useState({
@@ -49,7 +50,7 @@ export default function SignUpPage({ onLogin }) {
 
   const handleRegisterRequest = async (e) => {
     e.preventDefault();
-    const endpoint = "http://localhost:8080/user/register";
+    const endpoint = `${API_BASE_URL}/user/register`;
 
     try {
       const response = await axios.post(endpoint, formData, {

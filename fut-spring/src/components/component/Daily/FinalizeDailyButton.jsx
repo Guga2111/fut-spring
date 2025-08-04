@@ -22,6 +22,7 @@ import {
 import { useState, useEffect } from "react";
 import { Rocket } from "lucide-react";
 import axios from "axios";
+import { API_BASE_URL } from "../../../config";
 import { toast } from "sonner";
 
 export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
@@ -53,7 +54,7 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
     }
 
     const data = new FormData();
-    const updateImageEndpoint = `http://localhost:8080/daily/${daily.id}/champions-image`;
+    const updateImageEndpoint = `${API_BASE_URL}/daily/${daily.id}/champions-image`;
 
     if (imageFile) {
       data.append("image", imageFile);
@@ -64,7 +65,7 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
     setIsSubmitting(true);
     try {
       const response = await axios.put(
-        `http://localhost:8080/daily/${daily.id}/finalize/puskas/${puskasWinnerId}/wittball/${witballWinnerId}`
+        `${API_BASE_URL}/daily/${daily.id}/finalize/puskas/${puskasWinnerId}/wittball/${witballWinnerId}`
       );
 
       const imageResponse = await axios.put(updateImageEndpoint, data, {

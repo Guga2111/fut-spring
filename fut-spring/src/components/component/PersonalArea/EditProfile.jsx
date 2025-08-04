@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import axios from "axios";
+import { API_BASE_URL } from "../../../config";
 
 const starsOptions = [
   { value: "1", label: "1" },
@@ -69,7 +70,7 @@ export default function EditProfile({ user }) {
     try {
       const userId = user.id;
       const response = await axios.put(
-        `http://localhost:8080/user/info/${userId}`,
+        `${API_BASE_URL}/user/info/${userId}`,
         formData,
         {
           headers: {

@@ -8,6 +8,7 @@ import {
   DialogContent,
 } from "@/components/ui/custom-dialog";
 import { useState } from "react";
+import { API_BASE_URL } from "../../../config";
 
 export default function DailyPrizeCard({ daily, confirmedPlayers }) {
   const [isImageOpen, setIsImageOpen] = useState(false);
@@ -51,7 +52,7 @@ export default function DailyPrizeCard({ daily, confirmedPlayers }) {
   };
 
   const imageUrl = daily.championImage
-    ? `http://localhost:8080/daily/champions-image/${daily.championImage}`
+    ? `${API_BASE_URL}/daily/champions-image/${daily.championImage}`
     : null;
 
   return (

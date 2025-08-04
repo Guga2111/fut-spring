@@ -12,6 +12,7 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
+import { API_BASE_URL } from "../../../config";
 import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator"; // Útil para separar seções dentro de cards maiores
 import { Progress } from "@/components/ui/progress"; // Para barras de progresso

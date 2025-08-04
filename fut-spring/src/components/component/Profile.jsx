@@ -7,6 +7,7 @@ import {
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../config";
 
 export default function Profile({ user }) {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function Profile({ user }) {
 
   const getImageSrc = (filename) => {
     if (!filename) return "/default-avatar.jpg";
-    return `http://localhost:8080/user/images/${filename}`;
+    return `${API_BASE_URL}/user/images/${filename}`;
   };
 
   const shortenEmail = (email) => {

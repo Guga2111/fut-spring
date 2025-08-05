@@ -20,9 +20,7 @@ services:
       retries: 5
 
   spring_app:
-    build:
-      context: ./futspring
-      dockerfile: Dockerfile
+    image: 857360183647.dkr.ecr.sa-east-1.amazonaws.com/peladas-backend-app:latest
     container_name: peladas_spring_app
     ports:
       - "8080:8080"

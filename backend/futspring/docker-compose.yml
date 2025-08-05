@@ -1,18 +1,39 @@
 version: '3.8'
 services:
-  mysql:
+  mysql_db:
     image: mysql:8.0
+    container_name: peladas_mysql
     environment:
-      MYSQL_ROOT_PASSWORD: '123'
+      MYSQL_ROOT_PASSWORD: '123deoliveira4'
       MYSQL_DATABASE: 'futspring-db'
       MYSQL_USER: 'user'
-      MYSQL_PASSWORD: '123'
+      MYSQL_PASSWORD: '123deoliveira4'
     ports:
       - "3306:3306"
     expose:
       - "3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
+
+  spring_app:
+    build:
+      context: ./futspring
+      dockerfile: Dockerfile
+    container_name: peladas_spring_app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/futspring-db?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: 123deoliveira4
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      mysql_db:
+        condition: service_healthy
 
 volumes:
   mysql_data:

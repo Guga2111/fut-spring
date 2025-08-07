@@ -3,6 +3,7 @@ package com.guga.futspring;
 import com.guga.futspring.entity.Daily;
 import com.guga.futspring.entity.Pelada;
 import com.guga.futspring.entity.User;
+import com.guga.futspring.security.SecurityConstants;
 import com.guga.futspring.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,6 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootApplication
 @EnableScheduling
@@ -44,6 +48,7 @@ public class FutspringApplication {
 					user.setPassword("123");
 					user.setStars(5 - (i % 5));
 					user.setPosition("LW");
+					user.setRoles(Stream.of(SecurityConstants.SPRING_ROLE_PREFIX + SecurityConstants.ROLE_USER).collect(Collectors.toCollection(HashSet::new)));
 
 					userService.saveUser(user);
 					System.out.println("Usuário criado: " + user.getUsername());

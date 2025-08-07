@@ -4,6 +4,7 @@ import com.guga.futspring.entity.Stats;
 import com.guga.futspring.entity.User;
 import com.guga.futspring.exception.UserNotFoundException;
 import com.guga.futspring.repository.UserRepository;
+import com.guga.futspring.security.SecurityConstants;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -71,6 +73,7 @@ public class UserServiceImpl implements UserService{
         Stats stats = statsService.initializeStats(user);
         user.setStats(stats);
         user.setImage(null);
+        user.setRoles(Stream.of(SecurityConstants.SPRING_ROLE_PREFIX + SecurityConstants.ROLE_USER).collect(Collectors.toCollection(HashSet::new)));
 
         return userRepository.save(user);
     }

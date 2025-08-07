@@ -9,7 +9,9 @@ import lombok.Setter;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -47,6 +49,21 @@ public class Pelada {
 
     @Column(name = "duration")
     private float duration; //1,5 = 1h 30m; 2 = 2h; 1,333 = 1h 20m
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn(name = "creator_user_id", nullable = false)
+    private User creator;
+
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinTable(
+            name = "pelada_admins",
+            joinColumns = @JoinColumn(name = "pelada_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> admins = new HashSet<>();
 
     @ManyToMany
     @JsonIgnore

@@ -70,7 +70,7 @@ export default function SignUpPage({ onLogin }) {
 
   const handleLoginRequest = async (e) => {
     e.preventDefault();
-    const endpoint = "http://localhost:8080/authenticate";
+    const endpoint = `${API_BASE_URL}/authenticate`;
 
     try {
       const response = await axios.post(endpoint, loginData, {

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axiosInstance from "../../../api/axiosInstance";
 import axios from "axios";
 import {
   Dialog,
@@ -89,7 +90,7 @@ export default function AddPeladaButton({ onPeladaCreated }) {
     }
 
     try {
-      const response = await axios.post(endpoint, data, {
+      const response = await axiosInstance.post(endpoint, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import axios from "axios";
 import "./App.css";
 import { jwtDecode } from "jwt-decode";
 import PeladaGrid from "./components/component/Pelada/PeladaGrid";
 import Footer from "./components/component/Footer";
-import Profile from "./components/component/Profile";
+
 import SignUpPage from "./components/component/SignUpPage";
 import NavigationBar from "./components/component/NavigationBar";
 import StatsGrid from "./components/component/PersonalArea/StatsGrid";
 import LandingPage from "./components/component/LandingPage/LandingPage";
 import PeladaArea from "./components/component/Pelada/PeladaArea";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Toaster } from "sonner";
 import PersonalArea from "./components/component/PersonalArea/PersonalArea";
 import DailyArea from "./components/component/Daily/DailyArea";
+import axiosInstance from "./api/axiosInstance";
 
 function App() {
   const [peladas, setPeladas] = useState([]);
@@ -26,13 +25,9 @@ function App() {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
 
-  const api = axios.create({
-    baseURL: "http://localhost:8080",
-  });
-
   const getPeladas = async (filters) => {
     try {
-      const response = await api.get("/pelada", { params: filters });
+      const response = await axiosInstance.get("/pelada", { params: filters });
 
       setPeladas(response.data);
     } catch (error) {
@@ -63,11 +58,8 @@ function App() {
       const decoded = jwtDecode(token);
       const email = decoded.sub;
 
-      const userResponse = await api.get("/user", {
+      const userResponse = await axiosInstance.get("/user", {
         params: { email },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       });
 
       const userStats = userResponse.data.stats;
@@ -81,8 +73,8 @@ function App() {
   };
 
   useEffect(() => {
-    getPeladas();
     getUser();
+    getPeladas();
   }, [token]);
 
   return (

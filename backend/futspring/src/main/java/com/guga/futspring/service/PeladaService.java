@@ -14,7 +14,7 @@ import java.util.List;
 public interface PeladaService {
     List<Pelada> getPeladas();
     Pelada getPelada(Long id);
-    Pelada savePelada(Pelada pelada, MultipartFile imageFile) throws IOException;
+    Pelada savePelada(Pelada pelada, MultipartFile imageFile, String creatorEmail) throws IOException;
     Resource getImage(String filename);
     void deletePelada(Long id);
     Pelada updatePelada(Long id, String name, float duration, DayOfWeek dayOfWeek, LocalTime timeOfDay, Boolean autoCreateDailyEnabled);

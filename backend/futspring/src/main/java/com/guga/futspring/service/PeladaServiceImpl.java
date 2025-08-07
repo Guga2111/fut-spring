@@ -5,6 +5,8 @@ import com.guga.futspring.exception.AlreadyPlayerAssociatedException;
 import com.guga.futspring.exception.PeladaNotFoundException;
 import com.guga.futspring.repository.DailyRepository;
 import com.guga.futspring.repository.PeladaRepository;
+import com.guga.futspring.repository.UserRepository;
+import com.guga.futspring.security.SecurityConstants;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +25,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class PeladaServiceImpl implements PeladaService{
     private final RankingServiceImpl rankingService;
     private final UserServiceImpl userService;
     private final DailyRepository dailyRepository;
+    private final UserRepository userRepository;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -58,7 +60,10 @@ public class PeladaServiceImpl implements PeladaService{
     }
 
     @Override
-    public Pelada savePelada(Pelada pelada, MultipartFile imageFile) throws IOException {
+    public Pelada savePelada(Pelada pelada, MultipartFile imageFile, String creatorEmail) throws IOException {
+
+        User creator = userService.getUser(creatorEmail);
+
         if(imageFile != null && !imageFile.isEmpty()) {
             File directory = new File(uploadDir);
             if (!directory.exists()) {
@@ -74,11 +79,23 @@ public class PeladaServiceImpl implements PeladaService{
             pelada.setImage(filename);
 
         }
+
+        pelada.setCreator(creator);
+
         Ranking ranking = rankingService.initializeRanking(pelada);
         pelada.setRanking(ranking);
 
         if (pelada.getAutoCreateDailyEnabled() == null) {
             pelada.setAutoCreateDailyEnabled(false);
+        }
+
+        pelada.setAdmins(Stream.of(creator).collect(Collectors.toCollection(HashSet::new)));
+        pelada.setPlayers(Stream.of(creator).collect(Collectors.toCollection(ArrayList::new)));
+
+        if (!creator.getRoles().contains(SecurityConstants.SPRING_ROLE_PREFIX + SecurityConstants.ROLE_ADMIN_PELADA)) {
+            creator.setRoles(Stream.of(SecurityConstants.SPRING_ROLE_PREFIX + SecurityConstants.ROLE_ADMIN_PELADA).collect(Collectors.toCollection(HashSet::new)));
+            userRepository.save(creator);
+            // NOTE: the user must login again to the JWT refresh for the new role (ADMIN)
         }
 
         return peladaRepository.save(pelada);

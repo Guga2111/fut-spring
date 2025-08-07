@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,16 +55,18 @@ public class PeladaController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Pelada> savePelada(@RequestPart("peladaData") String peladaJson, @RequestPart(value = "image", required = false)MultipartFile imageFile) throws IOException {
+    public ResponseEntity<Pelada> createPelada(@RequestPart("peladaData") String peladaJson, @RequestPart(value = "image", required = false)MultipartFile imageFile, Authentication authentication) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         Pelada pelada = mapper.readValue(peladaJson, Pelada.class);
+
+        String creatorEmail = authentication.getName();
 
         if (pelada.getAutoCreateDailyEnabled() == null) {
             pelada.setAutoCreateDailyEnabled(false);
         }
 
-        return new ResponseEntity<>(peladaService.savePelada(pelada, imageFile), HttpStatus.CREATED);
+        return new ResponseEntity<>(peladaService.savePelada(pelada, imageFile, creatorEmail), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

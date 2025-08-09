@@ -16,6 +16,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../../config";
 import { Plus, Search } from "lucide-react";
 import axiosInstance from "../../../api/axiosInstance";
+import { toast } from "sonner";
 
 export default function UserSearchDialog({ peladaData }) {
   const [open, setOpen] = useState(false);
@@ -43,8 +44,10 @@ export default function UserSearchDialog({ peladaData }) {
 
   const addUser = async (userId) => {
     try {
-      await axiosInstance.put(`${API_BASE_URL}/pelada/${peladaData.id}/user/${userId}`);
-
+      const response = await axiosInstance.put(`${API_BASE_URL}/pelada/${peladaData.id}/user/${userId}`);
+      if(response.status === 200) {
+        toast.success(("Player added with success!"));
+      }
       getNotUsers();
     } catch (err) {
       console.error(`Error adding user ${userId}:`, err);

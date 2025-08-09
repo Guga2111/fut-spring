@@ -6,6 +6,7 @@ import defaultAvatar from "/public/rashford-celebration.jpg";
 import EditProfile from "./EditProfile";
 import { API_BASE_URL } from "../../../config";
 import axios from "axios";
+import axiosInstance from "../../../api/axiosInstance";
 
 export default function PersonalArea({ user }) {
   const [isUploading, setIsUploading] = useState(false);
@@ -31,7 +32,7 @@ export default function PersonalArea({ user }) {
       formData.append("image", file);
       formData.append("imageType", "profile");
 
-      const token = localStorage.getItem("jwt");
+      const token = localStorage.getItem("jwt_token");
 
       if (!token) {
         alert("You must be logged in to change your profile picture");
@@ -39,7 +40,7 @@ export default function PersonalArea({ user }) {
         return;
       }
 
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         `${API_BASE_URL}/user/image/${user.id}`,
         formData,
         {
@@ -72,14 +73,14 @@ export default function PersonalArea({ user }) {
       formData.append("image", file);
       formData.append("imageType", "background");
 
-      const token = localStorage.getItem("jwt");
+      const token = localStorage.getItem("jwt_token");
       if (!token) {
         alert("You must be logged in to change your background image");
         setIsUploadingBg(false);
         return;
       }
 
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         `${API_BASE_URL}/user/image/${user.id}`,
         formData,
         {

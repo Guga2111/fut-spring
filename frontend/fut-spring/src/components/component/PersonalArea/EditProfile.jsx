@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import axios from "axios";
 import { API_BASE_URL } from "../../../config";
+import axiosInstance from "../../../api/axiosInstance";
 
 const starsOptions = [
   { value: "1", label: "1" },
@@ -57,7 +58,7 @@ export default function EditProfile({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("jwt_token");
     if (!token) {
       console.error("Token not found");
       return;
@@ -69,7 +70,7 @@ export default function EditProfile({ user }) {
 
     try {
       const userId = user.id;
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         `${API_BASE_URL}/user/info/${userId}`,
         formData,
         {

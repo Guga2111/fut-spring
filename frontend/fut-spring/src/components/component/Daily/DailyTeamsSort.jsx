@@ -24,6 +24,7 @@ import { Star } from "lucide-react";
 import { useState, useEffect } from "react";
 import { API_BASE_URL } from "../../../config";
 import axios from "axios";
+import axiosInstance from "../../../api/axiosInstance";
 
 export default function DailyTeamsSort({ daily, onTeamsSorted }) {
   const [confirmedPlayers, setConfirmedPlayers] = useState(null);
@@ -37,7 +38,7 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
   useEffect(() => {
     const fetchConfirmedPlayers = async () => {
       try {
-        const resp = await axios.get(
+        const resp = await axiosInstance.get(
           `${API_BASE_URL}/daily/${daily.id}/confirmed-players`
         );
         setConfirmedPlayers(resp.data);
@@ -58,7 +59,7 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
         return;
       }
 
-      const resp = await axios.post(
+      const resp = await axiosInstance.post(
         `${API_BASE_URL}/daily/${daily.id}/sort-teams?numberOfTeams=${numberOfTeams}`
       );
       console.log("Teams sorted successfully:", resp.data);

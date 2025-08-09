@@ -28,7 +28,7 @@ export default function Profile({ user }) {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("jwt");
+    localStorage.removeItem("jwt_token");
     navigate("/");
   };
 

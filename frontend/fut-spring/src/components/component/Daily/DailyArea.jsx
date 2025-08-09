@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import FinalizeDailyButton from "./FinalizeDailyButton";
 import { API_BASE_URL } from "../../../config";
+import axiosInstance from "../../../api/axiosInstance";
 
 export default function DailyArea() {
   const { id } = useParams();
@@ -18,7 +19,7 @@ export default function DailyArea() {
     const fetchDailyById = async () => {
       if (id) {
         try {
-          const response = await axios.get(`${API_BASE_URL}/daily/${id}`);
+          const response = await axiosInstance.get(`${API_BASE_URL}/daily/${id}`);
           setDaily(response.data);
         } catch (error) {
           console.error(`Error fetching daily with ID ${id}: `, error);
@@ -38,8 +39,8 @@ export default function DailyArea() {
       if (!daily || !daily.id) {
         return;
       }
-      const response = await axios.get(
-        `http://localhost:8080/daily/${daily.id}/teams`
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/daily/${daily.id}/teams`
       );
       setTeams(response.data);
     } catch (error) {
@@ -53,8 +54,8 @@ export default function DailyArea() {
       return;
     }
     try {
-      const response = await axios.get(
-        `http://localhost:8080/daily/${daily.id}/matches`
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}/daily/${daily.id}/matches`
       );
       setMatches(response.data);
     } catch (error) {

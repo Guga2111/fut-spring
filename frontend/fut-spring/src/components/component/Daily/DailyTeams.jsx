@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { API_BASE_URL } from "../../../config";
 import { Star } from "lucide-react";
+import axiosInstance from "../../../api/axiosInstance";
 
 export default function DailyTeams({ dailyId }) {
   const [teamsWithPlayers, setTeamsWithPlayers] = useState([]);
@@ -29,7 +30,7 @@ export default function DailyTeams({ dailyId }) {
       setLoading(true);
       setError(null);
       try {
-        const teamsResp = await axios.get(
+        const teamsResp = await axiosInstance.get(
           `${API_BASE_URL}/daily/${dailyId}/teams`
         );
         const teams = teamsResp.data;
@@ -42,7 +43,7 @@ export default function DailyTeams({ dailyId }) {
 
         const teamsWithPlayersPromises = teams.map(async (team) => {
           try {
-            const playersResp = await axios.get(
+            const playersResp = await axiosInstance.get(
               `${API_BASE_URL}/team/${team.id}/players`
             );
 

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../../../config";
+import axiosInstance from "../../../api/axiosInstance";
 
 export default function ChatContent({
   playersAssociated,
@@ -12,7 +13,7 @@ export default function ChatContent({
   useEffect(() => {
     const fetchAllMessages = async () => {
       try {
-        const resp = await axios.get(
+        const resp = await axiosInstance.get(
           `${API_BASE_URL}/chat/pelada/${peladaId}/messages`
         );
         setMessages(resp.data);

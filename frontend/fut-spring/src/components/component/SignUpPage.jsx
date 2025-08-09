@@ -84,7 +84,7 @@ export default function SignUpPage({ onLogin }) {
 
       if (authHeader && authHeader.startsWith("Bearer ")) {
         const token = authHeader.split(" ")[1];
-        localStorage.setItem("jwt", token);
+        localStorage.setItem("jwt_token", token);
         onLogin(token);
         navigate("/home");
       } else {

@@ -4,7 +4,7 @@ import { API_BASE_URL } from '../config';
 
 const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
-    timeout: 10000,
+    timeout: 100000,
     headers: {
         'Content-Type' : 'application/json',
     },
@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('jwt');
+        const token = localStorage.getItem('jwt_token');
 
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
@@ -40,10 +40,10 @@ axiosInstance.interceptors.response.use(
             switch (status) {
                 case 401:
                     toast.error("Session expired. Please, log in again.");
-                    localStorage.removeItem("jwt");
+                    localStorage.removeItem("jwt_token");
                     break;
                 case 403:
-                    toast.error(data.error || "You don't have permission for that action.");
+                    
                     break;
                 case 404:
                     toast.error(data.error || "Resource don't found.");
@@ -60,7 +60,7 @@ axiosInstance.interceptors.response.use(
                     break;
             }
         } else if (error.request) {
-            toast.error("Without answer from the server. Verify your connection.");
+            console.error("Error retry your connection");
         } else {
             toast.error("Error when configuring the request");
         }

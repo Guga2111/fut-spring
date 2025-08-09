@@ -85,7 +85,7 @@ export default function ViewPeladaPlayersDialog({
                               </div>
                             </TableCell>
                             <TableCell>{player.username}</TableCell>
-                            <TableCell>{player.role || "Player"}</TableCell>
+                            <TableCell>{player.roles || "Player"}</TableCell>
                             <TableCell className="text-right">
                               {player.position || "N/A"}
                             </TableCell>

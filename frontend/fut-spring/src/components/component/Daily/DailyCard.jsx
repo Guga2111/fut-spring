@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import axios from "axios";
 import { API_BASE_URL } from "../../../config";
+import axiosInstance from "../../../api/axiosInstance";
 
 export default function DailyCard({ pelada, onDailySelect, user }) {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
 
       const url = `${API_BASE_URL}/daily/${dailyId}/confirm-presence/${userId}`;
 
-      const response = await axios.put(url, {});
+      const response = await axiosInstance.put(url, {});
 
       if (response.status === 200) {
         toast.success(`Presence of "${user.username}" confirmed successfully!`);
@@ -67,7 +68,7 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
 
       const url = `${API_BASE_URL}/daily/${dailyId}/disconfirm-presence/${userId}`;
 
-      const response = await axios.put(url, {});
+      const response = await axiosInstance.put(url, {});
 
       if (response.status === 200) {
         toast.success(

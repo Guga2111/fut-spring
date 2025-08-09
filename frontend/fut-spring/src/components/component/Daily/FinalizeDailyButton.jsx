@@ -24,6 +24,7 @@ import { Rocket } from "lucide-react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../config";
 import { toast } from "sonner";
+import axiosInstance from "../../../api/axiosInstance";
 
 export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -64,11 +65,11 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
 
     setIsSubmitting(true);
     try {
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         `${API_BASE_URL}/daily/${daily.id}/finalize/puskas/${puskasWinnerId}/wittball/${witballWinnerId}`
       );
 
-      const imageResponse = await axios.put(updateImageEndpoint, data, {
+      const imageResponse = await axiosInstance.put(updateImageEndpoint, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

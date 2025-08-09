@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { API_BASE_URL } from "../../../config";
 import { Plus, Search } from "lucide-react";
+import axiosInstance from "../../../api/axiosInstance";
 
 export default function UserSearchDialog({ peladaData }) {
   const [open, setOpen] = useState(false);
@@ -27,7 +28,7 @@ export default function UserSearchDialog({ peladaData }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `${API_BASE_URL}/pelada/${peladaData.id}/not-users`
       );
 
@@ -42,7 +43,7 @@ export default function UserSearchDialog({ peladaData }) {
 
   const addUser = async (userId) => {
     try {
-      await axios.put(`${API_BASE_URL}/pelada/${peladaData.id}/user/${userId}`);
+      await axiosInstance.put(`${API_BASE_URL}/pelada/${peladaData.id}/user/${userId}`);
 
       getNotUsers();
     } catch (err) {

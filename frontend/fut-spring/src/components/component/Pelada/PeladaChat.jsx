@@ -5,6 +5,7 @@ import ChatContent from "./ChatContent";
 import { useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../config";
+import axiosInstance from "../../../api/axiosInstance";
 
 export default function PeladaChat({
   playersAssociated,
@@ -22,7 +23,7 @@ export default function PeladaChat({
     try {
       const userId = user.id;
       const token = localStorage.getItem("jwt");
-      await axios.post(
+      await axiosInstance.post(
         `${API_BASE_URL}/chat/pelada/${peladaId}/send/${userId}`,
         {
           content: message,

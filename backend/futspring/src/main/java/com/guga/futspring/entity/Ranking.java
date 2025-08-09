@@ -1,5 +1,7 @@
 package com.guga.futspring.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.guga.futspring.entity.embedded.RankingEntry;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,9 +37,11 @@ public class Ranking {
     private List<RankingEntry> prizes; //premios como artilheiro, garcom e puskas
 
     @OneToMany(mappedBy = "ranking", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Stats> stats = new ArrayList<>();
 
     @OneToOne(mappedBy = "ranking", cascade = CascadeType.ALL)
+    @JsonBackReference("pelada-ranking")
     private Pelada pelada;
 
 }

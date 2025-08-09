@@ -1,5 +1,6 @@
 package com.guga.futspring.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -41,11 +42,11 @@ public class Stats {
     private List<Date> puskasDates = new ArrayList<>();
 
     @OneToOne(mappedBy = "stats", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonBackReference("user-stats")
     private User user;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference("ranking-stats")
     @JoinColumn(name = "ranking_id")
     private Ranking ranking;
 

@@ -1,6 +1,7 @@
 package com.guga.futspring.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -80,6 +81,7 @@ public class Pelada {
     private Ranking ranking;
 
     @OneToMany(mappedBy = "pelada")
+    @JsonManagedReference("pelada-dailies")
     private List<Daily> dailies;
 
     @OneToMany(mappedBy = "pelada", cascade = CascadeType.ALL)

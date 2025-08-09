@@ -1,6 +1,8 @@
 package com.guga.futspring.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -16,6 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "player")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
@@ -55,6 +58,7 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "stats_id", referencedColumnName = "id", unique = true)
+    @JsonManagedReference("user-stats")
     private Stats stats;
 
     @ManyToMany(mappedBy = "players")
@@ -66,8 +70,13 @@ public class User {
     private List<Daily> dailies;
 
     @ManyToMany(mappedBy = "players")
+    @JsonIgnore
     private List<Team> teams;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserDailyStats> dailyStats = new ArrayList<>();
+
+    public void addRole(String role) {
+        this.roles.add(role);
+    }
 }

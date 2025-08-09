@@ -1,5 +1,6 @@
 package com.guga.futspring.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = " messages")
+@Table(name = "messages")
 public class Message {
 
     @Id
@@ -27,10 +28,12 @@ public class Message {
     private LocalDateTime sentAt;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "pelada_id", nullable = false)
     private Pelada pelada;
 }

@@ -1,6 +1,8 @@
 package com.guga.futspring.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.guga.futspring.entity.embedded.RankingEntry;
 import com.guga.futspring.entity.enums.DailyStatus;
 import jakarta.persistence.*;
@@ -65,7 +67,7 @@ public class Daily {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "pelada_id", referencedColumnName = "id")
-    @JsonIgnore
+    @JsonBackReference("pelada-dailies")
     private Pelada pelada;
 
     @OneToMany(mappedBy = "daily")
@@ -73,11 +75,14 @@ public class Daily {
     private List<Team> teams;
 
     @OneToMany(mappedBy = "daily")
+    @JsonIgnore
     private List<Match> matches;
 
     @OneToOne(mappedBy = "daily", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("daily-leagueTable")
     private LeagueTable leagueTable;
 
     @OneToMany(mappedBy = "daily", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("daily-userDailyStats")
     private List<UserDailyStats> dailyStats;
 }

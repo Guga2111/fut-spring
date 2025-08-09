@@ -1,5 +1,6 @@
 package com.guga.futspring.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class Team {
     private String name;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference("daily-teams")
     @JoinColumn(name = "daily_id", referencedColumnName = "id")
     private Daily daily;
 

@@ -92,10 +92,11 @@ public class PeladaServiceImpl implements PeladaService{
         pelada.setAdmins(Stream.of(creator).collect(Collectors.toCollection(HashSet::new)));
         pelada.setPlayers(Stream.of(creator).collect(Collectors.toCollection(ArrayList::new)));
 
-        if (!creator.getRoles().contains(SecurityConstants.SPRING_ROLE_PREFIX + SecurityConstants.ROLE_ADMIN_PELADA)) {
-            creator.setRoles(Stream.of(SecurityConstants.SPRING_ROLE_PREFIX + SecurityConstants.ROLE_ADMIN_PELADA).collect(Collectors.toCollection(HashSet::new)));
+        String adminRoleWithPrefix = SecurityConstants.SPRING_ROLE_PREFIX + SecurityConstants.ROLE_ADMIN_PELADA;
+        if (!creator.getRoles().contains(adminRoleWithPrefix)) {
+            creator.addRole(adminRoleWithPrefix);
             userRepository.save(creator);
-            // NOTE: the user must login again to the JWT refresh for the new role (ADMIN)
+            // NOTE: the user must login again for the JWT to refresh for the new role (ADMIN)
         }
 
         return peladaRepository.save(pelada);

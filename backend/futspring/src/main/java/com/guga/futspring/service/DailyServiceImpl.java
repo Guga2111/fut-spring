@@ -9,7 +9,6 @@ import com.guga.futspring.exception.*;
 import com.guga.futspring.exception.DailyInThatDateAlreadyInThatPeladaException;
 import com.guga.futspring.repository.*;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;

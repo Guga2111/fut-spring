@@ -10,7 +10,7 @@ import StatsGrid from "./components/component/PersonalArea/StatsGrid";
 import LandingPage from "./components/component/LandingPage/LandingPage";
 import PeladaArea from "./components/component/Pelada/PeladaArea";
 
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import { Toaster } from "sonner";
 import PersonalArea from "./components/component/PersonalArea/PersonalArea";
 import DailyArea from "./components/component/Daily/DailyArea";
@@ -77,7 +77,24 @@ function App() {
     getPeladas();
   }, [token]);
 
-  return (
+  const isAuthenticated = () => {
+    const token = localStorage.getItem("jwt_token");
+    if (!token) {
+      return false;
+    }
+    try {
+      const decodedToken = jwtDecode(token);
+      const hasUserRole = decodedToken.roles && decodedToken.roles.includes("ROLE_USER");
+
+      return hasUserRole;
+    } catch (error) {
+
+      console.error("Invalid token:", error);
+      return false;
+    }
+  };
+
+ return (
     <div className="!font-[system-ui,Avenir,Helvetica,Arial,sans-serif] min-h-screen flex flex-col scrollbar-custom">
       <Router>
         <Routes>
@@ -85,19 +102,23 @@ function App() {
           <Route
             path="/home"
             element={
-              <>
-                <div className="m-2 font-semibold">
-                  <NavigationBar user={user} />
-                </div>
-                <h1 className="font-extrabold">FutSpring</h1>
-                <div className="flex-grow">
-                  <PeladaGrid
-                    peladas={peladas}
-                    onPeladaCreated={handlePeladaCreated}
-                    onPeladaSelect={handlePeladaSelect}
-                  />
-                </div>
-              </>
+              isAuthenticated() ? (
+                <>
+                  <div className="m-2 font-semibold">
+                    <NavigationBar user={user} />
+                  </div>
+                  <h1 className="font-extrabold">FutSpring</h1>
+                  <div className="flex-grow">
+                    <PeladaGrid
+                      peladas={peladas}
+                      onPeladaCreated={handlePeladaCreated}
+                      onPeladaSelect={handlePeladaSelect}
+                    />
+                  </div>
+                </>
+              ) : (
+                <Navigate to="/register" replace />
+              )
             }
           />
           <Route
@@ -112,45 +133,57 @@ function App() {
           <Route
             path="/profile"
             element={
-              <>
-                <div className="m-0 font-semibold">
-                  <NavigationBar user={user} />
-                </div>
-                <div className="mb-20">
-                  <PersonalArea user={user}></PersonalArea>
-                </div>
-                <div>
-                  <StatsGrid user={user} />
-                </div>
-              </>
+              isAuthenticated() ? (
+                <>
+                  <div className="m-0 font-semibold">
+                    <NavigationBar user={user} />
+                  </div>
+                  <div className="mb-20">
+                    <PersonalArea user={user}></PersonalArea>
+                  </div>
+                  <div>
+                    <StatsGrid user={user} />
+                  </div>
+                </>
+              ) : (
+                <Navigate to="/register" replace />
+              )
             }
           />
           <Route
             path="/pelada/:id"
             element={
-              <>
-                <div className="m-2 font-semibold">
-                  <NavigationBar user={user} />
-                </div>
-                <div>
-                  <PeladaArea
-                    pelada={selectedPelada}
-                    user={user}
-                    onDailySelect={handleDailySelect}
-                  ></PeladaArea>
-                </div>
-              </>
+              isAuthenticated() ? (
+                <>
+                  <div className="m-2 font-semibold">
+                    <NavigationBar user={user} />
+                  </div>
+                  <div>
+                    <PeladaArea
+                      pelada={selectedPelada}
+                      user={user}
+                      onDailySelect={handleDailySelect}
+                    ></PeladaArea>
+                  </div>
+                </>
+              ) : (
+                <Navigate to="/register" replace />
+              )
             }
           />
           <Route
             path="/daily/:id"
             element={
-              <>
-                <div className="m-2 font-semibold">
-                  <NavigationBar user={user} />
-                </div>
-                <DailyArea daily={selectedDaily}></DailyArea>
-              </>
+              isAuthenticated() ? (
+                <>
+                  <div className="m-2 font-semibold">
+                    <NavigationBar user={user} />
+                  </div>
+                  <DailyArea daily={selectedDaily}></DailyArea>
+                </>
+              ) : (
+                <Navigate to="/register" replace />
+              )
             }
           ></Route>
         </Routes>

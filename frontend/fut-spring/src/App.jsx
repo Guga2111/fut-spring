@@ -110,7 +110,7 @@ function App() {
             }
           />
           <Route
-            path="/stats"
+            path="/profile"
             element={
               <>
                 <div className="m-0 font-semibold">

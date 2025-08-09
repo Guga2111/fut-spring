@@ -34,7 +34,7 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
       const dailyId = dailyScheduled.id;
       const userId = user.id;
 
-      const url = `${API_BASE_URL}/daily/${dailyId}/confirm-presence/${userId}`;
+      const url = `/daily/${dailyId}/confirm-presence/${userId}`;
 
       const response = await axiosInstance.put(url, {});
 

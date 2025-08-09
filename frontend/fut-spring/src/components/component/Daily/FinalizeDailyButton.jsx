@@ -55,7 +55,7 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
     }
 
     const data = new FormData();
-    const updateImageEndpoint = `${API_BASE_URL}/daily/${daily.id}/champions-image`;
+    const updateImageEndpoint = `/daily/${daily.id}/champions-image`;
 
     if (imageFile) {
       data.append("image", imageFile);
@@ -66,7 +66,7 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
     setIsSubmitting(true);
     try {
       const response = await axiosInstance.put(
-        `${API_BASE_URL}/daily/${daily.id}/finalize/puskas/${puskasWinnerId}/wittball/${witballWinnerId}`
+        `/daily/${daily.id}/finalize/puskas/${puskasWinnerId}/wittball/${witballWinnerId}`
       );
 
       const imageResponse = await axiosInstance.put(updateImageEndpoint, data, {

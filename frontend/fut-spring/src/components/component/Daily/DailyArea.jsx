@@ -19,11 +19,11 @@ export default function DailyArea() {
     const fetchDailyById = async () => {
       if (id) {
         try {
-          const response = await axiosInstance.get(`${API_BASE_URL}/daily/${id}`);
+          const response = await axiosInstance.get(`/daily/${id}`);
           setDaily(response.data);
         } catch (error) {
           console.error(`Error fetching daily with ID ${id}: `, error);
-          toast.error("Erro ao carregar detalhes da diária.");
+          toast.error("Error on loading the daily.");
           setDaily(null);
         }
       } else {
@@ -40,12 +40,12 @@ export default function DailyArea() {
         return;
       }
       const response = await axiosInstance.get(
-        `${API_BASE_URL}/daily/${daily.id}/teams`
+        `/daily/${daily.id}/teams`
       );
       setTeams(response.data);
     } catch (error) {
       console.error("Error fetching teams: ", error);
-      toast.error("Erro ao carregar times.");
+      toast.error("Error when loading teams.");
     }
   }, [daily?.id]);
 
@@ -55,12 +55,12 @@ export default function DailyArea() {
     }
     try {
       const response = await axiosInstance.get(
-        `${API_BASE_URL}/daily/${daily.id}/matches`
+        `/daily/${daily.id}/matches`
       );
       setMatches(response.data);
     } catch (error) {
       console.error("Error fetching matches: ", error);
-      toast.error("Erro ao carregar histórico de partidas.");
+      toast.error("Error on loading match history.");
     }
   }, [daily?.id]);
 

@@ -41,7 +41,7 @@ export default function PersonalArea({ user }) {
       }
 
       const response = await axiosInstance.put(
-        `${API_BASE_URL}/user/image/${user.id}`,
+        `/user/image/${user.id}`,
         formData,
         {
           headers: {
@@ -81,7 +81,7 @@ export default function PersonalArea({ user }) {
       }
 
       const response = await axiosInstance.put(
-        `${API_BASE_URL}/user/image/${user.id}`,
+        `/user/image/${user.id}`,
         formData,
         {
           headers: {

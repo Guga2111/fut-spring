@@ -56,11 +56,11 @@ export default function AddMatchButton({
   const fetchPlayersByTeam = async (teamId) => {
     if (!teamId) return [];
     try {
-      const response = await axiosInstance.get(`${API_BASE_URL}/team/${teamId}/players`);
+      const response = await axiosInstance.get(`/team/${teamId}/players`);
       return response.data;
     } catch (error) {
       console.error("Error fetching players:", error);
-      toast.error("Falha ao carregar jogadores do time.");
+      toast.error("Fail on loading team players.");
       return [];
     }
   };
@@ -117,12 +117,12 @@ export default function AddMatchButton({
     e.preventDefault();
 
     if (!team1Id || !team2Id || team1Score === "" || team2Score === "") {
-      toast.error("Por favor, selecione ambos os times e insira um placar.");
+      toast.error("Please, select both teams and a score.");
       return;
     }
 
     if (team1Id === team2Id) {
-      toast.error("Time 1 e Time 2 não podem ser os mesmos.");
+      toast.error("Team 1 e Team 2 cannot be the same.");
       return;
     }
 
@@ -130,7 +130,7 @@ export default function AddMatchButton({
     const parsedTeam2Score = parseInt(team2Score, 10);
 
     if (isNaN(parsedTeam1Score) || isNaN(parsedTeam2Score)) {
-      toast.error("O placar deve ser números válidos.");
+      toast.error("The score must be valid numbers.");
       return;
     }
 
@@ -144,13 +144,13 @@ export default function AddMatchButton({
 
     if (totalGoalsTeam1ByPlayers !== parsedTeam1Score) {
       toast.error(
-        `O total de gols do Time 1 pelos jogadores (${totalGoalsTeam1ByPlayers}) não corresponde ao placar do Time 1 (${parsedTeam1Score}).`
+        `Team 1's total goals by players (${totalGoalsTeam1ByPlayers}) does not match Team 1's score (${parsedTeam1Score}).`
       );
       return;
     }
     if (totalGoalsTeam2ByPlayers !== parsedTeam2Score) {
       toast.error(
-        `O total de gols do Time 2 pelos jogadores (${totalGoalsTeam2ByPlayers}) não corresponde ao placar do Time 2 (${parsedTeam2Score}).`
+        `Team 2's total goals by players (${totalGoalsTeam2ByPlayers}) does not match Team 2's score (${parsedTeam2Score}).`
       );
       return;
     }
@@ -158,7 +158,7 @@ export default function AddMatchButton({
     setIsSubmitting(true);
 
     try {
-      const createMatchEndpoint = `${API_BASE_URL}/daily/${dailyId}/team1/${parseInt(
+      const createMatchEndpoint = `/daily/${dailyId}/team1/${parseInt(
         team1Id,
         10
       )}/team2/${parseInt(team2Id, 10)}`;
@@ -169,24 +169,29 @@ export default function AddMatchButton({
       });
 
       const newMatch = createMatchResponse.data; 
-      toast.success("Partida criada com sucesso!");
+      toast.success("Match created!");
 
       let winnerTeamId = null;
       let looserTeamId = null;
+
       if (parsedTeam1Score > parsedTeam2Score) {
+
         winnerTeamId = parseInt(team1Id, 10);
         looserTeamId = parseInt(team2Id, 10);
+
       } else if (parsedTeam2Score > parsedTeam1Score) {
+
         winnerTeamId = parseInt(team2Id, 10);
         looserTeamId = parseInt(team1Id, 10);
+
       }
 
-      const updateTableEndpoint = `${API_BASE_URL}/match/${dailyId}/winner/${winnerTeamId}/looser/${looserTeamId}?team1goals=${parsedTeam1Score}&team2goals=${parsedTeam2Score}`;
+      const updateTableEndpoint = `/match/${dailyId}/winner/${winnerTeamId}/looser/${looserTeamId}?team1goals=${parsedTeam1Score}&team2goals=${parsedTeam2Score}`;
 
       const updateTableResponse = await axiosInstance.put(updateTableEndpoint);
 
       const updatedLeagueTable = updateTableResponse.data; 
-      toast.success("Tabela da liga atualizada com sucesso!");
+      toast.success("League Table updated with success!");
 
       const updatePlayerGoalsAssistsPromises = [];
 
@@ -194,7 +199,7 @@ export default function AddMatchButton({
         const goals = playerStats[player.id]?.goals || 0;
         const assists = playerStats[player.id]?.assists || 0;
 
-        const updatePlayerEndpoint = `${API_BASE_URL}/match/${dailyId}/player/${player.id}/update-goals-assists`;
+        const updatePlayerEndpoint = `/match/${dailyId}/player/${player.id}/update-goals-assists`;
 
         updatePlayerGoalsAssistsPromises.push(
           axiosInstance.put(updatePlayerEndpoint, {
@@ -207,12 +212,12 @@ export default function AddMatchButton({
             })
             .catch((error) => {
               console.error(
-                `Erro ao atualizar gols/assistências para ${player.username}:`,
+                `Error when trying to update player goals and assists ${player.username}:`,
                 error
               );
 
               return Promise.reject(
-                new Error(`Falha crítica para ${player.username}`)
+                new Error(`Critic fail on ${player.username}`)
               );
             })
         );
@@ -230,14 +235,14 @@ export default function AddMatchButton({
       );
       if (failedPlayerUpdates.length > 0) {
         console.error(
-          "Algumas atualizações de gols/assistências de jogadores falharam:",
+          "Some updates on goals and assists failed:",
           failedPlayerUpdates
         );
         toast.error(
-          `Concluído com ${failedPlayerUpdates.length} falhas nas atualizações de gols/assistências.`
+          `Concluded with ${failedPlayerUpdates.length} fails on updates of goals/assists.`
         );
       } else {
-        toast.success("Gols e assistências dos jogadores atualizados com sucesso!");
+        toast.success("Goals and assists of players update with success!");
       }
 
       setOpen(false);
@@ -254,7 +259,7 @@ export default function AddMatchButton({
         onMatchCreated(newMatch, updatedLeagueTable);
       }
     } catch (error) {
-      console.error("Erro no processo da partida:", error);
+      console.error("Error on the match process:", error);
 
     } finally {
       setIsSubmitting(false);

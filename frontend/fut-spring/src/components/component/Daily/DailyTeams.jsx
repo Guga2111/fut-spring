@@ -31,7 +31,7 @@ export default function DailyTeams({ dailyId }) {
       setError(null);
       try {
         const teamsResp = await axiosInstance.get(
-          `${API_BASE_URL}/daily/${dailyId}/teams`
+          `/daily/${dailyId}/teams`
         );
         const teams = teamsResp.data;
 
@@ -44,7 +44,7 @@ export default function DailyTeams({ dailyId }) {
         const teamsWithPlayersPromises = teams.map(async (team) => {
           try {
             const playersResp = await axiosInstance.get(
-              `${API_BASE_URL}/team/${team.id}/players`
+              `/team/${team.id}/players`
             );
 
             return {

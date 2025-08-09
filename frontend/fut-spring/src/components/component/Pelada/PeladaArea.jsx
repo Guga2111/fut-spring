@@ -25,7 +25,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
   useEffect(() => {
     const fetchAllImages = async () => {
       try {
-        const resp = await axiosInstance.get(`${API_BASE_URL}/user/images`);
+        const resp = await axiosInstance.get(`/user/images`);
         setAllImages(resp.data);
       } catch (error) {
         console.error("Erro ao buscar allImages:", error);
@@ -40,7 +40,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
     if (!peladaData && id) {
       const fetchPelada = async () => {
         try {
-          const response = await axiosInstance.get(`${API_BASE_URL}/pelada/${id}`);
+          const response = await axiosInstance.get(`/pelada/${id}`);
           setPeladaData(response.data);
           setLoading(false);
         } catch (error) {
@@ -60,7 +60,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
       if (id) {
         try {
           const response = await axiosInstance.get(
-            `${API_BASE_URL}/pelada/${id}/users`
+            `/pelada/${id}/users`
           );
           setPlayersAssociated(response.data);
           setLoadingPlayers(false);
@@ -77,7 +77,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
   useEffect(() => {
     const fetchRanking = async () => {
       try {
-        const response = await axiosInstance.get(`${API_BASE_URL}/ranking/${id}`);
+        const response = await axiosInstance.get(`/ranking/${id}`);
         setRanking(response.data);
       } catch (error) {
         console.error("Error fetching ranking: ", error);
@@ -91,7 +91,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
     const fetchDailies = async () => {
       try {
         const response = await axiosInstance.get(
-          `${API_BASE_URL}/pelada/${id}/dailies`
+          `/pelada/${id}/dailies`
         );
         setDailies(response.data);
       } catch (error) {

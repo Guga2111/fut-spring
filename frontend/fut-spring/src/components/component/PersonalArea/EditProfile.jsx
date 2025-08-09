@@ -71,7 +71,7 @@ export default function EditProfile({ user }) {
     try {
       const userId = user.id;
       const response = await axiosInstance.put(
-        `${API_BASE_URL}/user/info/${userId}`,
+        `/user/info/${userId}`,
         formData,
         {
           headers: {

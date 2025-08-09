@@ -14,7 +14,7 @@ export default function ChatContent({
     const fetchAllMessages = async () => {
       try {
         const resp = await axiosInstance.get(
-          `${API_BASE_URL}/chat/pelada/${peladaId}/messages`
+          `/chat/pelada/${peladaId}/messages`
         );
         setMessages(resp.data);
       } catch (error) {

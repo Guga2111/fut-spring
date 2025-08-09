@@ -36,7 +36,7 @@ export default function PeladaCard({ pelada, onPeladaSelect }) {
     const fetchConfirmedPlayers = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get(`${API_BASE_URL}/daily/1/confirmed-players`);
+        const response = await axiosInstance.get(`/daily/1/confirmed-players`);
         setConfirmedPlayers(response.data);
         setError(null);
       } catch (err) {

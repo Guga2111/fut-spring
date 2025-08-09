@@ -79,7 +79,7 @@ export default function AddPeladaButton({ onPeladaCreated }) {
   const handleCreatePeladaRequest = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const endpoint = `${API_BASE_URL}/pelada`;
+    const endpoint = `/pelada`;
 
     const data = new FormData();
 

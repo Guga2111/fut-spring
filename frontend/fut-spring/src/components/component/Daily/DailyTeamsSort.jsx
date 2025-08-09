@@ -39,7 +39,7 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
     const fetchConfirmedPlayers = async () => {
       try {
         const resp = await axiosInstance.get(
-          `${API_BASE_URL}/daily/${daily.id}/confirmed-players`
+          `/daily/${daily.id}/confirmed-players`
         );
         setConfirmedPlayers(resp.data);
       } catch (error) {
@@ -60,7 +60,7 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
       }
 
       const resp = await axiosInstance.post(
-        `${API_BASE_URL}/daily/${daily.id}/sort-teams?numberOfTeams=${numberOfTeams}`
+        `/daily/${daily.id}/sort-teams?numberOfTeams=${numberOfTeams}`
       );
       console.log("Teams sorted successfully:", resp.data);
 

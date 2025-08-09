@@ -18,7 +18,7 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
   const checkTeamsStatus = useCallback(async () => {
     setLoadingTeamsStatus(true);
     try {
-      const resp = await axiosInstance.get(`${API_BASE_URL}/daily/${daily.id}/teams`);
+      const resp = await axiosInstance.get(`/daily/${daily.id}/teams`);
 
       setTeamsExist(resp.data && resp.data.length > 0);
     } catch (error) {
@@ -32,7 +32,7 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
   const fetchConfirmedPlayers = useCallback(async () => {
     try {
       const response = await axiosInstance.get(
-        `${API_BASE_URL}/daily/${daily.id}/confirmed-players`
+        `/daily/${daily.id}/confirmed-players`
       );
       setConfirmedPlayers(response.data);
     } catch (error) {

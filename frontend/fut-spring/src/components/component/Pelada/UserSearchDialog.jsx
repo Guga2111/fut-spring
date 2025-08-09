@@ -30,7 +30,7 @@ export default function UserSearchDialog({ peladaData }) {
     setError(null);
     try {
       const response = await axiosInstance.get(
-        `${API_BASE_URL}/pelada/${peladaData.id}/not-users`
+        `/pelada/${peladaData.id}/not-users`
       );
 
       setUsers(response.data);
@@ -44,7 +44,7 @@ export default function UserSearchDialog({ peladaData }) {
 
   const addUser = async (userId) => {
     try {
-      const response = await axiosInstance.put(`${API_BASE_URL}/pelada/${peladaData.id}/user/${userId}`);
+      const response = await axiosInstance.put(`/pelada/${peladaData.id}/user/${userId}`);
       if(response.status === 200) {
         toast.success(("Player added with success!"));
       }

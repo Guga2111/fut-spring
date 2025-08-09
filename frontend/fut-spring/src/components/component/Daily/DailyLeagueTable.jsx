@@ -30,7 +30,7 @@ export default function DailyLeagueTable({ dailyId }) {
       setError(null);
       try {
         const response = await axiosInstance.get(
-          `${API_BASE_URL}/league-table/daily/${dailyId}`
+          `/league-table/daily/${dailyId}`
         );
 
         const leagueTableEntries = response.data.entries;

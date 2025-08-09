@@ -24,7 +24,7 @@ export default function PeladaChat({
       const userId = user.id;
       const token = localStorage.getItem("jwt");
       await axiosInstance.post(
-        `${API_BASE_URL}/chat/pelada/${peladaId}/send/${userId}`,
+        `/chat/pelada/${peladaId}/send/${userId}`,
         {
           content: message,
         },

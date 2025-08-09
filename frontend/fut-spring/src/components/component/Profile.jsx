@@ -8,6 +8,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../config";
+import { PersonIcon, GearIcon, ExitIcon } from "@radix-ui/react-icons";
 
 export default function Profile({ user }) {
   const navigate = useNavigate();
@@ -21,19 +22,13 @@ export default function Profile({ user }) {
     return `${API_BASE_URL}/user/images/${filename}`;
   };
 
-  const shortenEmail = (email) => {
-    if (!email) return "";
-    const parts = email.split("@");
-    return parts[0];
-  };
-
   const handleLogout = () => {
     localStorage.removeItem("jwt_token");
     navigate("/");
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-transparent">
       <Popover>
         <PopoverTrigger asChild>
           <Avatar className="absolute top-4 right-4 cursor-pointer">
@@ -43,43 +38,50 @@ export default function Profile({ user }) {
             <AvatarFallback>NF</AvatarFallback>
           </Avatar>
         </PopoverTrigger>
-        <PopoverContent className="w-64 p-4" asChild>
-          <div className="flex flex-col space-y-2">
-            <div className="flex items-center space-x-2">
-              <Avatar className="w-10 h-10">
+        <PopoverContent className="w-64 p-0 bg-white shadow-lg rounded- xl" align="end">
+          <div className="flex flex-col">
+
+            <div className="p-4 border-b border-gray-200 flex items-center space-x-3"> 
+              <Avatar className="h-10 w-10">
                 <AvatarImage
-                  src={
-                    getImageSrc(user.image) || "https://github.com/shadcn.png"
-                  }
+                  src={getImageSrc(user.image) || "https://github.com/shadcn.png"}
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>
+                  {user.username ? user.username.charAt(0) : "U"}
+                </AvatarFallback>
               </Avatar>
               <div>
-                <p className="text-sm font-medium">{user.username}</p>
-                <p className="text-xs text-muted-foreground">
-                  @{shortenEmail(user.email)}
-                </p>
+                <p className="text-base font-medium text-gray-800">{user.username}</p>
+                <p className="text-sm text-gray-500">{user.email}</p>
               </div>
             </div>
-            <div className="grid gap-4 py-4 !text-white">
+
+            <div className="py-2">
               <Button
                 variant="ghost"
-                className="justify-start hover:!border-white hover:!bg-neutral-800 hover:!text-green-600"
+                className="!bg-white w-full justify-start text-base px-4 py-2 h-auto rounded-none text-gray-700 hover:!bg-gray-100"
+                onClick={() => navigate("/profile")}
               >
-                <a href="/stats">Acess your stats</a>
+                <PersonIcon className="mr-2 h-4 w-4 text-gray-600" />
+                Meu Perfil
               </Button>
               <Button
                 variant="ghost"
-                className="justify-start hover:!border-white hover:!bg-neutral-800 hover:!text-green-600"
+                className="!bg-white w-full justify-start text-base px-4 py-2 h-auto rounded-none text-green-700 hover:!bg-green-50"
               >
-                Configurations
+                <GearIcon className="mr-2 h-4 w-4 text-green-700" />
+                Configurações
               </Button>
+            </div>
+
+            <div className="border-t border-gray-200 py-2">
               <Button
                 variant="ghost"
                 onClick={handleLogout}
-                className="justify-start hover:!border-white hover:!bg-neutral-800 hover:!text-green-600"
+                className="!bg-white w-full justify-start text-base px-4 py-2 h-auto rounded-none text-red-600 hover:!bg-red-50 hover:text-red-700"
               >
-                Leave
+                <ExitIcon className="mr-2 h-4 w-4 text-red-600" />
+                Sair
               </Button>
             </div>
           </div>

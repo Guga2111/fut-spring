@@ -49,7 +49,7 @@ function App() {
 
   const getUser = async () => {
     try {
-      const token = localStorage.getItem("jwt");
+      const token = localStorage.getItem("jwt_token");
       if (!token) {
         console.error("No JWT token found");
         return;

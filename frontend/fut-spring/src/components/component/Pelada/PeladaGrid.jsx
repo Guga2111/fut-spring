@@ -34,15 +34,17 @@ export default function PeladaGrid({
           <AddPeladaButton onPeladaCreated={onPeladaCreated}></AddPeladaButton>
         </form>
       </div>
-      <div className="grid grid-cols-2 gap-x-8 gap-y-4">
-        {filteredPeladas.map((pelada) => (
-          <PeladaCard
-            pelada={pelada}
-            key={pelada.id}
-            onPeladaSelect={onPeladaSelect}
-          ></PeladaCard>
-        ))}
-      </div>
+      <div className="flex flex-wrap justify-between items-start w-full gap-y-16 p-4">
+  {filteredPeladas.map((pelada, index) => (
+    <PeladaCard
+      pelada={pelada}
+      key={pelada.id}
+      onPeladaSelect={onPeladaSelect}
+
+      className="w-1/2" 
+    ></PeladaCard>
+  ))}
+</div>
     </div>
   );
 }

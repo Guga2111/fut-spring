@@ -25,7 +25,7 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
   const handleConfirmPresence = async () => {
     if (!dailyScheduled || !user || !user.id) {
       console.warn(
-        "Não foi possível confirmar presença: daily agendada ou ID do usuário não disponível."
+        "Not possible to confirm presence: daily not scheduled or user ID not found."
       );
       return;
     }
@@ -41,10 +41,10 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
       if (response.status === 200) {
         toast.success(`Presence of "${user.username}" confirmed successfully!`);
       } else {
-        console.error("Erro na resposta da API:", response.data);
+        console.error("API error:", response.data);
       }
     } catch (error) {
-      console.error("Erro ao confirmar presença:", error);
+      console.error("Error on confirm presence:", error);
 
       if (error.response.status === 403) {
         toast.error(error.response.data.message);
@@ -57,7 +57,7 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
   const handleDisconfirmPresence = async () => {
     if (!dailyScheduled || !user || !user.id) {
       console.warn(
-        "Não foi possível confirmar presença: daily agendada ou ID do usuário não disponível."
+        "Not possible to confirm presence: daily not scheduled or user ID not found."
       );
       return;
     }
@@ -75,10 +75,10 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
           `Presence of "${user.username}" disconfirmed successfully!`
         );
       } else {
-        console.error("Erro na resposta da API:", response.data);
+        console.error("API error:", response.data);
       }
     } catch (error) {
-      console.error("Erro ao confirmar presença:", error);
+      console.error("Error on confirming presence:", error);
       toast.error("Failed to confirm your presence. Please try again.");
     }
   };
@@ -89,7 +89,7 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
       navigate(`/daily/${dailyScheduled.id}`);
     } else {
       console.warn(
-        "Nenhuma diária com status 'SCHEDULED' encontrada para esta pelada."
+        "No daily with status of 'SCHEDULED' found on that pelada."
       );
     }
   };
@@ -104,7 +104,7 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
   };
 
   const formatDailyTime = (timeString, durationHours) => {
-    if (!timeString || !durationHours) return "Horário não disponível";
+    if (!timeString || !durationHours) return "Daily not created!";
 
     const startTime = timeString.slice(0, 5);
 
@@ -129,54 +129,54 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
     : null;
 
   return (
-    <div className="flex justify-center items-center w-full">
-      <Card className="w-full max-w-md border overflow-hidden p-0">
-        <div className="w-full h-[180px]">
-          <img
-            src={imageUrl}
-            alt={`${pelada.name}`}
-            className="w-full h-full object-cover hover:opacity-75"
-            style={{
-              display: "block",
-              margin: 0,
-              borderRadius: "0",
-            }}
-            onClick={handleClick}
-          />
-        </div>
-
-        <CardContent className="pt-4 pb-2 px-4">
-          <div className="flex justify-between items-center">
-            <p className="text-sm font-semibold">
-              {pelada.reference},{" "}
-              {dailyScheduled
-                ? formatDailyDate(dailyScheduled.dailyDate)
-                : "Carregando data..."}
-            </p>
-            <div className="flex items-center gap-1">
-              <span className="text-sm font-semibold">
-                {formatDailyTime(dailyScheduled?.dailyTime, pelada.duration)}
-              </span>
-              <Clock className="h-4 w-4" />
-            </div>
-          </div>
-        </CardContent>
-
-        <CardFooter className="flex justify-center gap-4 pt-2 pb-4">
-          <Button
-            className="px-6 font-semibold bg-black text-white hover:!bg-green-600 hover:!border-white"
-            onClick={handleConfirmPresence}
-          >
-            CONFIRM
-          </Button>
-          <Button
-            className="px-6 font-semibold bg-black text-white hover:!bg-red-900 hover:!border-white"
-            onClick={handleDisconfirmPresence}
-          >
-            DISCONFIRM
-          </Button>
-        </CardFooter>
-      </Card>
+    <div className="flex h-full w-full">
+  <Card className="w-full h-full border overflow-hidden p-0 flex flex-col">
+    <div className="w-full h-[180px]">
+      <img
+        src={imageUrl}
+        alt={`${pelada.name}`}
+        className="w-full h-full object-cover hover:opacity-75"
+        style={{
+          display: "block",
+          margin: 0,
+          borderRadius: "0",
+        }}
+        onClick={handleClick}
+      />
     </div>
+
+    <CardContent className="flex-1 pt-4 pb-2 px-4">
+      <div className="flex justify-between items-center">
+        <p className="text-sm font-semibold">
+          {pelada.reference},{" "}
+          {dailyScheduled
+            ? formatDailyDate(dailyScheduled.dailyDate)
+            : "Loading data..."}
+        </p>
+        <div className="flex items-center gap-1">
+          <span className="text-sm font-semibold">
+            {formatDailyTime(dailyScheduled?.dailyTime, pelada.duration)}
+          </span>
+          <Clock className="h-4 w-4" />
+        </div>
+      </div>
+    </CardContent>
+
+    <CardFooter className="flex justify-center gap-4 pt-2 pb-4 mt-auto">
+      <Button
+        className="px-6 font-semibold bg-black text-white hover:!bg-green-600 hover:!border-white"
+        onClick={handleConfirmPresence}
+      >
+        CONFIRM
+      </Button>
+      <Button
+        className="px-6 font-semibold bg-black text-white hover:!bg-red-900 hover:!border-white"
+        onClick={handleDisconfirmPresence}
+      >
+        DISCONFIRM
+      </Button>
+    </CardFooter>
+  </Card>
+</div>
   );
 }

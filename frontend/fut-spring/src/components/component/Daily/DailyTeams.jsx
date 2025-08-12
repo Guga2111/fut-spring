@@ -1,18 +1,10 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import axios from "axios";
-
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { API_BASE_URL } from "../../../config";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Star } from "lucide-react";
+import { API_BASE_URL } from "../../../config";
 import axiosInstance from "../../../api/axiosInstance";
 
 export default function DailyTeams({ dailyId }) {
@@ -30,9 +22,7 @@ export default function DailyTeams({ dailyId }) {
       setLoading(true);
       setError(null);
       try {
-        const teamsResp = await axiosInstance.get(
-          `/daily/${dailyId}/teams`
-        );
+        const teamsResp = await axiosInstance.get(`/daily/${dailyId}/teams`);
         const teams = teamsResp.data;
 
         if (!teams || teams.length === 0) {
@@ -43,30 +33,14 @@ export default function DailyTeams({ dailyId }) {
 
         const teamsWithPlayersPromises = teams.map(async (team) => {
           try {
-            const playersResp = await axiosInstance.get(
-              `/team/${team.id}/players`
-            );
-
-            return {
-              ...team,
-              players: playersResp.data,
-            };
-          } catch (playerError) {
-            console.error(
-              `Error fetching players for team ${team.id}:`,
-              playerError
-            );
-
-            return {
-              ...team,
-              players: [],
-            };
+            const playersResp = await axiosInstance.get(`/team/${team.id}/players`);
+            return { ...team, players: playersResp.data };
+          } catch {
+            return { ...team, players: [] };
           }
         });
 
-        const resolvedTeamsWithPlayers = await Promise.all(
-          teamsWithPlayersPromises
-        );
+        const resolvedTeamsWithPlayers = await Promise.all(teamsWithPlayersPromises);
         setTeamsWithPlayers(resolvedTeamsWithPlayers);
       } catch (err) {
         console.error("Error fetching daily teams or processing players:", err);
@@ -85,33 +59,31 @@ export default function DailyTeams({ dailyId }) {
   }, [dailyId]);
 
   return (
-    <div className="w-full p-4">
-      <Card className="w-full max-w-md border overflow-hidden max-h-128">
-        <CardContent>
+    <div className="w-full h-full min-h-0"> 
+      <Card className="w-full border overflow-hidden">
+        <CardContent className="p-0 min-h-0"> 
           {loading && (
-            <div className="flex justify-center items-center h-[300px] text-gray-500">
+            <div className="flex justify-center items-center h-[280px] text-gray-500">
               Loading teams...
             </div>
           )}
           {error && (
-            <div className="flex justify-center items-center h-[300px] text-red-500">
+            <div className="flex justify-center items-center h-[280px] text-red-500 px-4 text-center">
               <p>{error}</p>
             </div>
           )}
-          {!loading &&
-            !error &&
-            (!teamsWithPlayers || teamsWithPlayers.length === 0) && (
-              <div className="flex justify-center items-center h-[300px] text-gray-500">
-                <p>No teams found for this daily session. Sort them first!</p>
-              </div>
-            )}
+          {!loading && !error && (!teamsWithPlayers || teamsWithPlayers.length === 0) && (
+            <div className="flex justify-center items-center h-[280px] text-gray-500 px-4 text-center">
+              <p>No teams found for this daily session. Sort them first!</p>
+            </div>
+          )}
           {!loading && !error && teamsWithPlayers.length > 0 && (
-            <ScrollArea className="h-[500px] w-full">
+            <ScrollArea className="h-[60vh] md:h-[58vh] lg:h-[56vh] w-full">
               <div className="p-4">
-                <CardHeader className="mb-4 text-lg font-medium leading-none text-gray-800 dark:text-gray-200">
+                <CardHeader className="mb-3 p-0 text-lg font-medium leading-none text-gray-800 dark:text-gray-200">
                   Sorted Teams
                 </CardHeader>
-                {teamsWithPlayers.map((team) => (
+                {teamsWithPlayers.map((team, idx) => (
                   <div
                     key={team.id}
                     className="mb-4 p-3 border rounded-md shadow-sm bg-white dark:bg-gray-800"
@@ -135,14 +107,9 @@ export default function DailyTeams({ dailyId }) {
                               {player.username} ({player.position})
                             </span>
                             <div className="flex ml-auto">
-                              {Array.from({ length: player.stars }).map(
-                                (_, index) => (
-                                  <Star
-                                    key={index}
-                                    className="h-4 w-4 text-yellow-500 fill-current"
-                                  />
-                                )
-                              )}
+                              {Array.from({ length: player.stars }).map((_, index) => (
+                                <Star key={index} className="h-4 w-4 text-yellow-500 fill-current" />
+                              ))}
                             </div>
                           </li>
                         ))
@@ -152,8 +119,7 @@ export default function DailyTeams({ dailyId }) {
                         </li>
                       )}
                     </ul>
-                    {teamsWithPlayers.indexOf(team) <
-                      teamsWithPlayers.length - 1 && (
+                    {idx < teamsWithPlayers.length - 1 && (
                       <Separator className="my-3 bg-gray-200 dark:bg-gray-700" />
                     )}
                   </div>

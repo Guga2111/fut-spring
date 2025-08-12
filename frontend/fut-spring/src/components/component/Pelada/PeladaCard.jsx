@@ -150,7 +150,6 @@ export default function PeladaCard({ pelada, onPeladaSelect }) {
           />
         </div>
 
-        {/* Price */}
         <div className="flex items-center justify-between border-t pt-3">
           <span className="text-2xl font-bold text-success">
             R$ {pricePerPerson.toFixed(2).replace('.', ',')}

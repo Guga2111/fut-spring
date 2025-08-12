@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -19,16 +18,14 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArrowDownUp } from "lucide-react";
-import { Star } from "lucide-react";
-import { useState, useEffect } from "react";
+import { ArrowDownUp, Star } from "lucide-react";
 import { API_BASE_URL } from "../../../config";
-import axios from "axios";
 import axiosInstance from "../../../api/axiosInstance";
 
 export default function DailyTeamsSort({ daily, onTeamsSorted }) {
   const [confirmedPlayers, setConfirmedPlayers] = useState(null);
   const [numberOfTeams, setNumberOfTeams] = useState("4");
+  const [sorting, setSorting] = useState(false);
 
   const getImageSrc = (filename) => {
     if (!filename) return "/backgroundbalotelli.jpg";
@@ -36,59 +33,61 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
   };
 
   useEffect(() => {
+    let cancelled = false;
     const fetchConfirmedPlayers = async () => {
       try {
         const resp = await axiosInstance.get(
           `/daily/${daily.id}/confirmed-players`
         );
-        setConfirmedPlayers(resp.data);
+        if (!cancelled) setConfirmedPlayers(resp.data);
       } catch (error) {
-        console.error("Erro ao buscar allImages:", error);
+        console.error("Error fetching confirmed players:", error);
       }
     };
     fetchConfirmedPlayers();
+    return () => {
+      cancelled = true;
+    };
   }, [daily.id]);
 
   const handleSortTeams = async () => {
+    if (sorting) return;
     try {
-      if (
-        !confirmedPlayers ||
-        confirmedPlayers.length < parseInt(numberOfTeams, 10)
-      ) {
+      if (!confirmedPlayers || confirmedPlayers.length < parseInt(numberOfTeams, 10)) {
         alert("Not enough confirmed players for the selected number of teams!");
         return;
       }
-
-      const resp = await axiosInstance.post(
+      setSorting(true);
+      await axiosInstance.post(
         `/daily/${daily.id}/sort-teams?numberOfTeams=${numberOfTeams}`
       );
-      console.log("Teams sorted successfully:", resp.data);
-
-      if (onTeamsSorted) {
-        onTeamsSorted();
-      }
+      if (onTeamsSorted) onTeamsSorted();
     } catch (error) {
       console.error("Error sorting teams:", error);
       alert("Failed to sort teams. Please try again.");
+    } finally {
+      setSorting(false);
     }
   };
 
   return (
-    <div className="w-full p-4">
-      <Card className="w-full max-w-md border flex flex-col overflow-hidden max-h-[536px]">
+    <div className="w-full h-full">
+      <Card className="w-full h-full border flex flex-col overflow-hidden">
         <CardHeader>
           <CardTitle>Sort Teams</CardTitle>
           <CardDescription>
             Sort teams based on the stars ability of the players.
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col flex-grow min-h-0">
-          <div className="grid gap-4 mb-4 flex-shrink-0">
+
+        <CardContent className="flex flex-col flex-1 min-h-0">
+          <div className="grid gap-4 mb-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="numberOfTeams">Number of Teams</Label>
               <Select
                 onValueChange={setNumberOfTeams}
                 defaultValue={numberOfTeams}
+                disabled={sorting}
               >
                 <SelectTrigger id="numberOfTeams" className="!bg-white">
                   <SelectValue placeholder="Select number of teams" />
@@ -101,7 +100,8 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
               </Select>
             </div>
           </div>
-          <ScrollArea className="rounded-md border h-[300px]">
+
+          <ScrollArea className="rounded-md border flex-1 min-h-0">
             <div className="p-4">
               <h4 className="mb-4 text-sm font-medium leading-none">
                 Confirmed Players
@@ -119,28 +119,32 @@ export default function DailyTeamsSort({ daily, onTeamsSorted }) {
                         <span>{player.username}</span>
                       </div>
                       <div className="flex">
-                        {Array.from({ length: player.stars }).map(
-                          (_, index) => (
-                            <Star
-                              key={index}
-                              className="h-4 w-4 text-yellow-500 fill-current"
-                            />
-                          )
-                        )}
+                        {Array.from({ length: player.stars }).map((_, index) => (
+                          <Star
+                            key={index}
+                            className="h-4 w-4 text-yellow-500 fill-current"
+                          />
+                        ))}
                       </div>
                     </div>
                     <Separator className="my-2" />
                   </React.Fragment>
                 ))
               ) : (
-                <p>No confirmed players wanted or loading...</p>
+                <p>No confirmed players yet or loading...</p>
               )}
             </div>
           </ScrollArea>
         </CardContent>
-        <CardFooter className="flex justify-center mt-auto">
-          <Button onClick={handleSortTeams} className="hover:!border-white">
-            Sort <ArrowDownUp className="ml-2" />{" "}
+
+        <CardFooter className="flex justify-center">
+          <Button
+            type="button"
+            onClick={handleSortTeams}
+            disabled={sorting}
+            className="hover:!border-white"
+          >
+            {sorting ? "Sorting..." : "Sort"} <ArrowDownUp className="ml-2" />
           </Button>
         </CardFooter>
       </Card>

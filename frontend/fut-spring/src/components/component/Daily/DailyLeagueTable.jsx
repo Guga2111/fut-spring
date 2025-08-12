@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -16,7 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { API_BASE_URL } from "../../../config";
 import axiosInstance from "../../../api/axiosInstance";
 
 export default function DailyLeagueTable({ dailyId }) {
@@ -32,7 +29,6 @@ export default function DailyLeagueTable({ dailyId }) {
         const response = await axiosInstance.get(
           `/league-table/daily/${dailyId}`
         );
-
         const leagueTableEntries = response.data.entries;
         setTeamsData(leagueTableEntries);
       } catch (err) {
@@ -50,59 +46,53 @@ export default function DailyLeagueTable({ dailyId }) {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-4 text-center">
-        <Card>
-          <CardHeader>
-            <CardTitle>Daily League Standings</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>Loading league table...</p>
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="w-full h-full">
+        <CardHeader>
+          <CardTitle>Daily League Standings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>Loading league table...</p>
+        </CardContent>
+      </Card>
     );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto p-4 text-center text-red-600">
-        <Card>
-          <CardHeader>
-            <CardTitle>Daily League Standings</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>{error}</p>
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="w-full h-full">
+        <CardHeader>
+          <CardTitle>Daily League Standings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-red-600">{error}</p>
+        </CardContent>
+      </Card>
     );
   }
 
   if (!teamsData || teamsData.length === 0) {
     return (
-      <div className="container mx-auto p-4 text-center">
-        <Card>
-          <CardHeader>
-            <CardTitle>Daily League Standings</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>No league table data available for this daily ID.</p>
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="w-full h-full">
+        <CardHeader>
+          <CardTitle>Daily League Standings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>No league table data available for this daily ID.</p>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="container mx-auto p-4 h-[600px] w-full">
-      <Card>
+    <div className="w-full h-full">
+      <Card className="w-full h-full">
         <CardHeader>
           <CardTitle>Daily League Standings</CardTitle>
           <CardDescription>
             A current snapshot of the daily league table.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="overflow-auto max-h-[60vh] md:max-h-[58vh] lg:max-h-[56vh]">
           <Table>
             <TableHeader>
               <TableRow>
@@ -115,22 +105,14 @@ export default function DailyLeagueTable({ dailyId }) {
             </TableHeader>
             <TableBody>
               {teamsData.map((teamEntry) => {
-                const playedGames =
-                  teamEntry.wins + teamEntry.losses + teamEntry.draws;
-
+                const playedGames = teamEntry.wins + teamEntry.losses + teamEntry.draws;
                 return (
                   <TableRow key={teamEntry.team.id}>
-                    <TableCell className="font-medium">
-                      {teamEntry.position}
-                    </TableCell>
+                    <TableCell className="font-medium">{teamEntry.position}</TableCell>
                     <TableCell>{teamEntry.team.name}</TableCell>
                     <TableCell className="text-right">{playedGames}</TableCell>
-                    <TableCell className="text-right">
-                      {teamEntry.goalDifference}
-                    </TableCell>
-                    <TableCell className="text-right font-bold">
-                      {teamEntry.points}
-                    </TableCell>
+                    <TableCell className="text-right">{teamEntry.goalDifference}</TableCell>
+                    <TableCell className="text-right font-bold">{teamEntry.points}</TableCell>
                   </TableRow>
                 );
               })}

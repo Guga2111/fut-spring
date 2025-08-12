@@ -1,13 +1,10 @@
-import React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import DailyTeamsSort from "./DailyTeamsSort";
 import DailyTeams from "./DailyTeams";
-import { useState, useCallback, useEffect } from "react";
-import axios from "axios";
 import DailyMatchesHistory from "./DailyMatchesHistory";
 import DailyLeagueTable from "./DailyLeagueTable";
 import DailyPersonalStats from "./DailyPersonalStats";
 import DailyPrizeCard from "./DailyPrizeCard";
-import { API_BASE_URL } from "../../../config";
 import axiosInstance from "../../../api/axiosInstance";
 
 export default function DailyGrid({ daily, matches, onRefreshMatches }) {
@@ -19,7 +16,6 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
     setLoadingTeamsStatus(true);
     try {
       const resp = await axiosInstance.get(`/daily/${daily.id}/teams`);
-
       setTeamsExist(resp.data && resp.data.length > 0);
     } catch (error) {
       console.error("Error checking daily teams status:", error);
@@ -51,46 +47,44 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
   };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-100px)] justify-between">
-      <div className="flex justify-around items-start p-5 gap-5 text-white flex-grow">
-        {/* Coluna 1: Sorteio */}
-        <div className="flex-1 min-w-[250px] p-4">
-          <div className="text-center text-gray-500 flex items-center justify-center">
+    <div className="min-h-[calc(100vh-140px)] pb-8">
+      {/* Responsive 1/2/3-column grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+        {/* Column 1: Teams / Sort */}
+        <div className="col-span-1 h-full">
+          <div className="text-center text-gray-600">
             {teamsExist ? (
               <DailyTeams dailyId={daily.id} />
             ) : (
-              <DailyTeamsSort
-                daily={daily}
-                onTeamsSorted={handleSortComplete}
-              />
+              <DailyTeamsSort daily={daily} onTeamsSorted={handleSortComplete} />
             )}
           </div>
         </div>
 
-        {/* Coluna 2: Conteúdo Principal (Time Campeão) */}
-        <div className="flex-1 min-w-[250px] p-4 flex flex-col justify-between">
-          <div className="text-gray-500 mb-4">
+        {/* Column 2: Champion / Prizes */}
+        <div className="col-span-1 h-full">
+          <div className="h-full">
             <DailyPrizeCard daily={daily} confirmedPlayers={confirmedPlayers} />
           </div>
         </div>
 
-        {/* Coluna 3: Tabela de Classificação */}
-        <div className="flex-1 min-w-[250px] p-4">
-          <div className="text-center text-gray-800 flex items-center justify-center">
-            <DailyLeagueTable dailyId={daily.id}></DailyLeagueTable>
+        {/* Column 3: League Table */}
+        <div className="col-span-1 h-full">
+          <div className="text-center text-gray-800 h-full">
+            {/* Fill column height and allow internal scroll if needed */}
+            <DailyLeagueTable dailyId={daily.id} />
           </div>
         </div>
       </div>
-      {/* Coluna Footer: Botões de Histórico de partidas e Desempenho individual*/}
-      <div className="w-full flex justify-center pb-30">
-        <div className="flex items-center text-gray-500 gap-x-2">
-          <DailyMatchesHistory
-            daily={daily}
-            matches={matches}
-            onRefreshMatches={onRefreshMatches}
-          />
-          <DailyPersonalStats daily={daily} />
-        </div>
+
+      {/* Footer actions: responsive placement */}
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <DailyMatchesHistory
+          daily={daily}
+          matches={matches}
+          onRefreshMatches={onRefreshMatches}
+        />
+        <DailyPersonalStats daily={daily} />
       </div>
     </div>
   );

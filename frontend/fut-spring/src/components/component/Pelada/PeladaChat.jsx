@@ -45,37 +45,41 @@ export default function PeladaChat({
   };
 
   return (
-    <div className="flex flex-col h-96">
-      {" "}
-      <div className="flex-1 overflow-y-auto">
-        <ChatContent
-          playersAssociated={playersAssociated}
-          allImages={allImages}
-          peladaId={peladaId}
-        ></ChatContent>
+    <div className="flex flex-col h-full max-h-screen">
+  <div className="flex-1 overflow-y-auto">
+    <ChatContent
+      playersAssociated={playersAssociated}
+      allImages={allImages}
+      peladaId={peladaId}
+    />
+  </div>
+
+  <div className="sticky bottom-0 w-full bg-background pt-2">
+    <div className="flex flex-col sm:flex-row gap-2 p-4">
+      <div className="flex-1">
+        <Textarea
+          className="w-full"
+          placeholder="Type your message here."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSendMessage();
+            }
+          }}
+        />
       </div>
-      <div className="sticky bottom-0 w-full bg-background pt-2">
-        <div className="flex items-center gap-2">
-          <Textarea
-            className="w-full"
-            placeholder="Type your message here."
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSendMessage();
-              }
-            }}
-          />
-          <Button
-            className="hover:!border-white"
-            onClick={handleSendMessage}
-            disabled={isLoading || !message.trim()}
-          >
-            <Send />
-          </Button>
-        </div>
-      </div>
+      <Button
+        className="sm:w-auto w-full hover:!border-white"
+        onClick={handleSendMessage}
+        disabled={isLoading || !message.trim()}
+      >
+        <Send />
+      </Button>
     </div>
+  </div>
+</div>
+
   );
 }

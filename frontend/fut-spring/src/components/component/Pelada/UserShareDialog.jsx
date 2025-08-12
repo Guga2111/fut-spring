@@ -16,12 +16,13 @@ import { Label } from "@/components/ui/label";
 
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { FRONT_BASE_URL } from "../../../config";
 
 export default function UserShareDialog({ peladaData }) {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
-    const link = `localhost:5173/pelada/${peladaData.id}`;
+    const link = `${FRONT_BASE_URL}/pelada/${peladaData.id}`;
     navigator.clipboard
       .writeText(link)
       .then(() => {

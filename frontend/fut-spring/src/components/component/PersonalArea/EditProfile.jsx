@@ -25,6 +25,7 @@ import {
 import axios from "axios";
 import { API_BASE_URL } from "../../../config";
 import axiosInstance from "../../../api/axiosInstance";
+import { toast } from "sonner";
 
 const starsOptions = [
   { value: "1", label: "1" },
@@ -60,27 +61,31 @@ export default function EditProfile({ user }) {
 
     const token = localStorage.getItem("jwt_token");
     if (!token) {
-      console.error("Token not found");
+      console.error("Authentication token not found.");
+      toast.error("You are not authenticated. Please log in.");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("stars", selectedStars);
-    formData.append("position", selectedPosition);
+ if (!selectedStars || !selectedPosition) {
+      toast.error("Please select both stars and position.");
+      return;
+    }
 
     try {
       const userId = user.id;
       const response = await axiosInstance.put(
         `/user/info/${userId}`,
-        formData,
+        null,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
+          params: {
+            stars: selectedStars,
+            position: selectedPosition,
           },
         }
       );
 
       if (response.status >= 200 && response.status < 300) {
+        toast.success("Profile updated successfully!");
         setDialogOpen(false);
       }
     } catch (error) {

@@ -43,10 +43,10 @@ axiosInstance.interceptors.response.use(
                     localStorage.removeItem("jwt_token");
                     break;
                 case 403:
-                    
+                        
                     break;
                 case 404:
-                    toast.error(data.error || "Resource don't found.");
+                    console.error(data.error || "Resource don't found.");
                     break;
                 case 400:
                 case 422:

@@ -28,7 +28,6 @@ public class Message {
     private LocalDateTime sentAt;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
 

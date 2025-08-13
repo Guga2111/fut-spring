@@ -39,7 +39,7 @@ export default function DailyMatchesHistory({
             className="bg-green-600 text-neutral-300 hover:text-white hover:!border-white"
             onClick={() => setOpen(true)}
           >
-            <GalleryVerticalEnd className="mr-2" /> Match History{" "}
+            <GalleryVerticalEnd className="mr-2" /> Match History
             <ChevronRight />
           </Button>
         </DialogTrigger>

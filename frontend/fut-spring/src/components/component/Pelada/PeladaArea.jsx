@@ -3,7 +3,6 @@ import DailyCard from "../Daily/DailyCard";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../../api/axiosInstance";
 import ViewPeladaPlayersDialog from "./ViewPeladaPlayersDialog";
-import { Progress } from "@/components/ui/progress";
 import RankingGrid from "./RankingGrid";
 import { Skeleton } from "@/components/ui/skeleton";
 import PeladaHeader from "./PeladaHeader";
@@ -21,6 +20,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
   const [allImages, setAllImages] = useState([]);
   const [loadingImages, setLoadingImages] = useState(true);
   const [dailies, setDailies] = useState([]);
+  const [isHeaderStuck, setIsHeaderStuck] = useState(false);
 
   useEffect(() => {
     const fetchAllImages = async () => {
@@ -93,6 +93,22 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
     };
     fetchDailies();
   }, [id]);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsHeaderStuck(true);
+      } else {
+        setIsHeaderStuck(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -122,13 +138,16 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
   if (!peladaData) return <div className="p-4 text-center">Pelada not found</div>;
   
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col">
 
-      <div className="sticky top-0 z-20 bg-background/80 backdrop-blur border-b">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <PeladaHeader peladaData={peladaData} />
-        </div>
-      </div>
+<div className={`
+  ${isHeaderStuck ? 'sticky top-0 z-30 shadow-md animate-in fade-in duration-200' : 'border-b'}
+  bg-background
+`}>
+  <div className="max-w-7xl mx-auto px-4 md:px-6">
+    <PeladaHeader peladaData={peladaData} />
+  </div>
+</div>
 
       <div className="flex-1 min-h-0 overflow-hidden max-w-7xl mx-auto w-full px-4 md:px-6 py-6">
         <div className="grid grid-cols-12 gap-6">

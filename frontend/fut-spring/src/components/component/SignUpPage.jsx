@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../config";
+import BreadcrumMenu from "./BreadcrumMenu";
 
 export default function SignUpPage({ onLogin }) {
   const [formData, setFormData] = useState({
@@ -99,6 +100,7 @@ export default function SignUpPage({ onLogin }) {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <BreadcrumMenu></BreadcrumMenu>
       <div className="w-full max-w-md">
         <Tabs defaultValue="register" className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-0">

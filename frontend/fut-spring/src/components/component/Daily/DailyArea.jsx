@@ -70,7 +70,7 @@ export default function DailyArea() {
   }
 
   return (
-    <div className="relative w-full">
+    <div className="h-full w-full !bg-gray-50">
       <div className="mx-auto w-full max-w-7xl px-4">
         <div className="flex flex-col items-center md:items-start md:flex-row md:justify-between py-4 gap-3 md:gap-6">
           <div className="flex justify-center md:justify-start w-full md:w-auto">

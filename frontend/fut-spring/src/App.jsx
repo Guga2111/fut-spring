@@ -100,32 +100,32 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route
-            path="/home"
-            element={
-              isAuthenticated() ? (
-                <>
-                  <div className="m-2 font-semibold">
-                    <NavigationBar user={user} />
-                  </div>
-                  <h1 className="font-extrabold">FutSpring</h1>
-                  <div className="flex-grow">
-                    <PeladaGrid
-                      peladas={peladas}
-                      onPeladaCreated={handlePeladaCreated}
-                      onPeladaSelect={handlePeladaSelect}
-                    />
-                  </div>
-                </>
-              ) : (
-                <Navigate to="/register" replace />
-              )
-            }
+  path="/home"
+  element={
+    isAuthenticated() ? (
+      <div className="flex flex-col flex-grow !bg-gray-50">
+        <div className="m-2 font-semibold !bg-gray-50">
+          <NavigationBar user={user} />
+        </div>
+        <h1 className="font-extrabold text-center">FutSpring</h1>
+        <div className="flex-grow">
+          <PeladaGrid
+            peladas={peladas}
+            onPeladaCreated={handlePeladaCreated}
+            onPeladaSelect={handlePeladaSelect}
           />
+        </div>
+      </div>
+    ) : (
+      <Navigate to="/register" replace />
+    )
+  }
+/>
           <Route
             path="/register"
             element={
               <>
-                <h1 className="font-extrabold">FutSpring</h1>
+                
                 <SignUpPage onLogin={setToken} />
               </>
             }
@@ -158,7 +158,7 @@ function App() {
                   <div className="m-2 font-semibold">
                     <NavigationBar user={user} />
                   </div>
-                  <div>
+                  <div className="!bg-gray-50">
                     <PeladaArea
                       pelada={selectedPelada}
                       user={user}
@@ -172,20 +172,22 @@ function App() {
             }
           />
           <Route
-            path="/daily/:id"
-            element={
-              isAuthenticated() ? (
-                <>
-                  <div className="m-2 font-semibold">
-                    <NavigationBar user={user} />
-                  </div>
-                  <DailyArea daily={selectedDaily}></DailyArea>
-                </>
-              ) : (
-                <Navigate to="/register" replace />
-              )
-            }
-          ></Route>
+  path="/daily/:id"
+  element={
+    isAuthenticated() ? (
+      <div className="flex flex-col flex-grow !bg-gray-50">
+        <div className="m-2 font-semibold !bg-gray-50">
+          <NavigationBar user={user} />
+        </div>
+        <div className="flex-grow">
+          <DailyArea />
+        </div>
+      </div>
+    ) : (
+      <Navigate to="/register" replace />
+    )
+  }
+/>
         </Routes>
         <Footer />
       </Router>

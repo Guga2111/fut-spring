@@ -48,9 +48,7 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
 
   return (
     <div className="min-h-[calc(100vh-140px)] pb-8">
-      {/* Responsive 1/2/3-column grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
-        {/* Column 1: Teams / Sort */}
         <div className="col-span-1 h-full">
           <div className="text-center text-gray-600">
             {teamsExist ? (
@@ -61,23 +59,19 @@ export default function DailyGrid({ daily, matches, onRefreshMatches }) {
           </div>
         </div>
 
-        {/* Column 2: Champion / Prizes */}
         <div className="col-span-1 h-full">
           <div className="h-full">
             <DailyPrizeCard daily={daily} confirmedPlayers={confirmedPlayers} />
           </div>
         </div>
 
-        {/* Column 3: League Table */}
         <div className="col-span-1 h-full">
           <div className="text-center text-gray-800 h-full">
-            {/* Fill column height and allow internal scroll if needed */}
             <DailyLeagueTable dailyId={daily.id} />
           </div>
         </div>
       </div>
 
-      {/* Footer actions: responsive placement */}
       <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
         <DailyMatchesHistory
           daily={daily}

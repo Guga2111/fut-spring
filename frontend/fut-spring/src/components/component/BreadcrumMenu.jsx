@@ -16,7 +16,7 @@ import {
 
 export default function BreadcrumMenu() {
   return (
-    <div className="absolute top-4 left-4 !bg-white">
+    <div className="absolute top-4 left-4 bg-gray-50">
       <div>
         <span>
           <Breadcrumb>
@@ -27,7 +27,7 @@ export default function BreadcrumMenu() {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="flex items-center gap-1 !bg-white">
+                  <DropdownMenuTrigger className="flex items-center gap-1 !bg-gray-50">
                     <BreadcrumbEllipsis className="h-4 w-4" />
                     <span className="sr-only">Toggle menu</span>
                   </DropdownMenuTrigger>

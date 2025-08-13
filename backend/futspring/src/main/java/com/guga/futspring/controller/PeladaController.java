@@ -44,6 +44,11 @@ public class PeladaController {
         return new ResponseEntity<>(peladaService.getAssociatedDailies(id), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/scheduled-daily-confirmed-player")
+    public ResponseEntity<List<User>> getConfirmedPlayersOfScheduledDaily (@PathVariable Long id) {
+        return new ResponseEntity<>(peladaService.getConfirmedPlayersOfScheduledDaily(id), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}/users")
     public ResponseEntity<List<User>> getPlayersAssociatedToPelada(@PathVariable Long id) {
         return new ResponseEntity<>(peladaService.getPlayerAssociatedToPelada(id), HttpStatus.OK);

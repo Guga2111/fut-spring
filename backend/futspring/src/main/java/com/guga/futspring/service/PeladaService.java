@@ -23,4 +23,6 @@ public interface PeladaService {
     List<User> getPlayersDisassociated(Long id);
     List<Daily> getAssociatedDailies(Long id);
 
+    List<User> getConfirmedPlayersOfScheduledDaily(Long id);
+
 }

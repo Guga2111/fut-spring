@@ -1,6 +1,7 @@
 package com.guga.futspring.service;
 
 import com.guga.futspring.entity.*;
+import com.guga.futspring.entity.enums.DailyStatus;
 import com.guga.futspring.exception.AlreadyPlayerAssociatedException;
 import com.guga.futspring.exception.PeladaNotFoundException;
 import com.guga.futspring.repository.DailyRepository;
@@ -125,15 +126,12 @@ public class PeladaServiceImpl implements PeladaService{
 
     @Override
     @Transactional
-    // Adaptei seu método updatePelada para aceitar os novos campos de agendamento
     public Pelada updatePelada(Long id, String name, float duration,
                                DayOfWeek dayOfWeek, LocalTime timeOfDay, Boolean autoCreateDailyEnabled) {
-        Pelada existingPelada = getPelada(id); // Reusa o método para buscar e verificar existência
+        Pelada existingPelada = getPelada(id);
 
         if (name != null) existingPelada.setName(name);
-        if (duration != 0) existingPelada.setDuration(duration); // Cuidado com '0' como valor para ignorar
-        // Se você tem um campo 'time' String, pode ser 'existingPelada.setTime(time);'
-        // Mas o ideal é migrar para LocalTime. Abaixo, estou usando timeOfDay.
+        if (duration != 0) existingPelada.setDuration(duration);
         if (timeOfDay != null) existingPelada.setTimeOfDay(timeOfDay);
         if (dayOfWeek != null) existingPelada.setDayOfWeek(dayOfWeek);
         if (autoCreateDailyEnabled != null) existingPelada.setAutoCreateDailyEnabled(autoCreateDailyEnabled);
@@ -158,6 +156,18 @@ public class PeladaServiceImpl implements PeladaService{
             }
             else throw new AlreadyPlayerAssociatedException(userId);
         }
+
+
+    @Override
+    public List<User> getConfirmedPlayersOfScheduledDaily(Long id) {
+        Pelada pelada = getPelada(id);
+        Daily scheduledDaily = pelada.getDailies().stream()
+                .filter(daily -> DailyStatus.SCHEDULED.equals(daily.getStatus()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No daily with scheduled status found for the pelada with id: " + id));
+
+        return scheduledDaily.getPlayersPresence();
+    }
 
     @Override
     public List<User> getPlayerAssociatedToPelada(Long id) {

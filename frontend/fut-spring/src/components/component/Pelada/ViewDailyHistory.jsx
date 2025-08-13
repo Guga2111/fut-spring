@@ -35,6 +35,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { format, parse, isValid, isSameDay } from "date-fns";
+import { GalleryVerticalEnd } from 'lucide-react';
 
 export default function ViewDailyHistory({ dailies }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -82,7 +83,7 @@ export default function ViewDailyHistory({ dailies }) {
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button className=" hover:!border-white !text-neutral-300 hover:!text-white">
-            <User className="mr-2 !text-neutral-300 hover:!text-white" />{" "}
+            <GalleryVerticalEnd className="mr-2 !text-neutral-300 hover:!text-white" />
             Dailies History
             <ChevronRight className="ml-2 !text-neutral-300 hover:!text-white" />
           </Button>
@@ -96,7 +97,6 @@ export default function ViewDailyHistory({ dailies }) {
               </AlertDialogCancel>
             </div>
 
-            {/* Search Input */}
             <div className="relative mb-4">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input

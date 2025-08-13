@@ -4,9 +4,9 @@ import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import axios from "axios";
 import { API_BASE_URL } from "../../../config";
 import axiosInstance from "../../../api/axiosInstance";
+import { Check, X } from 'lucide-react';
 
 export default function DailyCard({ pelada, onDailySelect, user }) {
   const navigate = useNavigate();
@@ -167,12 +167,14 @@ export default function DailyCard({ pelada, onDailySelect, user }) {
         className="px-6 font-semibold bg-black text-white hover:!bg-green-600 hover:!border-white"
         onClick={handleConfirmPresence}
       >
+        <Check className="h-4 w-4" />
         CONFIRM
       </Button>
       <Button
         className="px-6 font-semibold bg-black text-white hover:!bg-red-900 hover:!border-white"
         onClick={handleDisconfirmPresence}
       >
+        <X className="h-4 w-4" />
         DISCONFIRM
       </Button>
     </CardFooter>

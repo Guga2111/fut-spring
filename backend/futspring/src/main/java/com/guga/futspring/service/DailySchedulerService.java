@@ -26,8 +26,8 @@ public class DailySchedulerService {
     DailyRepository dailyRepository;
     LeagueTableRepository leagueTableRepository;
 
-    //em deploy alterar cron para 0 0 0 * * ? a cada 24 hrs, o de teste esta a cada 10 segundos 0/10 * * * * ? para 10 segundos
-    @Scheduled(cron = "0 0 * * * *")
+    //em deploy alterar cron para 0 0 12 * * ? a cada meio dia de todos os dias, o de teste esta a cada 10 segundos 0/10 * * * * ? para 10 segundos
+    @Scheduled(cron = "*/30 * * * *")
     public void criarDailySemanalmente() {
         System.out.println("Executando scheduler para criar Daily em: " + LocalDateTime.now());
 

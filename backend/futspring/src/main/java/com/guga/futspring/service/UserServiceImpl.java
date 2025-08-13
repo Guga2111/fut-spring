@@ -69,6 +69,17 @@ public class UserServiceImpl implements UserService{
     @Override
     public User saveUser(User user) {
 
+        List<User> users = getUsers();
+
+        if(!users.isEmpty()) {
+            if(users.stream().anyMatch(u -> user.getUsername().equals(u.getUsername()))) {
+                throw new RuntimeException(); //build new custom exception for exact same username
+            }
+            if(users.stream().anyMatch(u -> user.getEmail().equals(u.getEmail()))) {
+                throw new RuntimeException(); //build new custom exception for exact same email
+            }
+        }
+
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Stats stats = statsService.initializeStats(user);
         user.setStats(stats);

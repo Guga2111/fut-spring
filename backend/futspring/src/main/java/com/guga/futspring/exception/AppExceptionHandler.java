@@ -100,4 +100,16 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(EmailAlreadyHaveException.class)
+    public ResponseEntity<Object> handleEmailAlreadyHaveException(EmailAlreadyHaveException e) {
+        ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(UsernameAlreadyHaveException.class)
+    public ResponseEntity<Object> handleUsernameAlreadyHaveException(UsernameAlreadyHaveException e) {
+        ErrorResponse errorResponse = new ErrorResponse(Arrays.asList(e.getLocalizedMessage()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
 }

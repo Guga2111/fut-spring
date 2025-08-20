@@ -153,7 +153,7 @@
           "
         >
           <Trophy className="w-4 h-4" />
-          <span className="hidden sm:inline">Geral</span>
+          <span className="hidden sm:inline">General</span>
         </TabsTrigger>
 
         <TabsTrigger
@@ -168,7 +168,7 @@
           "
         >
           <TabIcon type="goals" />
-          <span className="hidden sm:inline">Gols</span>
+          <span className="hidden sm:inline">Goals</span>
         </TabsTrigger>
 
         <TabsTrigger
@@ -183,7 +183,7 @@
           "
         >
           <TabIcon type="assists" />
-          <span className="hidden sm:inline">Assistências</span>
+          <span className="hidden sm:inline">Assists</span>
         </TabsTrigger>
 
         <TabsTrigger

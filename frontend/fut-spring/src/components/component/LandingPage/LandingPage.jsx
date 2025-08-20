@@ -80,7 +80,7 @@ const FeatureCard = ({ icon, title, description }) => (
                 className="flex-1 inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 transition-colors shadow-sm"
               >
                 <Linkedin size={20} className="mr-3" />
-                Contact via LinkedIn
+                via LinkedIn
               </a>
 
               <a 

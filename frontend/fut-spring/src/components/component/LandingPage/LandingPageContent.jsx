@@ -4,8 +4,8 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { PenLine } from "lucide-react";
+import { Link } from 'react-router-dom';
 
-// Componente para o painel de features
 const FeaturesPanelContent = () => (
   <div className="flex h-full items-center justify-center p-6">
     <div className="space-y-4">
@@ -42,18 +42,22 @@ const MainPanelContent = () => (
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-2">
         <div className="text-xs text-gray-500 flex gap-1">
           <span>Already registered?</span>
+          <Link to={"/register?tab=login"}>
           <a
             href="/register"
             className="underline hover:text-green-600 transition-colors"
           >
             Login
           </a>
+          </Link>
         </div>
-        <a href="/register">
+        <Link to={"/register?tab=register"}>        <a href="/register">
           <button className="!bg-white !text-green-700 border !border-green-700 hover:!bg-green-700 hover:!text-white font-medium py-2 px-4 rounded-md transition-colors flex items-center w-full justify-center sm:w-auto">
             <PenLine size={15} className="mr-2" /> Get Started
           </button>
         </a>
+        </Link>
+
       </div>
     </div>
   </div>

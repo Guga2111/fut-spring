@@ -135,7 +135,7 @@ function App() {
             element={
               isAuthenticated() ? (
                 <>
-                  <div className="m-0 font-semibold">
+                  <div className="mb-15 font-semibold">
                     <NavigationBar user={user} />
                   </div>
                   <div className="mb-20">

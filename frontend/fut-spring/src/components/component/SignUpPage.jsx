@@ -14,9 +14,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../config";
-import BreadcrumMenu from "./BreadcrumMenu";
+import { Eye, EyeOff } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
 export default function SignUpPage({ onLogin }) {
+
+  const [searchParams] = useSearchParams();
+
+  const defaultTab = searchParams.get('tab') === 'login' ? 'login' : 'register';
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -28,6 +34,9 @@ export default function SignUpPage({ onLogin }) {
     email: "",
     password: "",
   });
+
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
 
   const [responseData, setResponseData] = useState(null);
   const navigate = useNavigate();
@@ -81,7 +90,6 @@ export default function SignUpPage({ onLogin }) {
       });
 
       const authHeader = response.headers["authorization"];
-      console.log("Authorization Header:", authHeader);
 
       if (authHeader && authHeader.startsWith("Bearer ")) {
         const token = authHeader.split(" ")[1];
@@ -98,35 +106,53 @@ export default function SignUpPage({ onLogin }) {
     }
   };
 
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <BreadcrumMenu></BreadcrumMenu>
       <div className="w-full max-w-md">
-        <Tabs defaultValue="register" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-0">
-            <TabsTrigger
-              value="register"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:!bg-background data-[state=active]:!text-foreground data-[state=active]:!shadow-sm
-                         data-[state=active]:!border-b-2 data-[state=active]:border-green-500
-                         data-[state=active]:!text-green-600
-                         data-[state=inactive]:!text-gray-500
-                         data-[state=inactive]:!bg-transparent"
-            >
+        <div className="text-center mb-8">
+          <img
+            src="/gerrard-kissing.jfif"
+            alt="Soccer illustration"
+            className="h-40 w-40 mx-auto drop-shadow-lg rounded-full object-cover"
+          />
+          <h1 className="text-5xl font-bold mt-4 text-gray-800 tracking-tight">
+            Futspring
+          </h1>
+        </div>
+
+        <Tabs defaultValue={defaultTab} className="w-full">
+          <TabsList className="
+          w-full max-w-[720px]
+          !flex items-center gap-0
+          !bg-muted 
+          divide-x divide-muted-foreground/10
+        ">
+<TabsTrigger
+        value="register"
+        className="
+          flex-1 !rounded-r-none !rounded-l-md
+          data-[state=inactive]:!bg-muted data-[state=inactive]:!text-muted-foreground
+          data-[state=active]:!bg-background data-[state=active]:!text-foreground data-[state=active]:!shadow-sm
+        "
+      >
               Register
             </TabsTrigger>
             <TabsTrigger
-              value="login"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:!bg-background data-[state=active]:!text-foreground data-[state=active]:!shadow-sm
-                         data-[state=active]:!border-b-2 data-[state=active]:border-green-500
-                         data-[state=active]:!text-green-600
-                         data-[state=inactive]:!text-gray-500
-                         data-[state=inactive]:!bg-transparent"
-            >
+        value="login"
+        className="
+          flex-1 !rounded-l-none !rounded-r-md
+          data-[state=inactive]:!bg-muted data-[state=inactive]:!text-muted-foreground
+          data-[state=active]:!bg-background data-[state=active]:!text-foreground data-[state=active]:!shadow-sm
+        "
+      >
               Login
             </TabsTrigger>
           </TabsList>
+          
           <TabsContent value="register">
-            <Card>
+            {/* MUDANÇA 3: Card com borda superior zerada para garantir a conexão */}
+            <Card className="!rounded-t-none !border-t-0">
               <CardHeader>
                 <CardTitle>Register</CardTitle>
                 <CardDescription>
@@ -134,6 +160,7 @@ export default function SignUpPage({ onLogin }) {
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleRegisterRequest}>
+                {/* ... SEU FORMULÁRIO ... */}
                 <CardContent className="space-y-4">
                   <div className="space-y-1">
                     <Label htmlFor="username">Name</Label>
@@ -161,15 +188,30 @@ export default function SignUpPage({ onLogin }) {
                   </div>
                   <div className="space-y-1">
                     <Label htmlFor="password">Password</Label>
-                    <Input
-                      required
-                      name="password"
-                      id="password"
-                      type="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      placeholder="Create a secure password"
-                    />
+                    <div className="relative">
+                      <Input
+                        required
+                        name="password"
+                        id="password"
+                        type={showRegisterPassword ? "text" : "password"}
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="Create a secure password"
+                        className="pr-10"
+                      />
+                      <span
+                        className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                        onClick={() =>
+                          setShowRegisterPassword(!showRegisterPassword)
+                        }
+                      >
+                        {showRegisterPassword ? (
+                          <EyeOff className="h-5 w-5 text-gray-400" />
+                        ) : (
+                          <Eye className="h-5 w-5 text-gray-400" />
+                        )}
+                      </span>
+                    </div>
                   </div>
                 </CardContent>
                 <CardFooter className="mt-6">
@@ -181,16 +223,11 @@ export default function SignUpPage({ onLogin }) {
                   </Button>
                 </CardFooter>
               </form>
-              {responseData && (
-                <div className="response-container p-4">
-                  <h3>Server Response:</h3>
-                  <pre>{JSON.stringify(responseData, null, 2)}</pre>
-                </div>
-              )}
             </Card>
           </TabsContent>
+
           <TabsContent value="login">
-            <Card>
+            <Card className="!rounded-t-none !border-t-0">
               <CardHeader>
                 <CardTitle>Login</CardTitle>
                 <CardDescription>
@@ -198,6 +235,7 @@ export default function SignUpPage({ onLogin }) {
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleLoginRequest}>
+                {/* ... SEU FORMULÁRIO ... */}
                 <CardContent className="space-y-4">
                   <div className="space-y-1">
                     <Label htmlFor="loginEmail">Email</Label>
@@ -213,15 +251,28 @@ export default function SignUpPage({ onLogin }) {
                   </div>
                   <div className="space-y-1">
                     <Label htmlFor="loginPassword">Password</Label>
-                    <Input
-                      required
-                      name="password"
-                      id="loginPassword"
-                      type="password"
-                      value={loginData.password}
-                      onChange={handleLoginChange}
-                      placeholder="Enter your password"
-                    />
+                    <div className="relative">
+                      <Input
+                        required
+                        name="password"
+                        id="loginPassword"
+                        type={showLoginPassword ? "text" : "password"}
+                        value={loginData.password}
+                        onChange={handleLoginChange}
+                        placeholder="Enter your password"
+                        className="pr-10"
+                      />
+                      <span
+                        className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                        onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      >
+                        {showLoginPassword ? (
+                          <EyeOff className="h-5 w-5 text-gray-400" />
+                        ) : (
+                          <Eye className="h-5 w-5 text-gray-400" />
+                        )}
+                      </span>
+                    </div>
                   </div>
                 </CardContent>
                 <CardFooter className="mt-6">
@@ -233,6 +284,7 @@ export default function SignUpPage({ onLogin }) {
             </Card>
           </TabsContent>
         </Tabs>
+
         <div className="mt-6 text-center text-sm text-gray-600">
           Connect with local players • Organize matches • Track your games
         </div>

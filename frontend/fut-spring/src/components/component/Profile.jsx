@@ -35,7 +35,7 @@ export default function Profile({ user }) {
             <AvatarImage
               src={getImageSrc(user.image) || "https://github.com/shadcn.png"}
             />
-            <AvatarFallback>NF</AvatarFallback>
+            <AvatarFallback>{user.username ? user.username.charAt(0) : "U"}</AvatarFallback>
           </Avatar>
         </PopoverTrigger>
         <PopoverContent className="w-64 p-0 bg-white shadow-lg rounded- xl" align="end">
@@ -63,14 +63,14 @@ export default function Profile({ user }) {
                 onClick={() => navigate("/profile")}
               >
                 <PersonIcon className="mr-2 h-4 w-4 text-gray-600" />
-                Meu Perfil
+                My Profile
               </Button>
               <Button
                 variant="ghost"
                 className="!bg-white w-full justify-start text-base px-4 py-2 h-auto rounded-none text-green-700 hover:!bg-green-50"
               >
                 <GearIcon className="mr-2 h-4 w-4 text-green-700" />
-                Configurações
+                Configurations
               </Button>
             </div>
 
@@ -81,7 +81,7 @@ export default function Profile({ user }) {
                 className="!bg-white w-full justify-start text-base px-4 py-2 h-auto rounded-none text-red-600 hover:!bg-red-50 hover:text-red-700"
               >
                 <ExitIcon className="mr-2 h-4 w-4 text-red-600" />
-                Sair
+                Exit
               </Button>
             </div>
           </div>

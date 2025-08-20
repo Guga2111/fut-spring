@@ -2,6 +2,7 @@ import { Plus } from "lucide-react";
 
 import UserSearchDialog from "./UserSearchDialog";
 import UserShareDialog from "./UserShareDialog";
+import DeletePeladaDialog from "./DeletePeladaDialog";
 
 export default function PeladaHeader({ peladaData }) {
   return (
@@ -18,6 +19,9 @@ export default function PeladaHeader({ peladaData }) {
         </div>
         <div>
           <UserShareDialog peladaData={peladaData}></UserShareDialog>
+        </div>
+        <div>
+          <DeletePeladaDialog peladaId={peladaData.id}></DeletePeladaDialog>
         </div>
       </div>
     </div>

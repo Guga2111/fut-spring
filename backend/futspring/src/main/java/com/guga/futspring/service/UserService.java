@@ -1,6 +1,7 @@
 package com.guga.futspring.service;
 
 import com.guga.futspring.entity.Stats;
+import com.guga.futspring.entity.Team;
 import com.guga.futspring.entity.User;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;

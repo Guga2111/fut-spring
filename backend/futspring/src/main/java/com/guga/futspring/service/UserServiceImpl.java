@@ -1,6 +1,7 @@
 package com.guga.futspring.service;
 
 import com.guga.futspring.entity.Stats;
+import com.guga.futspring.entity.Team;
 import com.guga.futspring.entity.User;
 import com.guga.futspring.exception.UserNotFoundException;
 import com.guga.futspring.repository.UserRepository;
@@ -81,6 +82,7 @@ public class UserServiceImpl implements UserService{
         }
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setEmail(user.getEmail().toLowerCase());
         Stats stats = statsService.initializeStats(user);
         user.setStats(stats);
         user.setImage(null);

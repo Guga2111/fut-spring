@@ -182,6 +182,7 @@ export default function PeladaArea({ pelada, user, onDailySelect }) {
                   isLoading={loadingPlayers}
                   playersAssociated={playersAssociated}
                   allImages={allImages}
+                  peladaId={pelada.id}
                 />
                 <ViewDailyHistory dailies={dailies} />
               </CardContent>

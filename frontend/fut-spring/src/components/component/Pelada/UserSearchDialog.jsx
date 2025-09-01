@@ -12,9 +12,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import axios from "axios";
 import { API_BASE_URL } from "../../../config";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Loader2 } from "lucide-react";
 import axiosInstance from "../../../api/axiosInstance";
 import { toast } from "sonner";
 
@@ -24,6 +23,7 @@ export default function UserSearchDialog({ peladaData }) {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [addingUserId, setAddingUserId] = useState(null);
 
   const getNotUsers = async () => {
     setLoading(true);
@@ -32,26 +32,34 @@ export default function UserSearchDialog({ peladaData }) {
       const response = await axiosInstance.get(
         `/pelada/${peladaData.id}/not-users`
       );
-
       setUsers(response.data);
     } catch (err) {
       console.error("Error fetching not-users:", err);
-      setError("Não foi possível carregar usuários.");
+      setError("Could not load users.");
     } finally {
       setLoading(false);
     }
   };
 
   const addUser = async (userId) => {
+    if (addingUserId) return;
+
+    setAddingUserId(userId);
     try {
-      const response = await axiosInstance.put(`/pelada/${peladaData.id}/user/${userId}`);
-      if(response.status === 200) {
-        toast.success(("Player added with success!"));
+      const response = await axiosInstance.put(
+        `/pelada/${peladaData.id}/user/${userId}`
+      );
+      if (response.status === 200) {
+        toast.success("Player added successfully!");
       }
-      getNotUsers();
+      setUsers((currentUsers) =>
+        currentUsers.filter((user) => user.id !== userId)
+      );
     } catch (err) {
       console.error(`Error adding user ${userId}:`, err);
-      setError("Não foi possível adicionar o usuário.");
+      setError("Could not add the user.");
+    } finally {
+      setAddingUserId(null);
     }
   };
 
@@ -79,7 +87,7 @@ export default function UserSearchDialog({ peladaData }) {
         <DialogHeader>
           <DialogTitle>Search Users</DialogTitle>
           <DialogDescription>
-            Type to search for the avaible users.
+            Type to search for available users.
           </DialogDescription>
         </DialogHeader>
 
@@ -118,10 +126,15 @@ export default function UserSearchDialog({ peladaData }) {
                   <span>{user.username}</span>
                   <Button
                     size="xs"
-                    className="bg-transparent hover:!bg-green-600 hover:!border-white"
+                    className="bg-transparent hover:!bg-green-600 hover:!border-white w-8 h-8 flex items-center justify-center"
                     onClick={() => addUser(user.id)}
+                    disabled={addingUserId !== null}
                   >
-                    <Plus className="w-4 h-4 text-white" />
+                    {addingUserId === user.id ? (
+                      <Loader2 className="w-4 h-4 animate-spin text-white" />
+                    ) : (
+                      <Plus className="w-4 h-4 text-white" />
+                    )}
                   </Button>
                 </li>
               ))

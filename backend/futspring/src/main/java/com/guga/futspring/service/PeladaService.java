@@ -19,6 +19,7 @@ public interface PeladaService {
     void deletePelada(Long id);
     Pelada updatePelada(Long id, String name, float duration, DayOfWeek dayOfWeek, LocalTime timeOfDay, Boolean autoCreateDailyEnabled);
     Pelada associatePlayerToPelada(Long id, Long userId);
+    Pelada disassociatePlayerOfPelada (Long id, Long userId);
     List<User> getPlayerAssociatedToPelada(Long id);
     List<User> getPlayersDisassociated(Long id);
     List<Daily> getAssociatedDailies(Long id);

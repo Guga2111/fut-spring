@@ -108,6 +108,11 @@ public class PeladaController {
         return new ResponseEntity<>(peladaService.associatePlayerToPelada(id, userId), HttpStatus.OK);
     }
 
+    @PutMapping("/{id}/remove-user/{userId}")
+    public ResponseEntity<Pelada> desassociatePlayerOfPelada (@PathVariable Long id, @PathVariable Long userId) {
+        return new ResponseEntity<>(peladaService.disassociatePlayerOfPelada(id, userId), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Pelada> deletePelada(@PathVariable Long id) {
         peladaService.deletePelada(id);

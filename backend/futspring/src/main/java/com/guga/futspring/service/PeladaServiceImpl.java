@@ -4,6 +4,7 @@ import com.guga.futspring.entity.*;
 import com.guga.futspring.entity.enums.DailyStatus;
 import com.guga.futspring.exception.AlreadyPlayerAssociatedException;
 import com.guga.futspring.exception.PeladaNotFoundException;
+import com.guga.futspring.exception.PlayerNotInPeladaException;
 import com.guga.futspring.repository.DailyRepository;
 import com.guga.futspring.repository.PeladaRepository;
 import com.guga.futspring.repository.UserRepository;
@@ -157,6 +158,20 @@ public class PeladaServiceImpl implements PeladaService{
             else throw new AlreadyPlayerAssociatedException(userId);
         }
 
+    @Override
+    public Pelada disassociatePlayerOfPelada(Long id, Long userId) {
+
+        Pelada pelada = getPelada(id);
+
+        User player = pelada.getPlayers().stream()
+                .filter(user -> user.getId().equals(userId))
+                .findFirst()
+                .orElseThrow(() -> new PlayerNotInPeladaException(userId, id));
+
+        pelada.getPlayers().remove(player);
+
+        return peladaRepository.save(pelada);
+    }
 
     @Override
     public List<User> getConfirmedPlayersOfScheduledDaily(Long id) {

@@ -68,6 +68,7 @@ public class SecurityConfig {
                         //daily routes
                         .requestMatchers(HttpMethod.PUT, "/daily/{dailyId}/confirm-presence/{userId}").hasRole(SecurityConstants.ROLE_USER)
                         .requestMatchers(HttpMethod.PUT, "/daily/{dailyId}/disconfirm-presence/{userId}").hasRole(SecurityConstants.ROLE_USER)
+                        .requestMatchers(HttpMethod.PUT, "/daily/{dailyId}/force-disconfirm/{userId}").hasRole(SecurityConstants.ROLE_ADMIN_PELADA)
                         //With @PreAuthorize verify if the user is in the list of confirmedPlayers
                         .requestMatchers(HttpMethod.POST, "/daily/**").hasRole(SecurityConstants.ROLE_USER)
                         .requestMatchers(HttpMethod.PUT, "/daily/{id}/finalize/puskas/{puskasWinnerId}/wittball/{wittballWinnerId}").hasRole(SecurityConstants.ROLE_USER)

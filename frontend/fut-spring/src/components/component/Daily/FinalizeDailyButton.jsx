@@ -20,8 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState, useEffect } from "react";
-import { Rocket } from "lucide-react";
-import axios from "axios";
+import { Rocket, Loader2 } from "lucide-react";
 import { API_BASE_URL } from "../../../config";
 import { toast } from "sonner";
 import axiosInstance from "../../../api/axiosInstance";
@@ -43,40 +42,37 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
     if (!isOpen) {
       setPuskasWinnerId(null);
       setWitballWinnerId(null);
+      setImageFile(null);
     }
   }, [isOpen]);
 
   const handleFinalizeDaily = async () => {
     if (!puskasWinnerId || !witballWinnerId) {
       toast.error("Validation error", {
-        description: "Please, select both winners for puskas and wittball.",
+        description: "Please, select winners for both Puskas and Wittball.",
       });
       return;
     }
-
-    const data = new FormData();
-    const updateImageEndpoint = `/daily/${daily.id}/champions-image`;
-
-    if (imageFile) {
-      data.append("image", imageFile);
-    }
-
     if (isSubmitting) return;
 
     setIsSubmitting(true);
     try {
-      const response = await axiosInstance.put(
-        `/daily/${daily.id}/finalize/puskas/${puskasWinnerId}/wittball/${witballWinnerId}`
-      );
+      const finalizeUrl = `/daily/${daily.id}/finalize/puskas/${puskasWinnerId}/wittball/${witballWinnerId}`;
+      const response = await axiosInstance.put(finalizeUrl);
 
-      const imageResponse = await axiosInstance.put(updateImageEndpoint, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      if (imageFile) {
+        const data = new FormData();
+        data.append("image", imageFile);
+        const updateImageEndpoint = `/daily/${daily.id}/champions-image`;
+        await axiosInstance.put(updateImageEndpoint, data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
 
-      toast.success("Sucess!", {
-        description: "Daily finished with sucess!",
+      toast.success("Success!", {
+        description: "Daily finished successfully!",
       });
       setIsOpen(false);
 
@@ -85,9 +81,9 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
       }
     } catch (error) {
       console.error("Error when finalizing:", error);
-      toast.error("Error when finalizing", {
+      toast.error("Error finalizing daily", {
         description:
-          error.response?.data?.message || "An error has occur. Try again.",
+          error.response?.data?.message || "An error has occurred. Please try again.",
       });
     } finally {
       setIsSubmitting(false);
@@ -110,8 +106,7 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
           <DialogHeader>
             <DialogTitle>Finish Daily</DialogTitle>
             <DialogDescription>
-              Select winners for best goals (puskas) and for worst player
-              (wittball).
+              Select winners for best goal (Puskas) and for worst player (Wittball).
             </DialogDescription>
           </DialogHeader>
 
@@ -126,7 +121,7 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
                 disabled={!hasPlayers || isSubmitting}
               >
                 <SelectTrigger className="col-span-3 !bg-white !text-neutral-900 hover:!text-neutral-700">
-                  <SelectValue placeholder="Select the winner for puskas" />
+                  <SelectValue placeholder="Select the Puskas winner" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -142,7 +137,7 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
                       ))
                     ) : (
                       <SelectItem value="no-players" disabled>
-                        No player presence
+                        No players present
                       </SelectItem>
                     )}
                   </SelectGroup>
@@ -160,7 +155,7 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
                 disabled={!hasPlayers || isSubmitting}
               >
                 <SelectTrigger className="col-span-3 !bg-white !text-neutral-900 hover:!text-neutral-700">
-                  <SelectValue placeholder="Select wittball winner" />
+                  <SelectValue placeholder="Select the Wittball winner" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -176,25 +171,27 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
                       ))
                     ) : (
                       <SelectItem value="no-players" disabled>
-                        No player presence
+                        No players present
                       </SelectItem>
                     )}
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <div className="grid grid-cols-4 items-center gap-30 col-span-3">
-                <Label htmlFor="image" className="text-right">
-                  Image
-                </Label>
-                <Input
-                  id="image"
-                  name="image"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="col-span-3"
-                />
-              </div>
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="image" className="text-right">
+                Image
+              </Label>
+              <Input
+                id="image"
+                name="image"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="col-span-3"
+                disabled={isSubmitting}
+              />
             </div>
           </div>
 
@@ -205,7 +202,14 @@ export default function FinalizeDailyButton({ daily, onDailyFinalized }) {
               disabled={isSubmitting || !puskasWinnerId || !witballWinnerId}
               className="hover:!bg-destructive hover:!border-white"
             >
-              {isSubmitting ? "Saving..." : "Finish Daily"}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Finish Daily"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

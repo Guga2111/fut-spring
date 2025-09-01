@@ -38,6 +38,8 @@ export default function SignUpPage({ onLogin }) {
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
   const [showLoginPassword, setShowLoginPassword] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [responseData, setResponseData] = useState(null);
   const navigate = useNavigate();
 
@@ -59,6 +61,7 @@ export default function SignUpPage({ onLogin }) {
 
   const handleRegisterRequest = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const endpoint = `${API_BASE_URL}/user/register`;
 
     try {
@@ -75,11 +78,14 @@ export default function SignUpPage({ onLogin }) {
     } catch (error) {
       console.error("Error in the registration request:", error);
       alert("Registration failed. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleLoginRequest = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const endpoint = `${API_BASE_URL}/authenticate`;
 
     try {
@@ -103,6 +109,8 @@ export default function SignUpPage({ onLogin }) {
     } catch (error) {
       console.error("Error in the login request:", error);
       alert("Login failed. Please check your credentials.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -151,7 +159,6 @@ export default function SignUpPage({ onLogin }) {
           </TabsList>
           
           <TabsContent value="register">
-            {/* MUDANÇA 3: Card com borda superior zerada para garantir a conexão */}
             <Card className="!rounded-t-none !border-t-0">
               <CardHeader>
                 <CardTitle>Register</CardTitle>
@@ -160,7 +167,6 @@ export default function SignUpPage({ onLogin }) {
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleRegisterRequest}>
-                {/* ... SEU FORMULÁRIO ... */}
                 <CardContent className="space-y-4">
                   <div className="space-y-1">
                     <Label htmlFor="username">Name</Label>
@@ -218,8 +224,9 @@ export default function SignUpPage({ onLogin }) {
                   <Button
                     type="submit"
                     className="w-full !bg-green-600 !text-white hover:!bg-green-700"
+                    disabled={isLoading}
                   >
-                    Create Account
+                    {isLoading ? "Creating Account..." : "Create Account"}
                   </Button>
                 </CardFooter>
               </form>
@@ -235,7 +242,6 @@ export default function SignUpPage({ onLogin }) {
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleLoginRequest}>
-                {/* ... SEU FORMULÁRIO ... */}
                 <CardContent className="space-y-4">
                   <div className="space-y-1">
                     <Label htmlFor="loginEmail">Email</Label>
@@ -276,8 +282,8 @@ export default function SignUpPage({ onLogin }) {
                   </div>
                 </CardContent>
                 <CardFooter className="mt-6">
-                  <Button className="w-full !bg-green-600 !text-white hover:!bg-green-700">
-                    Login
+                  <Button className="w-full !bg-green-600 !text-white hover:!bg-green-700" disabled={isLoading}>
+                  {isLoading ? "Logging in..." : "Login"}
                   </Button>
                 </CardFooter>
               </form>

@@ -20,8 +20,13 @@ public interface DailyService {
     Daily finalizeDaily(Long dailyId, Long puskasWinnerId, Long witballWinnerId);
     List<Team> getAssociatedTeams(Long id);
     List<User> getConfirmedPlayers(Long id);
+    List<User> getNotConfirmedPlayers (Long id);
     List<Match> getDailyMatches(Long id);
     LeagueTable assignTeamToDailyLeagueTable(Long id, List<Team> teams);
     Daily addChampionsImage(Long id, MultipartFile imageFile) throws IOException;
     Resource getChampionsImage(String filename);
+
+    void swapPlayersInTeam (Long dailyId, Long player1Id, Long player2Id);
+
+    Daily forceDisconfirmPresence (Long dailyId, Long playerId);
 }

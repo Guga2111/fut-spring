@@ -75,6 +75,18 @@ public class DailyServiceImpl implements DailyService{
     }
 
     @Override
+    public List<User> getNotConfirmedPlayers(Long id) {
+
+        Daily daily = getDaily(id);
+
+        List<User> getAllPlayers = daily.getPelada().getPlayers();
+
+        return getAllPlayers.stream()
+                .filter(user -> !user.equals(daily.getPlayersPresence()))
+                .toList();
+    }
+
+    @Override
     @Transactional
     public Daily createDaily(Daily daily, Long peladaId) {
         Pelada pelada = peladaService.getPelada(peladaId);
@@ -114,6 +126,23 @@ public class DailyServiceImpl implements DailyService{
         }
 
         daily.getPlayersPresence().remove(player);
+
+        return dailyRepository.save(daily);
+    }
+
+    @Override
+    public Daily forceDisconfirmPresence(Long dailyId, Long playerId) {
+
+        Daily daily = getDaily(dailyId);
+
+        User player = daily.getPlayersPresence().stream()
+                .filter(user -> user.getId().equals(playerId))
+                .findFirst()
+                .orElseThrow(() -> new UserNotFoundException(playerId));
+
+        boolean removed = daily.getPlayersPresence().remove(player);
+
+        if (!removed) throw new RuntimeException(); //custom exception
 
         return dailyRepository.save(daily);
     }
@@ -222,6 +251,42 @@ public class DailyServiceImpl implements DailyService{
         assignTeamToDailyLeagueTable(id, result);
 
         return result;
+    }
+
+    @Override
+    @Transactional
+    public void swapPlayersInTeam(Long dailyId, Long player1Id, Long player2Id) {
+
+        if (player1Id.equals(player2Id)) throw new RuntimeException(); //custom exception
+
+        Optional<Team> team1 = teamRepository.findTeamByDailyIdAndUserId(dailyId, player1Id);
+        Optional<Team> team2 = teamRepository.findTeamByDailyIdAndUserId(dailyId, player2Id);
+
+        if(team1.isEmpty() && team2.isEmpty()) throw new RuntimeException(); // custom exception
+
+        Team unwrappedTeam1 = team1.get();
+        Team unwrappedTeam2 = team2.get();
+
+        if (unwrappedTeam1.getId().equals(unwrappedTeam2.getId())) {
+            return;
+        }
+
+        User player1 = unwrappedTeam1.getPlayers().stream()
+                        .filter(user -> user.getId().equals(player1Id))
+                                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Inconsistency on data"));
+
+        User player2 = unwrappedTeam2.getPlayers().stream()
+                .filter(user -> user.getId().equals(player2Id))
+                .findFirst()
+                        .orElseThrow(() -> new IllegalStateException("Inconsistency on data"));
+
+        unwrappedTeam1.getPlayers().remove(player1);
+        unwrappedTeam2.getPlayers().remove(player2);
+
+        unwrappedTeam1.getPlayers().add(player2);
+        unwrappedTeam2.getPlayers().add(player1);
+
     }
 
     @Override

@@ -57,6 +57,10 @@ public class DailyController {
     public ResponseEntity<List<User>> getConfirmedPlayers(@PathVariable Long id) {
         return new ResponseEntity<>(dailyService.getConfirmedPlayers(id), HttpStatus.OK);
     }
+    @GetMapping("/{id}/not-confirmed-players")
+    public ResponseEntity<List<User>> getNotConfirmedPlayers (@PathVariable Long id) {
+        return new ResponseEntity<>(dailyService.getNotConfirmedPlayers(id), HttpStatus.OK);
+    }
 
     @GetMapping("/peladas/{peladaId}/dailies")
     public ResponseEntity<List<Daily>> getDailiesByPelada(@PathVariable Long peladaId) {
@@ -128,6 +132,14 @@ public class DailyController {
         return new ResponseEntity<>(dailyService.disconfirmPresenceInDaily(dailyId, userId), HttpStatus.OK);
     }
 
+    @PutMapping("/{dailyId}/force-disconfirm/{userId}")
+    public ResponseEntity<Daily> forceDisconfirmPresence(
+            @PathVariable Long dailyId,
+            @PathVariable Long userId) {
+
+        return new ResponseEntity<>(dailyService.forceDisconfirmPresence(dailyId, userId), HttpStatus.OK);
+    }
+
     @PutMapping("/{id}/finalize/puskas/{puskasWinnerId}/wittball/{wittballWinnerId}")
     public ResponseEntity<Daily> finalizeDaily(@PathVariable Long id, @PathVariable Long puskasWinnerId, @PathVariable Long wittballWinnerId) {
 
@@ -137,5 +149,11 @@ public class DailyController {
     @PutMapping(value = "/{id}/champions-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Daily> addChampionsImage(@PathVariable Long id, @RequestPart(value = "image")MultipartFile imageFile) throws IOException {
         return new ResponseEntity<>(dailyService.addChampionsImage(id, imageFile), HttpStatus.OK);
+    }
+
+    @PutMapping("/{dailyId}/teams/swap/player-one/{player1Id}/player-two/{player2Id}")
+    public ResponseEntity<Void> swapPlayers (@PathVariable Long dailyId, @PathVariable Long player1Id, @PathVariable Long player2Id) {
+        dailyService.swapPlayersInTeam(dailyId, player1Id, player2Id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -50,13 +50,13 @@ axiosInstance.interceptors.response.use(
                     break;
                 case 400:
                 case 422:
-                    toast.error(data.error || "Invalid data. Verify your info.");
+                    console.error(data.error || "Invalid data. Verify your info.");
                     break;
                 case 500:
-                    toast.error("Ocurred an error in the server. Try again later.");
+                    console.error("Ocurred an error in the server. Try again later.");
                     break;
                 default:
-                    toast.error(data.error || `Unknown error: ${status}`);
+                    console.error(data.error || `Unknown error: ${status}`);
                     break;
             }
         } else if (error.request) {

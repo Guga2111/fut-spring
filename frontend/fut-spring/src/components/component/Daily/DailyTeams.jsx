@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, Loader2, UserPen } from "lucide-react";
 import { API_BASE_URL } from "../../../config";
@@ -37,7 +37,9 @@ export default function DailyTeams({ dailyId }) {
 
       const teamsWithPlayersPromises = teams.map(async (team) => {
         try {
-          const playersResp = await axiosInstance.get(`/team/${team.id}/players`);
+          const playersResp = await axiosInstance.get(
+            `/team/${team.id}/players`
+          );
           return { ...team, players: playersResp.data };
         } catch {
           return { ...team, players: [] };
@@ -135,9 +137,36 @@ export default function DailyTeams({ dailyId }) {
   };
 
   return (
-    <div className="w-full h-full min-h-0">
-      <Card className="w-full border overflow-hidden">
-        <CardContent className="p-0 min-h-0">
+    <div className="w-full h-full">
+      <Card className="w-full h-full border overflow-hidden">
+        <div className="p-4 border-b dark:border-gray-700">
+          <div className="flex justify-between items-center">
+            <CardHeader className="text-lg font-medium leading-none text-gray-800 dark:text-gray-200">
+              Sorted Teams
+            </CardHeader>
+            <Button
+              onClick={handleToggleEditMode}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2 !border-green-600 !bg-white hover:!bg-green-600 hover:!text-white"
+            >
+              {isEditMode ? (
+                "Conclude"
+              ) : (
+                <>
+                  Edit Teams <UserPen className="h-4 w-4" />
+                </>
+              )}
+            </Button>
+          </div>
+          {isEditMode && (
+            <div className="mt-3 text-center p-2 bg-blue-50 dark:bg-blue-900/50 border border-blue-200 dark:border-blue-700 rounded-md text-sm text-blue-700 dark:text-blue-300">
+              <p>Select two players to switch their teams.</p>
+            </div>
+          )}
+        </div>
+
+        <CardContent className="p-0.5 min-h-0">
           {loading && (
             <div className="flex justify-center items-center h-[280px] text-gray-500">
               Loading teams...
@@ -152,41 +181,13 @@ export default function DailyTeams({ dailyId }) {
             !error &&
             (!teamsWithPlayers || teamsWithPlayers.length === 0) && (
               <div className="flex justify-center items-center h-[280px] text-gray-500 px-4 text-center">
-                <p>
-                  No teams found for this daily session. Sort them first!
-                </p>
+                <p>No teams found for this daily session. Sort them first!</p>
               </div>
             )}
 
           {!loading && teamsWithPlayers.length > 0 && (
-            <ScrollArea className="h-[60vh] md:h-[58vh] lg:h-[56vh] w-full">
+            <ScrollArea className="h-[60vh] md:h-[58vh] lg:h-[50vh] w-full">
               <div className="p-4">
-                <div className="flex justify-between items-center mb-3">
-                  <CardHeader className="p-0 text-lg font-medium leading-none text-gray-800 dark:text-gray-200">
-                    Sorted Teams
-                  </CardHeader>
-                  <Button
-    onClick={handleToggleEditMode}
-    variant="outline"
-    size="sm"
-    className="flex items-center gap-2 !border-green-600 !bg-white hover:!bg-green-600 hover:!text-white" 
->
-    {isEditMode ? (
-        "Conclude"
-    ) : (
-        <>
-            Edit Teams <UserPen className="h-4 w-4" />
-        </>
-    )}
-</Button>
-                </div>
-
-                {isEditMode && (
-                  <div className="text-center p-2 mb-3 bg-blue-50 dark:bg-blue-900/50 border border-blue-200 dark:border-blue-700 rounded-md text-sm text-blue-700 dark:text-blue-300">
-                    <p>Select two players for switch their teams.</p>
-                  </div>
-                )}
-
                 {teamsWithPlayers.map((team, idx) => (
                   <div
                     key={team.id}
@@ -216,11 +217,7 @@ export default function DailyTeams({ dailyId }) {
                                     ? "ring-2 ring-blue-500 bg-blue-100 dark:bg-blue-900"
                                     : ""
                                 }
-                                ${
-                                  isSwapping && isSelected
-                                    ? "opacity-50"
-                                    : ""
-                                }
+                                ${isSwapping && isSelected ? "opacity-50" : ""}
                               `}
                             >
                               <img
@@ -262,6 +259,11 @@ export default function DailyTeams({ dailyId }) {
             </ScrollArea>
           )}
         </CardContent>
+        <CardFooter className="mt-auto border-t dark:border-gray-700">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+                Total de times: {teamsWithPlayers.length}
+            </p>
+        </CardFooter>
       </Card>
     </div>
   );

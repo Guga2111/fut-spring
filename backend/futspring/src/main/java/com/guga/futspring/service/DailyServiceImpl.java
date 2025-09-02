@@ -80,9 +80,14 @@ public class DailyServiceImpl implements DailyService{
         Daily daily = getDaily(id);
 
         List<User> getAllPlayers = daily.getPelada().getPlayers();
+        List<User> playersPresence = daily.getPlayersPresence();
+
+        Set<Long> presentPlayersId = playersPresence.stream()
+                .map(User::getId)
+                .collect(Collectors.toSet());
 
         return getAllPlayers.stream()
-                .filter(user -> !user.equals(daily.getPlayersPresence()))
+                .filter(player -> !presentPlayersId.contains(player.getId()))
                 .toList();
     }
 

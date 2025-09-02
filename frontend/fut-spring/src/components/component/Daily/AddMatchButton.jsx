@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { API_BASE_URL } from "../../../config";
-import axiosInstance from "../../../api/axiosInstance"; 
+import axiosInstance from "../../../api/axiosInstance";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Handshake } from "lucide-react";
+import { Plus, Handshake, Loader2 } from "lucide-react";
 import { PiSoccerBallFill } from "react-icons/pi";
 import {
   Select,
@@ -32,20 +32,14 @@ export default function AddMatchButton({
   onMatchCreated,
   isDailyFinished,
 }) {
-  console.log("Teams received in AddMatchButton:", teams);
-
   const [open, setOpen] = useState(false);
   const [team1Id, setTeam1Id] = useState("");
   const [team2Id, setTeam2Id] = useState("");
-
   const [team1Score, setTeam1Score] = useState("");
   const [team2Score, setTeam2Score] = useState("");
-
   const [team1Players, setTeam1Players] = useState([]);
   const [team2Players, setTeam2Players] = useState([]);
-
   const [playerStats, setPlayerStats] = useState({});
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const getImageSrc = (filename) => {
@@ -60,7 +54,7 @@ export default function AddMatchButton({
       return response.data;
     } catch (error) {
       console.error("Error fetching players:", error);
-      toast.error("Fail on loading team players.");
+      toast.error("Failed to load team players.");
       return [];
     }
   };
@@ -120,28 +114,22 @@ export default function AddMatchButton({
       toast.error("Please, select both teams and a score.");
       return;
     }
-
     if (team1Id === team2Id) {
-      toast.error("Team 1 e Team 2 cannot be the same.");
+      toast.error("Team 1 and Team 2 cannot be the same.");
       return;
     }
-
     const parsedTeam1Score = parseInt(team1Score, 10);
     const parsedTeam2Score = parseInt(team2Score, 10);
-
     if (isNaN(parsedTeam1Score) || isNaN(parsedTeam2Score)) {
       toast.error("The score must be valid numbers.");
       return;
     }
-
     const totalGoalsTeam1ByPlayers = team1Players.reduce((sum, player) => {
       return sum + (playerStats[player.id]?.goals || 0);
     }, 0);
-
     const totalGoalsTeam2ByPlayers = team2Players.reduce((sum, player) => {
       return sum + (playerStats[player.id]?.goals || 0);
     }, 0);
-
     if (totalGoalsTeam1ByPlayers !== parsedTeam1Score) {
       toast.error(
         `Team 1's total goals by players (${totalGoalsTeam1ByPlayers}) does not match Team 1's score (${parsedTeam1Score}).`
@@ -156,80 +144,50 @@ export default function AddMatchButton({
     }
 
     setIsSubmitting(true);
-
     try {
       const createMatchEndpoint = `/daily/${dailyId}/team1/${parseInt(
         team1Id,
         10
       )}/team2/${parseInt(team2Id, 10)}`;
-
       const createMatchResponse = await axiosInstance.post(createMatchEndpoint, {
         team1Score: parsedTeam1Score,
         team2Score: parsedTeam2Score,
       });
-
-      const newMatch = createMatchResponse.data; 
+      const newMatch = createMatchResponse.data;
       toast.success("Match created!");
 
-      let winnerTeamId = null;
-      let looserTeamId = null;
-
+      let winnerTeamId = parseInt(team1Id, 10);
+      let looserTeamId = parseInt(team2Id, 10);
       if (parsedTeam1Score > parsedTeam2Score) {
-
         winnerTeamId = parseInt(team1Id, 10);
         looserTeamId = parseInt(team2Id, 10);
-
       } else if (parsedTeam2Score > parsedTeam1Score) {
-
         winnerTeamId = parseInt(team2Id, 10);
         looserTeamId = parseInt(team1Id, 10);
-
       }
-
       const updateTableEndpoint = `/match/${dailyId}/winner/${winnerTeamId}/looser/${looserTeamId}?team1goals=${parsedTeam1Score}&team2goals=${parsedTeam2Score}`;
-
       const updateTableResponse = await axiosInstance.put(updateTableEndpoint);
-
-      const updatedLeagueTable = updateTableResponse.data; 
-      toast.success("League Table updated with success!");
+      const updatedLeagueTable = updateTableResponse.data;
+      toast.success("League Table updated successfully!");
 
       const updatePlayerGoalsAssistsPromises = [];
-
       const addPlayerGoalsAssistsUpdate = (player) => {
         const goals = playerStats[player.id]?.goals || 0;
         const assists = playerStats[player.id]?.assists || 0;
-
         const updatePlayerEndpoint = `/match/${dailyId}/player/${player.id}/update-goals-assists`;
-
         updatePlayerGoalsAssistsPromises.push(
           axiosInstance.put(updatePlayerEndpoint, {
             goals: goals,
             assists: assists,
           })
-            .then((response) => {
-
-              return response;
-            })
-            .catch((error) => {
-              console.error(
-                `Error when trying to update player goals and assists ${player.username}:`,
-                error
-              );
-
-              return Promise.reject(
-                new Error(`Critic fail on ${player.username}`)
-              );
-            })
         );
       };
-
       team1Players.forEach((player) => addPlayerGoalsAssistsUpdate(player));
       team2Players.forEach((player) => addPlayerGoalsAssistsUpdate(player));
 
       const playerResults = await Promise.allSettled(
         updatePlayerGoalsAssistsPromises
       );
-
       const failedPlayerUpdates = playerResults.filter(
         (result) => result.status === "rejected"
       );
@@ -239,14 +197,13 @@ export default function AddMatchButton({
           failedPlayerUpdates
         );
         toast.error(
-          `Concluded with ${failedPlayerUpdates.length} fails on updates of goals/assists.`
+          `Concluded with ${failedPlayerUpdates.length} fails on player stat updates.`
         );
       } else {
-        toast.success("Goals and assists of players update with success!");
+        toast.success("Player goals and assists updated successfully!");
       }
 
       setOpen(false);
-
       setTeam1Id("");
       setTeam2Id("");
       setTeam1Score("");
@@ -260,7 +217,7 @@ export default function AddMatchButton({
       }
     } catch (error) {
       console.error("Error on the match process:", error);
-
+      toast.error(error.response?.data?.message || "An unexpected error occurred during the match creation process.");
     } finally {
       setIsSubmitting(false);
     }
@@ -289,47 +246,39 @@ export default function AddMatchButton({
             <ScrollArea className="h-[calc(100vh-250px)] pr-4">
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="team1" className="text-right">
-                    Team 1
-                  </Label>
+                  <Label htmlFor="team1" className="text-right">Team 1</Label>
                   <Select value={team1Id} onValueChange={setTeam1Id}>
                     <SelectTrigger className="col-span-3 !bg-white !text-black border !border-gray-200">
-                      <SelectValue placeholder="Select the team 1" />
+                      <SelectValue placeholder="Select team 1" />
                     </SelectTrigger>
                     <SelectContent>
-                      {teams &&
-                        teams.map((team) => (
-                          <SelectItem key={team.id} value={String(team.id)}>
-                            {team.name}
-                          </SelectItem>
-                        ))}
+                      {teams && teams.map((team) => (
+                        <SelectItem key={team.id} value={String(team.id)}>
+                          {team.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="team2" className="text-right">
-                    Team 2
-                  </Label>
+                  <Label htmlFor="team2" className="text-right">Team 2</Label>
                   <Select value={team2Id} onValueChange={setTeam2Id}>
                     <SelectTrigger className="col-span-3 !bg-white !text-black border !border-gray-200">
-                      <SelectValue placeholder="Select the team 2" />
+                      <SelectValue placeholder="Select team 2" />
                     </SelectTrigger>
                     <SelectContent>
-                      {teams &&
-                        teams.map((team) => (
-                          <SelectItem key={team.id} value={String(team.id)}>
-                            {team.name}
-                          </SelectItem>
-                        ))}
+                      {teams && teams.map((team) => (
+                        <SelectItem key={team.id} value={String(team.id)}>
+                          {team.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="team1Score" className="text-right">
-                    Team 1 Score
-                  </Label>
+                  <Label htmlFor="team1Score" className="text-right">Team 1 Score</Label>
                   <Input
                     id="team1Score"
                     type="number"
@@ -342,9 +291,7 @@ export default function AddMatchButton({
                 </div>
 
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="team2Score" className="text-right">
-                    Team 2 Score
-                  </Label>
+                  <Label htmlFor="team2Score" className="text-right">Team 2 Score</Label>
                   <Input
                     id="team2Score"
                     type="number"
@@ -358,20 +305,14 @@ export default function AddMatchButton({
 
                 {(team1Players.length > 0 || team2Players.length > 0) && (
                   <div className="mt-6 border-t pt-4">
-                    <h3 className="text-lg font-semibold mb-4">
-                      Players Stats
-                    </h3>
-
+                    <h3 className="text-lg font-semibold mb-4">Player Stats</h3>
                     {team1Players.length > 0 && (
                       <div className="mb-4">
                         <h4 className="text-md font-medium mb-2">
                           {teams.find((t) => String(t.id) === team1Id)?.name}
                         </h4>
                         {team1Players.map((player) => (
-                          <div
-                            key={player.id}
-                            className="grid grid-cols-4 items-center gap-2 mb-2"
-                          >
+                          <div key={player.id} className="grid grid-cols-4 items-center gap-2 mb-2">
                             <Label className="col-span-1 flex items-center">
                               <img
                                 src={getImageSrc(player.image)}
@@ -386,13 +327,7 @@ export default function AddMatchButton({
                                 type="number"
                                 placeholder="Goals"
                                 value={playerStats[player.id]?.goals || 0}
-                                onChange={(e) =>
-                                  handlePlayerStatChange(
-                                    player.id,
-                                    "goals",
-                                    e.target.value
-                                  )
-                                }
+                                onChange={(e) => handlePlayerStatChange(player.id, "goals", e.target.value)}
                                 className="w-full"
                                 min="0"
                               />
@@ -403,13 +338,7 @@ export default function AddMatchButton({
                                 type="number"
                                 placeholder="Assists"
                                 value={playerStats[player.id]?.assists || 0}
-                                onChange={(e) =>
-                                  handlePlayerStatChange(
-                                    player.id,
-                                    "assists",
-                                    e.target.value
-                                  )
-                                }
+                                onChange={(e) => handlePlayerStatChange(player.id, "assists", e.target.value)}
                                 className="w-full"
                                 min="0"
                               />
@@ -418,17 +347,13 @@ export default function AddMatchButton({
                         ))}
                       </div>
                     )}
-
                     {team2Players.length > 0 && (
                       <div>
                         <h4 className="text-md font-medium mb-2">
                           {teams.find((t) => String(t.id) === team2Id)?.name}
                         </h4>
                         {team2Players.map((player) => (
-                          <div
-                            key={player.id}
-                            className="grid grid-cols-4 items-center gap-2 mb-2"
-                          >
+                          <div key={player.id} className="grid grid-cols-4 items-center gap-2 mb-2">
                             <Label className="col-span-1 flex items-center">
                               <img
                                 src={getImageSrc(player.image)}
@@ -443,13 +368,7 @@ export default function AddMatchButton({
                                 type="number"
                                 placeholder="Goals"
                                 value={playerStats[player.id]?.goals || 0}
-                                onChange={(e) =>
-                                  handlePlayerStatChange(
-                                    player.id,
-                                    "goals",
-                                    e.target.value
-                                  )
-                                }
+                                onChange={(e) => handlePlayerStatChange(player.id, "goals", e.target.value)}
                                 className="w-full"
                                 min="0"
                               />
@@ -460,13 +379,7 @@ export default function AddMatchButton({
                                 type="number"
                                 placeholder="Assists"
                                 value={playerStats[player.id]?.assists || 0}
-                                onChange={(e) =>
-                                  handlePlayerStatChange(
-                                    player.id,
-                                    "assists",
-                                    e.target.value
-                                  )
-                                }
+                                onChange={(e) => handlePlayerStatChange(player.id, "assists", e.target.value)}
                                 className="w-full"
                                 min="0"
                               />
@@ -481,7 +394,14 @@ export default function AddMatchButton({
             </ScrollArea>
             <DialogFooter className="mt-4">
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Saving..." : "Save Match"}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  "Save Match"
+                )}
               </Button>
             </DialogFooter>
           </form>
